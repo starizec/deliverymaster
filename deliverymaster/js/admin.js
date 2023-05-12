@@ -58,9 +58,9 @@ $('body').on('click', '.dm_confirm_action', function (e) {
         note: form.find('textarea[name="note"]').val(),
         parcel_type: form.find('input[name="parcel_type"]').val(),
     };
-    console.log(orderData.cod_amount);
+
     const parcel_type = orderData.parcel_type === 'cod' ? 'D-COD' : 'D';
-    console.log(parcel_type);
+
     $.ajax({
         url: `https://easyship.hr/api/parcel/parcel_import?username=${dm_options.username}&password=${dm_options.password}&cod_amount=${orderData.cod_amount}&name1=${orderData.customer_name}&street=${orderData.customer_address}&rPropNum=${orderData.house_number}&city=${orderData.city}&country=${orderData.country}&pcode=${orderData.zip_code}&email=${orderData.email}&phone=${orderData.phone}&sender_remark=${orderData.note}&weight=${orderData.weight}&order_number=${orderData.reference}&cod_purpose=${orderData.reference}&parcel_type=${parcel_type}&num_of_parcel=${orderData.package_number}`,
         type: "POST",
@@ -75,7 +75,7 @@ $('body').on('click', '.dm_confirm_action', function (e) {
             },
             success: function (res) {
               var blob = new Blob([res], { type: "application/pdf" });
-              var filename = `${customer_name}-${response.pl_number[0]}-${Date.now()}.pdf`;
+              var filename = `${orderData.customer_name}-${response.pl_number[0]}-${Date.now()}.pdf`;
               var link = document.createElement("a");
 
               link.href = window.URL.createObjectURL(blob);
