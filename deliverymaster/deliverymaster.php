@@ -258,3 +258,22 @@ function add_dpd_print_label_bulk_action($actions) {
     $actions['dpd_print_label'] = __('DPD Print Label', 'text_domain');
     return $actions;
 }
+
+add_action('wp_ajax_dm_update_adresnica', 'dm_update_adresnica');
+add_action('wp_ajax_nopriv_dm_update_adresnica', 'dm_update_adresnica');
+
+function dm_update_adresnica() {
+    check_ajax_referer('dm_nonce', 'security');
+
+    $order_id = isset($_POST['order_id']) ? intval($_POST['order_id']) : 0;
+    $pl_number = isset($_POST['pl_number']) ? sanitize_text_field($_POST['pl_number']) : '';
+
+    if ($order_id > 0 && !empty($pl_number)) {
+        update_post_meta($order_id, 'Adresnica', $pl_number);
+        wp_send_json_success();
+    } else {
+        wp_send_json_error('Invalid order ID or pl_number.');
+    }
+
+    wp_die();
+}
