@@ -224,9 +224,9 @@ function dm_show_confirm_modal()
                             <input type="text" name="payment_method" value="<?php echo esc_attr($payment_method); ?>">
                         </label>
 
-                        <input type="radio" name="payment_method" value="cod" id="x-cod" <?php $payment_method == 'cod' ? print_r('checked') : '' ?>>
+                        <input type="radio" name="parcel_type" value="cod" id="x-cod" <?php $payment_method == 'cod' ? print_r('checked') : '' ?>>
                         <label for="x-cod">COD</label>
-                        <input type="radio" name="payment_method" value="classic" id="x-classic" <?php $payment_method != 'cod' ? print_r('checked') : '' ?>>
+                        <input type="radio" name="parcel_type" value="classic" id="x-classic" <?php $payment_method != 'cod' ? print_r('checked') : '' ?>>
                         <label for="x-classic">Classic</label>
                         <!-- Collection Date (Order Date) -->
                         <label class="labels"><?php esc_html_e('Collection Date (Order Date):', 'delivery-master'); ?>
