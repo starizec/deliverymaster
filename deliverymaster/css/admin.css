@@ -1,0 +1,79 @@
+.dm_modal_wrapper {
+  background-color: rgba(0, 0, 0, 0.6);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+}
+
+.dm_modal {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 4px;
+  width: 100%;
+  max-width: 800px;
+}
+
+.dm_modal_actions {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.dm_open_modal:focus {
+  box-shadow: none;
+}
+
+#dm_order_details_form {
+  display: flex;
+  flex-direction: row;
+}
+
+.labels {
+  display: flex;
+  flex-direction: column;
+  padding: 3px;
+}
+
+.dm_form_columns {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0 10px;
+}
+
+.dm_loading_panel {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9998;
+  justify-content: center;
+  align-items: center;
+}
+
+.dm_spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border-left-color: #007cba;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
