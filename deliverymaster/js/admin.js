@@ -75,7 +75,7 @@ $('body').on('click', '.dm_confirm_action', function (e) {
             },
             success: function (res) {
               var blob = new Blob([res], { type: "application/pdf" });
-              var filename = `${orderData.customer_name}-${response.pl_number[0]}-${Date.now()}.pdf`;
+              var filename = `${orderData.customer_name}-${response.pl_number[0]}}.pdf`;
               var link = document.createElement("a");
 
               link.href = window.URL.createObjectURL(blob);
