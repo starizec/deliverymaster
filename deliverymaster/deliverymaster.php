@@ -269,7 +269,7 @@ function dm_update_adresnica() {
     $pl_number = isset($_POST['pl_number']) ? sanitize_text_field($_POST['pl_number']) : '';
 
     if ($order_id > 0 && !empty($pl_number)) {
-        update_post_meta($order_id, 'Adresnica', $pl_number);
+        update_post_meta($order_id, 'x_parcel_number', $pl_number);
         wp_send_json_success();
     } else {
         wp_send_json_error('Invalid order ID or pl_number.');

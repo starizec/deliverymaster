@@ -57,20 +57,12 @@ $('body').on('click', '.dm_confirm_action', function (e) {
         cod_amount: form.find('input[name="cod_amount"]').val(),
         note: form.find('textarea[name="note"]').val(),
     };
-
-    console.log(orderData, 'orderData')
-
-    // Make your API call here with the updated orderData object
-    // For example:
+    
     $.ajax({
         url: `https://easyship.hr/api/parcel/parcel_import?username=${dm_options.username}&password=${dm_options.password}&name1=${orderData.customer_name}&street=${orderData.customer_address}&rPropNum=${orderData.house_number}&city=${orderData.city}&country=${orderData.country}&pcode=${orderData.zip_code}&email=${orderData.email}&phone=${orderData.phone}&sender_remark=${orderData.note}&weight=${orderData.weight}&order_number=${orderData.reference}&parcel_type=D&num_of_parcel=${orderData.package_number}`,
         type: "POST",
-        //data: orderData,
         success: function (response) {
-          // Handle success
-          console.log(response, 'adresnica')
-
-          update_adresnica(orderData.reference, response.pl_number[0]);
+          update_adresnica(orderData.reference, `HR-DPD-${response.pl_number[0]}`);
 
           $.ajax({
             url: `https://easyship.hr/api/parcel/parcel_print?username=${dm_options.username}&password=${dm_options.password}&parcels=${response.pl_number[0]}`,
@@ -78,33 +70,22 @@ $('body').on('click', '.dm_confirm_action', function (e) {
             xhrFields: {
               responseType: 'blob'
             },
-            //data: orderData,
             success: function (res) {
-              console.log(res, 'label');
-              // Handle success
               var blob = new Blob([res], { type: "application/pdf" });
-  
-              // Generate a unique filename for the PDF
-              var filename = "your-plugin-" + Date.now() + ".pdf";
-  
-              // Create a temporary link element
+              var filename = `${customer_name}-${response.pl_number[0]}-${Date.now()}.pdf`;
               var link = document.createElement("a");
+
               link.href = window.URL.createObjectURL(blob);
               link.download = filename;
-  
-              // Programmatically click the link to trigger the download
               link.click();
-              // Clean up the temporary link element
               link.remove();
             },
             error: function (error) {
-              // Handle error
               console.error("API call failed: ", error);
             },
           });
         },
         error: function (error) {
-            // Handle error
             console.error("API call failed: ", error);
         },
     });
