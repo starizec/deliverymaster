@@ -224,10 +224,11 @@ function dm_show_confirm_modal()
                             <input type="text" name="payment_method" value="<?php echo esc_attr($payment_method); ?>">
                         </label>
 
-                        <input type="radio" name="parcel_type" value="cod" id="x-cod" <?php $payment_method == 'cod' ? print_r('checked') : '' ?>>
+                        <input type="radio" name="parcel_type" value="cod" id="x-cod" <?php $payment_method === 'cod' ? print_r('checked') : '' ?>>
                         <label for="x-cod">COD</label>
                         <input type="radio" name="parcel_type" value="classic" id="x-classic" <?php $payment_method != 'cod' ? print_r('checked') : '' ?>>
                         <label for="x-classic">Classic</label>
+
                         <!-- Collection Date (Order Date) -->
                         <label class="labels"><?php esc_html_e('Collection Date (Order Date):', 'delivery-master'); ?>
                             <input type="date" name="collection_date" value="<?php echo esc_attr($order_date); ?>">
@@ -240,12 +241,10 @@ function dm_show_confirm_modal()
                         <label class="labels"><?php esc_html_e('Package Number:', 'delivery-master'); ?>
                             <input type="text" name="package_number" value="<?php echo esc_attr($package_number); ?>">
                         </label>
-                        <?php if ($payment_method === 'cod') : ?>
-                            <!-- Cash on Delivery Amount -->
-                            <label class="labels"><?php esc_html_e('Cash on Delivery Amount:', 'delivery-master'); ?>
-                                <input type="text" name="cod_amount" value="<?php echo esc_attr($order_total); ?>">
-                            </label>
-                        <?php endif; ?>
+                        <!-- Cash on Delivery Amount -->
+                        <label class="labels"><?php esc_html_e('Cash on Delivery Amount:', 'delivery-master'); ?>
+                            <input type="text" name="cod_amount" value="<?php echo esc_attr($order_total); ?>">
+                        </label>
                         <!-- Note -->
                         <label class="labels"><?php esc_html_e('Note:', 'delivery-master'); ?>
                             <textarea name="note"><?php echo esc_textarea($order_data['customer_note']); ?></textarea>
