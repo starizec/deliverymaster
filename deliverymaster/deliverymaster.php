@@ -175,6 +175,7 @@ function dm_show_confirm_modal()
         <div class="dm_modal_wrapper">
             <div class="dm_modal">
                 <h2 style="margin-top: 0;"><?php esc_html_e('Order Details', 'delivery-master'); ?></h2>
+                <div class="dm-error" style="display: none"></div>
                 <form id="dm_order_details_form">
                     <div class="dm_form_columns">
                         <!-- Reference -->

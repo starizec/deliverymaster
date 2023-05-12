@@ -60,15 +60,16 @@ jQuery(document).ready(function ($) {
       parcel_type: form.find('input[name="parcel_type"]:checked').val(),
     };
 
-    console.log(orderData)
+    console.log(orderData);
     const parcel_type = orderData.parcel_type === "cod" ? "D-COD" : "D";
-    
+
     $.ajax({
       url: `https://easyship.hr/api/parcel/parcel_import?username=${dm_options.username}&password=${dm_options.password}&cod_amount=${orderData.cod_amount}&name1=${orderData.customer_name}&street=${orderData.customer_address}&rPropNum=${orderData.house_number}&city=${orderData.city}&country=${orderData.country}&pcode=${orderData.zip_code}&email=${orderData.email}&phone=${orderData.phone}&sender_remark=${orderData.note}&weight=${orderData.weight}&order_number=${orderData.reference}&cod_purpose=${orderData.reference}&parcel_type=${parcel_type}&num_of_parcel=${orderData.package_number}`,
       type: "POST",
       success: function (response) {
-        if (response.status != 'ok') {
-            return;
+        if (response.status != "ok") {
+          displayError(response.errlog);
+          return;
         }
 
         update_adresnica(
@@ -83,6 +84,11 @@ jQuery(document).ready(function ($) {
             responseType: "blob",
           },
           success: function (res) {
+            if (response.status === "err") {
+              displayError(res.errlog);
+              return;
+            }
+
             var blob = new Blob([res], { type: "application/pdf" });
             var filename = `${orderData.customer_name}-${response.pl_number[0]}}.pdf`;
             var link = document.createElement("a");
@@ -91,23 +97,25 @@ jQuery(document).ready(function ($) {
             link.download = filename;
             link.click();
             link.remove();
+
+            $(".dm_modal_wrapper").fadeOut(300, function () {
+              $(this).remove();
+            });
           },
           error: function (error) {
             console.error("API call failed: ", error);
+            displayError(error);
           },
         });
       },
       error: function (error) {
         console.error("API call failed: ", error);
+        displayError(error);
       },
-    });
-
-    $(".dm_modal_wrapper").fadeOut(300, function () {
-      $(this).remove();
     });
   });
 
-  $("body").on("click", ".dm_confirm_action, .dm_cancel_action", function () {
+  $("body").on("click", ".dm_cancel_action", function () {
     $(".dm_modal_wrapper").fadeOut(300, function () {
       $(this).remove();
     });
@@ -138,5 +146,10 @@ jQuery(document).ready(function ($) {
         console.error("Error updating Adresnica.");
       },
     });
+  }
+
+  function displayError(error) {
+    $(".dm-error").text(error);
+    $(".dm-error").removeAttr("style");
   }
 });
