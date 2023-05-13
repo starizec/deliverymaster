@@ -194,4 +194,68 @@ jQuery(document).ready(function ($) {
     $(".dm-error").text(error);
     $(".dm-error").removeAttr("style");
   }
+
+  jQuery(document).ready(function ($) {
+    const urlParams = new URLSearchParams(window.location.search);
+
+    const orders_page = urlParams.get("post_type");
+    const pagination_page =
+      urlParams.get("paged") != undefined ? urlParams.get("paged") : "1";
+
+    if (orders_page != "shop_order") {
+      return;
+    }
+
+    const limit = 20;
+    const offset = +pagination_page * limit - limit;
+
+    $.ajax({
+      url: ajaxurl, // WordPress AJAX endpoint
+      type: "POST",
+      data: {
+        action: "get_orders",
+        limit: limit,
+        offset: offset,
+      },
+      success: function (response) {
+        if (response.success) {
+          const orders = response.data;
+
+          $.each(orders, function (index, order) {
+            const pl_number = order.pl_number.split("-").pop();
+
+            if (order.pl_number != "") {
+              const parcel_status_element = $(`tr#post-${order.order_id}`).find(
+                "td.dm_parcel_status"
+              );
+              parcel_status_element.html('<img src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/images/loading.gif" alt="GIF Image">');
+
+              $.ajax({
+                url: `https://easyship.hr/api/parcel/parcel_status?secret=FcJyN7vU7WKPtUh7m1bx&parcel_number=${pl_number}`,
+                type: "POST",
+                success: function (r) {
+                  if (r.status === "err") {
+                    displayError(r.errlog);
+                    return;
+                  }
+                  update_parcel_status(order.order_id, r.parcel_status);
+                  parcel_status_element.text(r.parcel_status);
+                },
+                error: function (error) {
+                  console.error("API call failed: ", error);
+                },
+              });
+            }
+          });
+        } else {
+          // Handle error response
+          console.error(response.data);
+        }
+      },
+      error: function (error) {
+        // Handle AJAX error
+        console.error(error);
+      },
+    });
+  });
 });

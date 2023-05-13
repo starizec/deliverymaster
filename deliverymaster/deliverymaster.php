@@ -325,7 +325,6 @@ function add_custom_order_column($columns) {
     return $columns;
 }
 
-// Display custom meta data value for each order
 add_action('manage_shop_order_posts_custom_column', 'display_custom_order_meta_data');
 function display_custom_order_meta_data($column) {
     global $post;
@@ -333,8 +332,29 @@ function display_custom_order_meta_data($column) {
     if ($column === 'dm_parcel_status') {
         $order = wc_get_order($post->ID);
         $custom_meta_data = $order->get_meta('x_parcel_status');
-
-        // Display the custom meta data value
         echo $custom_meta_data;
     }
+}
+
+add_action('wp_ajax_get_orders', 'get_orders');
+add_action('wp_ajax_nopriv_get_orders', 'get_orders');
+
+function get_orders() {
+    $orders = wc_get_orders(array(
+        'limit' => $_POST['limit'],
+        'offset' => $_POST['offset']
+    ));
+
+    $response = array();
+    foreach ($orders as $order) {
+        $order = wc_get_order($order->get_id());
+        $pl_number = $order->get_meta('x_parcel_number');
+
+        $response[] = array(
+            'order_id' => $order->get_id(),
+            'pl_number' => $pl_number
+        );
+    }
+
+    wp_send_json_success($response);
 }
