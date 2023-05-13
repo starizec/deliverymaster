@@ -317,3 +317,24 @@ function dm_update_parcel_status()
 
     wp_die();
 }
+
+// Add custom column to the orders table
+add_filter('manage_edit-shop_order_columns', 'add_custom_order_column');
+function add_custom_order_column($columns) {
+    $columns['dm_parcel_status'] = 'Parcel status';
+    return $columns;
+}
+
+// Display custom meta data value for each order
+add_action('manage_shop_order_posts_custom_column', 'display_custom_order_meta_data');
+function display_custom_order_meta_data($column) {
+    global $post;
+
+    if ($column === 'dm_parcel_status') {
+        $order = wc_get_order($post->ID);
+        $custom_meta_data = $order->get_meta('x_parcel_status');
+
+        // Display the custom meta data value
+        echo $custom_meta_data;
+    }
+}
