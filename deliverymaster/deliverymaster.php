@@ -296,3 +296,24 @@ function dm_update_adresnica()
 
     wp_die();
 }
+
+
+add_action('wp_ajax_dm_update_parcel_status', 'dm_update_parcel_status');
+add_action('wp_ajax_nopriv_dm_update_parcel_status', 'dm_update_parcel_status');
+
+function dm_update_parcel_status()
+{
+    check_ajax_referer('dm_nonce', 'security');
+
+    $order_id = isset($_POST['order_id']) ? intval($_POST['order_id']) : 0;
+    $pl_status = isset($_POST['pl_status']) ? sanitize_text_field($_POST['pl_status']) : '';
+
+    if ($order_id > 0 && !empty($pl_status)) {
+        update_post_meta($order_id, 'x_parcel_status', $pl_status);
+        wp_send_json_success();
+    } else {
+        wp_send_json_error('Invalid order ID or pl_status.');
+    }
+
+    wp_die();
+}

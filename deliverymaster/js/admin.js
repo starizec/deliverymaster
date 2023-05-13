@@ -98,6 +98,23 @@ jQuery(document).ready(function ($) {
             link.click();
             link.remove();
 
+            $.ajax({
+              url: `https://easyship.hr/api/parcel/parcel_status?secret=FcJyN7vU7WKPtUh7m1bx&parcel_number=${response.pl_number[0]}`,
+              type: "POST",
+              success: function (r) {
+                if (r.status === "err") {
+                  displayError(r.errlog);
+                  return;
+                }
+                console.log(r);
+                update_parcel_status(orderData.reference, r.parcel_status);
+              },
+              error: function (error) {
+                console.error("API call failed: ", error);
+                displayError(error);
+              },
+            });
+
             $(".dm_modal_wrapper").fadeOut(300, function () {
               $(this).remove();
             });
@@ -144,6 +161,31 @@ jQuery(document).ready(function ($) {
       },
       error: function () {
         console.error("Error updating Adresnica.");
+      },
+    });
+  }
+
+  function update_parcel_status(order_id, pl_status) {
+    console.log(order_id, pl_status);
+    $.ajax({
+      url: dm_ajax.ajax_url,
+      type: "POST",
+      data: {
+        action: "dm_update_parcel_status",
+        security: dm_ajax.nonce,
+        order_id: order_id,
+        pl_status: pl_status,
+      },
+      success: function (response) {
+        console.log(response);
+        if (response.success) {
+          console.log("Parcel status updated successfully.");
+        } else {
+          console.error("Error updating Status: ", response.data);
+        }
+      },
+      error: function (error) {
+        console.error("Error updating Status.", error);
       },
     });
   }
