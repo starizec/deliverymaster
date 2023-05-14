@@ -23,6 +23,7 @@ if (!class_exists('DeliveryMaster')) {
             add_action('admin_menu', array($this, 'dm_add_options_page'));
             add_action('admin_init', array($this, 'dm_register_settings'));
             add_action('admin_enqueue_scripts', array($this, 'dm_enqueue_scripts'));
+            /* add_filter('manage_edit-shop_order_columns', array($this, 'dm_add_order_column')); */
             add_action( 'woocommerce_admin_order_actions_end', array( $this, 'dm_order_column_content' ) );
             add_action('woocommerce_admin_order_data_after_order_details', array($this, 'dm_add_icon_to_order_data_column'));
         }
@@ -115,6 +116,22 @@ if (!class_exists('DeliveryMaster')) {
         <?php
         }
 
+
+/*         public function dm_add_order_column($columns)
+        {
+            $new_columns = array();
+
+            foreach ($columns as $column_name => $column_info) {
+                $new_columns[$column_name] = $column_info;
+
+                if ('order_total' === $column_name) {
+                    $new_columns['delivery_master'] = __('Print label', 'delivery-master');
+                }
+            }
+
+            return $new_columns;
+        } */
+
         public function dm_order_column_content( $order ) {
             $order_id = method_exists( $order, 'get_id' ) ? $order->get_id() : $order->id;
 
@@ -204,12 +221,15 @@ function dm_show_confirm_modal()
                         <label class="labels"><?php esc_html_e('Payment Method:', 'delivery-master'); ?>
                             <input type="text" name="payment_method" value="<?php echo esc_attr($payment_method); ?>">
                         </label>
-
+                        <!--Payment -->
+                        <label class="labels"><?php esc_html_e('Payment:', 'delivery-master'); ?>
+                        <div class="payment">
                         <input type="radio" name="parcel_type" value="cod" id="x-cod" <?php $payment_method === 'cod' ? print_r('checked') : '' ?>>
-                        <label for="x-cod">COD</label>
+                        <label for="x-cod" style="padding-right:5px;">COD</label>
                         <input type="radio" name="parcel_type" value="classic" id="x-classic" <?php $payment_method != 'cod' ? print_r('checked') : '' ?>>
                         <label for="x-classic">Classic</label>
-
+                        </div>
+                        </label>
                         <!-- Collection Date (Order Date) -->
                         <label class="labels"><?php esc_html_e('Collection Date (Order Date):', 'delivery-master'); ?>
                             <input type="date" name="collection_date" value="<?php echo esc_attr($order_date); ?>">
