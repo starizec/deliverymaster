@@ -23,8 +23,8 @@ if (!class_exists('DeliveryMaster')) {
             add_action('admin_menu', array($this, 'dm_add_options_page'));
             add_action('admin_init', array($this, 'dm_register_settings'));
             add_action('admin_enqueue_scripts', array($this, 'dm_enqueue_scripts'));
-            add_filter('manage_edit-shop_order_columns', array($this, 'dm_add_order_column'));
-            add_action('manage_shop_order_posts_custom_column', array($this, 'dm_order_column_content'));
+            /* add_filter('manage_edit-shop_order_columns', array($this, 'dm_add_order_column')); */
+            add_action( 'woocommerce_admin_order_actions_end', array( $this, 'dm_order_column_content' ) );
             add_action('woocommerce_admin_order_data_after_order_details', array($this, 'dm_add_icon_to_order_data_column'));
         }
 
@@ -117,7 +117,7 @@ if (!class_exists('DeliveryMaster')) {
         }
 
 
-        public function dm_add_order_column($columns)
+/*         public function dm_add_order_column($columns)
         {
             $new_columns = array();
 
@@ -130,17 +130,14 @@ if (!class_exists('DeliveryMaster')) {
             }
 
             return $new_columns;
-        }
+        } */
 
-        public function dm_order_column_content($column)
-        {
-            global $post;
+        public function dm_order_column_content( $order ) {
+            $order_id = method_exists( $order, 'get_id' ) ? $order->get_id() : $order->id;
 
-            if ('delivery_master' === $column) {
-                $icon_url = plugin_dir_url(__FILE__) . 'assets/dpd-logo.png';
-                echo '<a href="#" class="dm_open_modal" data-order-id="' . esc_attr($post->ID) . '"><img src="' . esc_url($icon_url) . '" alt="' . esc_attr__('Open Modal', 'delivery-master') . '" style="max-width: 30px; height: auto; cursor: pointer;" /></a>';
-            }
-        }
+            $icon_url = plugin_dir_url( __FILE__ ) . 'assets/dpd-logo.png';
+            echo '<a href="#" class="dm_open_modal button" data-order-id="' . esc_attr( $order_id ) . '"><img src="' . esc_url( $icon_url ) . '" alt="' . esc_attr__( 'Open Modal', 'delivery-master' ) . '" class="dpd-action-icon"" /></a>';
+        }    
     }
 
     new DeliveryMaster();
