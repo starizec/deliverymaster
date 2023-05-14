@@ -23,7 +23,6 @@ if (!class_exists('DeliveryMaster')) {
             add_action('admin_menu', array($this, 'dm_add_options_page'));
             add_action('admin_init', array($this, 'dm_register_settings'));
             add_action('admin_enqueue_scripts', array($this, 'dm_enqueue_scripts'));
-            /* add_filter('manage_edit-shop_order_columns', array($this, 'dm_add_order_column')); */
             add_action( 'woocommerce_admin_order_actions_end', array( $this, 'dm_order_column_content' ) );
             add_action('woocommerce_admin_order_data_after_order_details', array($this, 'dm_add_icon_to_order_data_column'));
         }
@@ -115,22 +114,6 @@ if (!class_exists('DeliveryMaster')) {
             </script>
         <?php
         }
-
-
-/*         public function dm_add_order_column($columns)
-        {
-            $new_columns = array();
-
-            foreach ($columns as $column_name => $column_info) {
-                $new_columns[$column_name] = $column_info;
-
-                if ('order_total' === $column_name) {
-                    $new_columns['delivery_master'] = __('Print label', 'delivery-master');
-                }
-            }
-
-            return $new_columns;
-        } */
 
         public function dm_order_column_content( $order ) {
             $order_id = method_exists( $order, 'get_id' ) ? $order->get_id() : $order->id;
