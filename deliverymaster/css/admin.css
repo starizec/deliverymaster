@@ -97,3 +97,41 @@
   width: 2.5em !important;
   border: none !important;
 }
+
+.dm_modal_header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.dm_close_button.dm_cancel_action {
+  width: 25px;
+  height: 25px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+/*PARCEL STATUS*/
+.dm-package-status {
+  padding: 0 5px;
+}
+
+.dm-status-sent {
+  background: #c6e1c6 !important;
+  color: #5b841b !important;
+}
+
+.dm-status-delivered {
+  background: #c8d7e1 !important;
+  color: #2e4453 !important;
+}
+
+.dm-status-cancelled {
+  background: #eb000326 !important;
+  color: #f60030 !important;
+}
+
+.dm-status-printed {
+  background: #0094eb26 !important;
+  color: #2a4aa5 !important;
+}

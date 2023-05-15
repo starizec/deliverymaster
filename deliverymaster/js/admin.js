@@ -239,7 +239,10 @@ jQuery(document).ready(function ($) {
                     return;
                   }
                   update_parcel_status(order.order_id, r.parcel_status);
-                  parcel_status_element.text(r.parcel_status);
+                  const spanElement = $('<span>' + r.parcel_status + '</span>');
+                  applyStatusClass(spanElement, r.parcel_status);
+                  parcel_status_element.html(spanElement);
+
                 },
                 error: function (error) {
                   console.error("API call failed: ", error);
@@ -259,3 +262,34 @@ jQuery(document).ready(function ($) {
     });
   });
 });
+
+function applyStatusClass(element, status) {
+  if (status) {
+    element.addClass('dm-package-status order-status');
+    switch (status) {
+      case 'PRINTED':
+        element.addClass('dm-status-printed');
+        break;
+      case 'DELIVERED':
+        element.addClass('dm-status-delivered');
+        break;
+      case 'CANCELLED':
+        element.addClass('dm-status-cancelled');
+        break;
+      case 'SENT':
+        element.addClass('dm-status-sent');
+        break;
+      default:
+        element.addClass('dm-status-rest');
+        break;
+    }
+  }
+}
+
+jQuery(document).ready(function($) {
+  $('td.dm_parcel_status span').each(function() {
+    var status = $(this).text();
+    applyStatusClass($(this), status);
+  });
+});
+

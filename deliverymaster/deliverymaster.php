@@ -25,6 +25,7 @@ if (!class_exists('DeliveryMaster')) {
             add_action('admin_enqueue_scripts', array($this, 'dm_enqueue_scripts'));
             add_action( 'woocommerce_admin_order_actions_end', array( $this, 'dm_order_column_content' ) );
             add_action('woocommerce_admin_order_data_after_order_details', array($this, 'dm_add_icon_to_order_data_column'));
+            add_action('plugins_loaded', array($this, 'my_plugin_load_textdomain'));
         }
 
         public function dm_add_options_page()
@@ -38,7 +39,22 @@ if (!class_exists('DeliveryMaster')) {
                 array($this, 'dm_options_page_content')
             );
         }
-
+        
+        public function my_plugin_load_textdomain() {
+            $plugin_rel_path = basename(dirname(__FILE__)) . '/languages/';
+            $languages_dir = WP_PLUGIN_DIR . '/' . $plugin_rel_path;
+        
+            $locale = get_locale();
+        
+            $mo_file = $languages_dir . '/' . 'deliverymaster-'. $locale . '.mo';
+        
+            if (file_exists($mo_file)) {
+                // Učitajte .mo datoteku za trenutni jezik
+                return load_textdomain('delivery-master', $mo_file);
+            } else {
+                return false;
+            }
+        }
 
         public function dm_register_settings()
         {
@@ -155,14 +171,13 @@ function dm_show_confirm_modal()
         </div>
         <div class="dm_modal_wrapper">
             <div class="dm_modal">
-                <h2 style="margin-top: 0;"><?php esc_html_e('Order Details', 'delivery-master'); ?></h2>
+                <div class="dm_modal_header">
+                <h2 style="margin-top: 0;"><?php esc_html_e('Order Details', 'delivery-master'); ?> #<?php echo esc_attr($order_data['id']); ?></h2>
+                <button class="dm_close_button dm_cancel_action">&times;</button>
+                </div>
                 <div class="dm-error" style="display: none"></div>
                 <form id="dm_order_details_form">
                     <div class="dm_form_columns">
-                        <!-- Reference -->
-                        <label class="labels"><?php esc_html_e('Reference:', 'delivery-master'); ?>
-                            <input type="text" name="reference" value="<?php echo esc_attr($order_data['id']); ?>">
-                        </label>
                         <!-- Customer's Name -->
                         <label class="labels"><?php esc_html_e("Customer's Name:", 'delivery-master'); ?>
                             <input type="text" name="customer_name" value="<?php echo esc_attr($billing['first_name'] . ' ' . $billing['last_name']); ?>">
@@ -201,6 +216,10 @@ function dm_show_confirm_modal()
                         </label>
                     </div>
                     <div class="dm_form_columns">
+                        <!-- Reference -->
+                        <label class="labels"><?php esc_html_e('Reference:', 'delivery-master'); ?>
+                            <input type="text" name="reference" value="<?php echo esc_attr($order_data['id']); ?>">
+                        </label>
                         <!--Payment Method -->
                         <label class="labels"><?php esc_html_e('Payment Method:', 'delivery-master'); ?>
                             <input type="text" name="payment_method" value="<?php echo esc_attr($payment_method); ?>">
@@ -305,7 +324,7 @@ function dm_update_parcel_status()
 // Add custom column to the orders table
 add_filter('manage_edit-shop_order_columns', 'add_custom_order_column');
 function add_custom_order_column($columns) {
-    $columns['dm_parcel_status'] = 'Parcel status';
+    $columns['dm_parcel_status'] = __('Parcel status', 'delivery-master');
     return $columns;
 }
 
@@ -316,7 +335,7 @@ function display_custom_order_meta_data($column) {
     if ($column === 'dm_parcel_status') {
         $order = wc_get_order($post->ID);
         $custom_meta_data = $order->get_meta('x_parcel_status');
-        echo $custom_meta_data;
+        echo '<span>' . $custom_meta_data . '</span>';
     }
 }
 
