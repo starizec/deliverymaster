@@ -276,9 +276,6 @@ function applyStatusClass(element, status) {
       case 'CANCELLED':
         element.addClass('dm-status-cancelled');
         break;
-      case 'SENT':
-        element.addClass('dm-status-sent');
-        break;
       default:
         element.addClass('dm-status-rest');
         break;
@@ -292,4 +289,3 @@ jQuery(document).ready(function($) {
     applyStatusClass($(this), status);
   });
 });
-

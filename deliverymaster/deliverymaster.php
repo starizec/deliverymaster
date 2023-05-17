@@ -180,7 +180,7 @@ function dm_show_confirm_modal()
                     <div class="dm_form_columns">
                         <!-- Customer's Name -->
                         <label class="labels"><?php esc_html_e("Customer's Name:", 'delivery-master'); ?>
-                            <input type="text" name="customer_name" value="<?php echo esc_attr($billing['first_name'] . ' ' . $billing['last_name']); ?>">
+                            <input type="text" name="customer_name" value="<?php echo esc_attr($shipping['first_name'] . ' ' . $shipping['last_name']); ?>">
                         </label>
                         <!-- Customer's Address -->
                         <label class="labels"><?php esc_html_e("Customer's Address:", 'delivery-master'); ?>
@@ -204,7 +204,7 @@ function dm_show_confirm_modal()
                         </label>
                         <!-- Contact Person -->
                         <label class="labels"><?php esc_html_e('Contact Person:', 'delivery-master'); ?>
-                            <input type="text" name="contact_person" value="<?php echo esc_attr($billing['first_name'] . ' ' . $billing['last_name']); ?>">
+                            <input type="text" name="contact_person" value="<?php echo esc_attr($shipping['first_name'] . ' ' . $shipping['last_name']); ?>">
                         </label>
                         <!-- Phone -->
                         <label class="labels"><?php esc_html_e('Phone:', 'delivery-master'); ?>
@@ -270,15 +270,7 @@ function dm_show_confirm_modal()
 }
 add_action('wp_ajax_dm_show_confirm_modal', 'dm_show_confirm_modal');
 
-//add custom bulk action dpd
-
-add_filter('bulk_actions-edit-shop_order', 'add_dpd_print_label_bulk_action', 20, 1);
-
-function add_dpd_print_label_bulk_action($actions)
-{
-    $actions['dpd_print_label'] = __('DPD Print Label', 'text_domain');
-    return $actions;
-}
+//update adresnice
 
 add_action('wp_ajax_dm_update_adresnica', 'dm_update_adresnica');
 add_action('wp_ajax_nopriv_dm_update_adresnica', 'dm_update_adresnica');
@@ -360,4 +352,64 @@ function get_orders() {
     }
 
     wp_send_json_success($response);
+}
+
+
+//add custom bulk action dpd
+
+add_filter('bulk_actions-edit-shop_order', 'add_dpd_print_label_bulk_action', 10, 1);
+
+function add_dpd_print_label_bulk_action($actions) {
+    $actions['dpd_print_label'] = __('DPD Print Label', 'textdomain');
+    return $actions;
+}
+
+add_filter('handle_bulk_actions-edit-shop_order', 'handle_dpd_print_label_bulk_action', 10, 3);
+
+function handle_dpd_print_label_bulk_action($redirect_to, $action, $post_ids) {
+    if ($action !== 'dpd_print_label')
+        return $redirect_to;
+
+    $orders_data = array();
+
+    foreach ($post_ids as $order_id) {
+        $order = wc_get_order($order_id);
+        $order_data = $order->get_data();
+        $billing = $order_data['billing'];
+        $shipping = $order_data['shipping'];
+        $order_date = $order_data['date_created']->date('Y-m-d');
+        $payment_method = $order->get_payment_method();
+        $order_total = $order->get_total();
+        $weight = 2;
+        $package_number = 1;
+        $parcel_type = $payment_method === 'cod' ? 'D-COD' : 'D';
+
+        preg_match('/\d[\w\s-]*$/', $shipping['address_1'], $house_number);
+        $house_number = isset($house_number[0]) ? $house_number[0] : '';
+
+        $address_without_house_number = preg_replace('/\d[\w\s-]*$/', '', $shipping['address_1']);
+
+        $orders_data[] = array(
+            'reference' => $order_id,
+            'customer_name' => $shipping['first_name'] . ' ' . $shipping['last_name'],
+            'customer_address' => $address_without_house_number,
+            'house_number' => $house_number,
+            'city' => $shipping['city'],
+            'zip_code' => $shipping['postcode'],
+            'country' => $shipping['country'],
+            'contact_person' => $shipping['first_name'] . ' ' . $shipping['last_name'],
+            'phone' => $billing['phone'],
+            'email' => $billing['email'],
+            'payment_method' => $payment_method,
+            'order_date' => $order_date,
+            'weight' => $weight,
+            'package_number' => $package_number,
+            'cod' => $order_total,
+            'parcel_type' => $parcel_type,
+            'note' => $order_data['customer_note'],
+        );
+    }
+    wp_die('<pre>' . print_r($orders_data, true) . '</pre>');
+
+    return $redirect_to;
 }

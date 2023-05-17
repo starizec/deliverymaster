@@ -116,14 +116,9 @@
   padding: 0 5px;
 }
 
-.dm-status-sent {
+.dm-status-delivered {
   background: #c6e1c6 !important;
   color: #5b841b !important;
-}
-
-.dm-status-delivered {
-  background: #c8d7e1 !important;
-  color: #2e4453 !important;
 }
 
 .dm-status-cancelled {
