@@ -23,7 +23,7 @@ if (!class_exists('DeliveryMaster')) {
             add_action('admin_menu', array($this, 'dm_add_options_page'));
             add_action('admin_init', array($this, 'dm_register_settings'));
             add_action('admin_enqueue_scripts', array($this, 'dm_enqueue_scripts'));
-            add_action( 'woocommerce_admin_order_actions_end', array( $this, 'dm_order_column_content' ) );
+            add_action('woocommerce_admin_order_actions_end', array($this, 'dm_order_column_content'));
             add_action('woocommerce_admin_order_data_after_order_details', array($this, 'dm_add_icon_to_order_data_column'));
             add_action('plugins_loaded', array($this, 'my_plugin_load_textdomain'));
         }
@@ -39,15 +39,16 @@ if (!class_exists('DeliveryMaster')) {
                 array($this, 'dm_options_page_content')
             );
         }
-        
-        public function my_plugin_load_textdomain() {
+
+        public function my_plugin_load_textdomain()
+        {
             $plugin_rel_path = basename(dirname(__FILE__)) . '/languages/';
             $languages_dir = WP_PLUGIN_DIR . '/' . $plugin_rel_path;
-        
+
             $locale = get_locale();
-        
-            $mo_file = $languages_dir . '/' . 'deliverymaster-'. $locale . '.mo';
-        
+
+            $mo_file = $languages_dir . '/' . 'deliverymaster-' . $locale . '.mo';
+
             if (file_exists($mo_file)) {
                 // Učitajte .mo datoteku za trenutni jezik
                 return load_textdomain('delivery-master', $mo_file);
@@ -132,12 +133,13 @@ if (!class_exists('DeliveryMaster')) {
         }
 
 
-        public function dm_order_column_content( $order ) {
-            $order_id = method_exists( $order, 'get_id' ) ? $order->get_id() : $order->id;
+        public function dm_order_column_content($order)
+        {
+            $order_id = method_exists($order, 'get_id') ? $order->get_id() : $order->id;
 
-            $icon_url = plugin_dir_url( __FILE__ ) . 'assets/dpd-logo.png';
-            echo '<a href="#" class="dm_open_modal button" data-order-id="' . esc_attr( $order_id ) . '"><img src="' . esc_url( $icon_url ) . '" alt="' . esc_attr__( 'Open Modal', 'delivery-master' ) . '" class="dpd-action-icon"" /></a>';
-        }    
+            $icon_url = plugin_dir_url(__FILE__) . 'assets/dpd-logo.png';
+            echo '<a href="#" class="dm_open_modal button" data-order-id="' . esc_attr($order_id) . '"><img src="' . esc_url($icon_url) . '" alt="' . esc_attr__('Open Modal', 'delivery-master') . '" class="dpd-action-icon"" /></a>';
+        }
     }
 
     new DeliveryMaster();
@@ -172,8 +174,8 @@ function dm_show_confirm_modal()
         <div class="dm_modal_wrapper">
             <div class="dm_modal">
                 <div class="dm_modal_header">
-                <h2 style="margin-top: 0;"><?php esc_html_e('Order Details', 'delivery-master'); ?> #<?php echo esc_attr($order_data['id']); ?></h2>
-                <button class="dm_close_button dm_cancel_action">&times;</button>
+                    <h2 style="margin-top: 0;"><?php esc_html_e('Order Details', 'delivery-master'); ?> #<?php echo esc_attr($order_data['id']); ?></h2>
+                    <button class="dm_close_button dm_cancel_action">&times;</button>
                 </div>
                 <div class="dm-error" style="display: none"></div>
                 <form id="dm_order_details_form">
@@ -226,12 +228,12 @@ function dm_show_confirm_modal()
                         </label>
                         <!--Payment -->
                         <label class="labels"><?php esc_html_e('Payment:', 'delivery-master'); ?>
-                        <div class="payment">
-                        <input type="radio" name="parcel_type" value="cod" id="x-cod" <?php $payment_method === 'cod' ? print_r('checked') : '' ?>>
-                        <label for="x-cod" style="padding-right:5px;">COD</label>
-                        <input type="radio" name="parcel_type" value="classic" id="x-classic" <?php $payment_method != 'cod' ? print_r('checked') : '' ?>>
-                        <label for="x-classic">Classic</label>
-                        </div>
+                            <div class="payment">
+                                <input type="radio" name="parcel_type" value="cod" id="x-cod" <?php $payment_method === 'cod' ? print_r('checked') : '' ?>>
+                                <label for="x-cod" style="padding-right:5px;">COD</label>
+                                <input type="radio" name="parcel_type" value="classic" id="x-classic" <?php $payment_method != 'cod' ? print_r('checked') : '' ?>>
+                                <label for="x-classic">Classic</label>
+                            </div>
                         </label>
                         <!-- Collection Date (Order Date) -->
                         <label class="labels"><?php esc_html_e('Collection Date (Order Date):', 'delivery-master'); ?>
@@ -315,13 +317,15 @@ function dm_update_parcel_status()
 
 // Add custom column to the orders table
 add_filter('manage_edit-shop_order_columns', 'add_custom_order_column');
-function add_custom_order_column($columns) {
+function add_custom_order_column($columns)
+{
     $columns['dm_parcel_status'] = __('Parcel status', 'delivery-master');
     return $columns;
 }
 
 add_action('manage_shop_order_posts_custom_column', 'display_custom_order_meta_data');
-function display_custom_order_meta_data($column) {
+function display_custom_order_meta_data($column)
+{
     global $post;
 
     if ($column === 'dm_parcel_status') {
@@ -334,7 +338,8 @@ function display_custom_order_meta_data($column) {
 add_action('wp_ajax_get_orders', 'get_orders');
 add_action('wp_ajax_nopriv_get_orders', 'get_orders');
 
-function get_orders() {
+function get_orders()
+{
     $orders = wc_get_orders(array(
         'limit' => $_POST['limit'],
         'offset' => $_POST['offset']
@@ -359,18 +364,25 @@ function get_orders() {
 
 add_filter('bulk_actions-edit-shop_order', 'add_dpd_print_label_bulk_action', 10, 1);
 
-function add_dpd_print_label_bulk_action($actions) {
+function add_dpd_print_label_bulk_action($actions)
+{
     $actions['dpd_print_label'] = __('DPD Print Label', 'textdomain');
     return $actions;
 }
 
 add_filter('handle_bulk_actions-edit-shop_order', 'handle_dpd_print_label_bulk_action', 10, 3);
 
-function handle_dpd_print_label_bulk_action($redirect_to, $action, $post_ids) {
+function handle_dpd_print_label_bulk_action($redirect_to, $action, $post_ids)
+{
     if ($action !== 'dpd_print_label')
         return $redirect_to;
 
+    $username = get_option('dm_username');
+    $password = get_option('dm_password');
+
     $orders_data = array();
+
+    $pl_numbers = array();
 
     foreach ($post_ids as $order_id) {
         $order = wc_get_order($order_id);
@@ -389,7 +401,7 @@ function handle_dpd_print_label_bulk_action($redirect_to, $action, $post_ids) {
 
         $address_without_house_number = preg_replace('/\d[\w\s-]*$/', '', $shipping['address_1']);
 
-        $orders_data[] = array(
+        $orders_data = array(
             'reference' => $order_id,
             'customer_name' => $shipping['first_name'] . ' ' . $shipping['last_name'],
             'customer_address' => $address_without_house_number,
@@ -408,8 +420,45 @@ function handle_dpd_print_label_bulk_action($redirect_to, $action, $post_ids) {
             'parcel_type' => $parcel_type,
             'note' => $order_data['customer_note'],
         );
+
+        $response = wp_remote_post("https://easyship.hr/api/parcel/parcel_import?username=$username&password=$password&cod_amount=$order_total&name1=" . $shipping['first_name'] . ' ' . $shipping['last_name'] . "&street=" . $orders_data['customer_address'] . "&rPropNum=" . $orders_data['house_number'] . "&city=" . $orders_data['city'] . "&country=" . $orders_data['country'] . "&pcode=" . $orders_data['zip_code'] . "&email=" . $orders_data['email'] . "&phone=" . $orders_data['phone'] . "&sender_remark=" . $orders_data['note'] . "&weight=" . $orders_data['weight'] . "&order_number=" . $orders_data['reference'] . "&cod_purpose=" . $orders_data['reference'] . "&parcel_type=$parcel_type&num_of_parcel=" . $orders_data['package_number'], array());
+
+        if (!is_wp_error($response) && wp_remote_retrieve_response_code($response) === 200) {
+            $pl_numbers[] = json_decode($response['body'], true)['pl_number'][0];
+            update_post_meta($order_id, 'x_parcel_number', 'HR-DPD-' . json_decode($response['body'], true)['pl_number'][0]);
+        } else {
+        }
     }
-    wp_die('<pre>' . print_r($orders_data, true) . '</pre>');
+    //wp_die('<pre>--' . implode(",", $pl_numbers) . '---' . print_r($pl_numbers, true) . '</pre>');
+
+    $label_response = wp_remote_post(
+        "https://easyship.hr/api/parcel/parcel_print?username=$username&password=$password&parcels=" . implode(",", $pl_numbers),
+        array(
+            'method'      => 'POST',
+            'timeout'     => 45,
+            'redirection' => 5,
+            'httpversion' => '1.0',
+            'blocking'    => true,
+            'headers'     => array(),
+            'body'        => array(),
+            'cookies'     => array(),
+            'xhrFields'   => array(
+                'responseType' => 'blob',
+            ),
+        )
+    );
+
+    if (!is_wp_error($label_response) && wp_remote_retrieve_response_code($label_response) === 200) {
+        $response_body = wp_remote_retrieve_body($label_response);
+
+        header("Content-type: application/pdf");
+        header('Content-disposition: attachment; filename="DPD-Label.pdf"');
+        header("Content-Length: " . strlen($response_body));
+
+        echo $response_body;
+        exit;
+    }
+    //wp_die('<pre>--' . print_r(json_decode($pl_numbers[0]['body'], true)['pl_number'][0]) .'---'. print_r($pl_numbers[0]['body']->pl_number) .'---'. print_r($pl_numbers, true) . '</pre>');
 
     return $redirect_to;
 }
