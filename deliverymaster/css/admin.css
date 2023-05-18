@@ -130,3 +130,7 @@
   background: #0094eb26 !important;
   color: #2a4aa5 !important;
 }
+
+.column-wc_actions {
+  width: 100px!important;
+}
