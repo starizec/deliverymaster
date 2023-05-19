@@ -4,9 +4,13 @@
  * Plugin Name: DeliveryMaster
  * Plugin URI: https://emedia.hr/
  * Description: A custom WooCommerce delivery plugin that will make your life easier.
+ * Tags: delivery, label, dpd
  * Version: 1.0.0
  * Author: Emedia
  * Author URI: https://emedia.hr/
+ * Tested up to: 6.2.1
+ * License: GPLv2 or later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  */
 
 if (!defined('ABSPATH')) {
