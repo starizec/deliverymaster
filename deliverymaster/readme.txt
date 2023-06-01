@@ -1,0 +1,48 @@
+=== Print Label and Tracking Code for DPD ===
+Contributors: davorzec
+Plugin Name: Express Label Maker
+Plugin URI: https://expresslabelmaker.com
+Plugin Slug: dpddeliveryplugin
+Tags: dpd, print label, package tracking, delivery plugin, shipping
+Author URI: https://lumenspei.com/
+Author: Lumen Spei
+Requires at least: 5.2
+Tested up to: 6.1.1
+Requires PHP: 5.6.20
+Stable tag: 4.3.0
+Version: 4.3.0
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+
+== Description ==
+
+Express Label Maker is a user-friendly WooCommerce plugin that quickly makes shipping labels.
+
+With a single click, you’ll be printing labels while simultaneously initiating the arrival of DPD courier, as well as the Email and SMS services.
+
+This plugin eliminates the need to manually complete DPD forms; simply go to the order details page, select the menu, and click “Print Label”. Labels will be instantly generated and printed, and deliveries can be made.
+
+**FEATURES:**
+
+* Single label print
+* Multi (bulk) label print
+* Easy connect to API service
+* Tracking code
+* SMS and Email notification
+* **One click delivery to customers**
+
+**REQUIREMENTS:**
+
+* Username and password
+
+== Installation ==
+
+= PREREQUISITE =
+
+1. You need to have an account on DPD, including a username and password
+2. You need to have a DPD ID
+
+= AFTER INSTALLING AND ACTIVATING THE PLUGIN, YOU'LL GET = 
+
+1. New Control Panel tab under WooCommerce > Express Label Maker
+2. Enter DPD username and password
