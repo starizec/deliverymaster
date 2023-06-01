@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Plugin Name: DeliveryMaster
- * Plugin URI: https://emedia.hr/
+ * Plugin Name: Express Label Maker
+ * Plugin URI: https://expresslabelmaker.com/
  * Description: A custom WooCommerce delivery plugin that will make your life easier.
  * Tags: delivery, label, dpd
  * Version: 1.0.0

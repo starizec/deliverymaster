@@ -46,3 +46,9 @@ This plugin eliminates the need to manually complete DPD forms; simply go to the
 
 1. New Control Panel tab under WooCommerce > Express Label Maker
 2. Enter DPD username and password
+
+== Changelog ==
+
+= 1.0.0 =
+Release date: June 1ST, 2023
+Initial release
