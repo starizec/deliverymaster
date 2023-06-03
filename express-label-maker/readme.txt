@@ -1,16 +1,15 @@
-=== Print Label and Tracking Code for DPD ===
+=== Express Label Maker ===
 Contributors: davorzec
 Plugin Name: Express Label Maker
 Plugin URI: https://expresslabelmaker.com
-Plugin Slug: dpddeliveryplugin
 Tags: dpd, print label, package tracking, delivery plugin, shipping
-Author URI: https://lumenspei.com/
-Author: Lumen Spei
+Author URI: https://emedia.hr/
+Author: emedia.hr
 Requires at least: 5.2
 Tested up to: 6.1.1
 Requires PHP: 5.6.20
-Stable tag: 4.3.0
-Version: 4.3.0
+Stable tag: 1.0.0
+Version: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -26,10 +25,7 @@ This plugin eliminates the need to manually complete DPD forms; simply go to the
 
 * Single label print
 * Multi (bulk) label print
-* Easy connect to API service
-* Tracking code
-* SMS and Email notification
-* **One click delivery to customers**
+* Track package status on orders page
 
 **REQUIREMENTS:**
 
