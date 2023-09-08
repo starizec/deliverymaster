@@ -1,4 +1,4 @@
-.dm_modal_wrapper {
+.elm_modal_wrapper {
   background-color: rgba(0, 0, 0, 0.6);
   position: fixed;
   top: 0;
@@ -11,7 +11,7 @@
   z-index: 99999;
 }
 
-.dm_modal {
+.elm_modal {
   background-color: #fff;
   padding: 20px;
   border-radius: 4px;
@@ -19,17 +19,17 @@
   max-width: 800px;
 }
 
-.dm_modal_actions {
+.elm_modal_actions {
   display: flex;
   justify-content: space-around;
   margin-top: 20px;
 }
 
-.dm_open_modal:focus {
+.elm_open_modal:focus {
   box-shadow: none;
 }
 
-#dm_order_details_form {
+#elm_order_details_form {
   display: flex;
   flex-direction: row;
 }
@@ -40,14 +40,14 @@
   padding: 3px;
 }
 
-.dm_form_columns {
+.elm_form_columns {
   flex: 1;
   display: flex;
   flex-direction: column;
   padding: 0 10px;
 }
 
-.dm_loading_panel {
+.elm_loading_panel {
   display: none;
   position: fixed;
   top: 0;
@@ -60,7 +60,7 @@
   align-items: center;
 }
 
-.dm_spinner {
+.elm_spinner {
   border: 4px solid rgba(0, 0, 0, 0.1);
   width: 36px;
   height: 36px;
@@ -78,14 +78,16 @@
   }
 }
 
-.dm-error {
+.elm-error {
   color: #721c24;
   background-color: #f8d7da;
   border-color: #f5c6cb;
   padding: 4px 8px;
   border-radius: 4px;
 }
-.dpd-action-icon {
+.dpd-action-icon,
+.gls-action-icon,
+.overseas-action-icon {
   cursor: pointer;
   width: 100% !important;
   margin: 0px !important;
@@ -93,17 +95,17 @@
   height: 100% !important;
 }
 
-.dm_open_modal.button {
+.elm_open_modal.button {
   width: 2.5em !important;
   border: none !important;
 }
 
-.dm_modal_header {
+.elm_modal_header {
   display: flex;
   justify-content: space-between;
 }
 
-.dm_close_button.dm_cancel_action {
+.elm_close_button.elm_cancel_action {
   width: 25px;
   height: 25px;
   display: flex;
@@ -111,26 +113,29 @@
   cursor: pointer;
 }
 
+.elm_icon_container {
+  display: inline-flex;
+}
 /*PARCEL STATUS*/
-.dm-package-status {
+.elm-package-status {
   padding: 0 5px;
 }
 
-.dm-status-delivered {
+.elm-status-delivered {
   background: #c6e1c6 !important;
   color: #5b841b !important;
 }
 
-.dm-status-cancelled {
+.elm-status-cancelled {
   background: #eb000326 !important;
   color: #f60030 !important;
 }
 
-.dm-status-printed {
+.elm-status-printed {
   background: #0094eb26 !important;
   color: #2a4aa5 !important;
 }
 
 .column-wc_actions {
-  width: 100px!important;
+  width: 100px !important;
 }
