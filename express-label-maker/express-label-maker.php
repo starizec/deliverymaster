@@ -124,20 +124,20 @@ class ExpressLabelMaker
         }
     }
 
-    public function elm_add_icon_to_order_data_column($order)
-    {
+    public function elm_add_icon_to_order_data_column($order) {
         $order_id = method_exists($order, 'get_id') ? $order->get_id() : $order->id;
-?>
+    ?>
         <script>
             jQuery(document).ready(function($) {
                 <?php foreach ($this->courier_icons as $courier => $icon) :
                     $icon_url = plugin_dir_url(__FILE__) . $icon['url'];
                 ?>
-                    var iconContainer = $('<div class="elm_icon_container" style="margin-top: 20px;"><a href="#" class="elm_open_modal" data-order-id="<?php echo esc_attr($order_id); ?>" data-courier="<?php echo $courier; ?>"><img src="<?php echo esc_url($icon_url); ?>" alt="<?php echo esc_attr($icon['alt'], 'express-label-maker'); ?>" style="max-width: 30px; height: auto; cursor: pointer;" /></a></div>');
+                    var iconContainer = $('<div class="elm_icon_container" style="margin-top: 20px;"><a href="#" class="elm_open_modal" data-order-id="<?php echo esc_attr($order_id); ?>" data-courier="<?php echo $courier; ?>"><img src="<?php echo esc_url($icon_url); ?>" alt="<?php echo esc_attr($icon['alt']); ?>" style="max-width: 30px; height: auto; cursor: pointer;" /></a></div>');
+                    iconContainer.appendTo('.order_data_column:last-child');
                 <?php endforeach; ?>
             });
         </script>
-        <?php
+    <?php
     }
 
     public function elm_show_confirm_modal()
