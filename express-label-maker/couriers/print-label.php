@@ -13,23 +13,16 @@ class ElmPrintLabel
         check_ajax_referer('elm_nonce', 'security');
 
         $courier = $_POST['chosenCourier'];
-    
         $saved_country = get_option("elm_country_option", '');
-        $saved_username = get_option("elm_{$courier}_username_option", '');
-        $saved_password = get_option("elm_{$courier}_password_option", '');
-        $saved_email = get_option('elm_email_option', '');
-        $saved_activation_key = get_option('elm_activation_key_option', '');
-        
         $domain = $_SERVER['SERVER_NAME'];
+        $order_id = $_POST['orderId'];
+
+        error_log(print_r($courier, true));
+        error_log(print_r($saved_country, true));
     
-        $user_data = array(
-            "username" => $saved_username,
-            "password" => $saved_password,
-            "domain" => $domain,
-            "licence" => $saved_activation_key,
-            "email" => $saved_email
-        );
-    
+        $userObj = new user();
+        $user_data = $userObj->getData($saved_country.$courier);
+
         $parcel_data = $_POST['parcel'];
     
         $body = array(
@@ -37,7 +30,8 @@ class ElmPrintLabel
             "parcel" => $parcel_data
         );
 
-        error_log(print_r($parcel_data, true));
+        /* error_log(print_r($user_data, true)); */
+       /*  error_log(print_r($parcel_data, true)); */
     
         $args = array(
             'method' => 'POST',
@@ -57,6 +51,9 @@ class ElmPrintLabel
             if (substr($response['response']['code'], 0, 1) == '2') {
    
                 $decoded_data = base64_decode($body_response['data']['labels']);
+
+                $meta_key = $saved_country . "_" . $courier . "_adresnica";
+                update_post_meta($order_id, $meta_key, $body_response['data']['parcels']);
 
                 $upload_dir = wp_upload_dir();
         

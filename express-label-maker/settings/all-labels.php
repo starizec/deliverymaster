@@ -25,6 +25,7 @@ function all_labels_tab_content() {
     $dir_path = $upload_dir['basedir'];
     $url_base = $upload_dir['baseurl'];
 
+    // dodati prefiks kurira po potrebi
     $patterns = array(
         'dpd-*.pdf',
     );

@@ -107,6 +107,7 @@
                 </label>
                     <!-- Hidden courier for api -->
                 <input type="hidden" id="hiddenCourier" value="" />
+                <input type="hidden" id="hiddenOrderId" value="<?php echo esc_attr($order_data['id']); ?>" />
         </form>
         <div class="elm_modal_actions">
             <button class="button button-primary elm_confirm_action">

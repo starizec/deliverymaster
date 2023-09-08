@@ -16,7 +16,9 @@
 require_once 'settings/general-settings.php';
 require_once 'settings/dpd-settings.php';
 require_once 'settings/all-labels.php';
+require_once 'settings/user-data.php';
 require_once 'couriers/print-label.php';
+require_once 'couriers/all-couriers.php';
 
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
@@ -24,6 +26,7 @@ if (!defined('ABSPATH')) {
 
 class ExpressLabelMaker
 {
+    protected $couriers;
 
     public function __construct()
     {
@@ -33,6 +36,9 @@ class ExpressLabelMaker
         add_action('woocommerce_admin_order_actions_end', array($this, 'elm_order_column_content'));
         add_action('woocommerce_admin_order_data_after_order_details', array($this, 'elm_add_icon_to_order_data_column'));
         add_action('wp_ajax_elm_show_confirm_modal', array($this, 'elm_show_confirm_modal'));
+/*         add_filter('manage_edit-shop_order_columns', 'elm_add_custom_order_column');
+        add_action('manage_shop_order_posts_custom_column', 'elm_display_custom_order_meta_data'); */
+        $this->couriers = new Couriers();
     }
 
     public function elm_enqueue_scripts($hook)
@@ -95,30 +101,14 @@ class ExpressLabelMaker
     
         echo '</div>';
     }
-    private $courier_icons = array(
-        'dpd' => array(
-            'url' => 'assets/dpd-logo.png',
-            'alt' => 'DPD Logo',
-            'ajax_action' => 'elm_show_confirm_modal'
-        ),
-        /*         'gls' => array(
-            'url' => 'assets/gls-logo.png',
-            'alt' => 'GLS Logo',
-            'ajax_action' => 'elm_show_confirm_modal'
-        ),
-        'overseas' => array(
-            'url' => 'assets/overseas-logo.png',
-            'alt' => 'OVERSEAS Logo',
-            'ajax_action' => 'elm_show_confirm_modal'
-        ), */
-    );
-
 
     public function elm_order_column_content($order)
     {
         $order_id = method_exists($order, 'get_id') ? $order->get_id() : $order->id;
 
-        foreach ($this->courier_icons as $courier => $icon) {
+        $courier_icons = $this->couriers->get_courier_icons();
+
+        foreach ($courier_icons as $courier => $icon) {
             $icon_url = plugin_dir_url(__FILE__) . $icon['url'];
             echo '<a href="#" class="elm_open_modal button" data-order-id="' . esc_attr($order_id) . '" data-courier="' . $courier . '"><img src="' . esc_url($icon_url) . '" alt="' . esc_attr($icon['alt'], 'express-label-maker') . '" class="' . esc_attr($courier) . '-action-icon" /></a>';
         }
@@ -126,10 +116,12 @@ class ExpressLabelMaker
 
     public function elm_add_icon_to_order_data_column($order) {
         $order_id = method_exists($order, 'get_id') ? $order->get_id() : $order->id;
+        
+        $courier_icons = $this->couriers->get_courier_icons();
     ?>
         <script>
             jQuery(document).ready(function($) {
-                <?php foreach ($this->courier_icons as $courier => $icon) :
+                <?php foreach ($courier_icons as $courier => $icon) :
                     $icon_url = plugin_dir_url(__FILE__) . $icon['url'];
                 ?>
                     var iconContainer = $('<div class="elm_icon_container" style="margin-top: 20px;"><a href="#" class="elm_open_modal" data-order-id="<?php echo esc_attr($order_id); ?>" data-courier="<?php echo $courier; ?>"><img src="<?php echo esc_url($icon_url); ?>" alt="<?php echo esc_attr($icon['alt']); ?>" style="max-width: 30px; height: auto; cursor: pointer;" /></a></div>');
@@ -139,6 +131,24 @@ class ExpressLabelMaker
         </script>
     <?php
     }
+
+/*     public function elm_add_custom_order_column($columns)
+        {
+            $columns['elm_parcel_status'] = __('Parcel status', 'delivery-master');
+            return $columns;
+        }
+
+
+    public function elm_display_custom_order_meta_data($column)
+    {
+        global $post;
+
+        if ($column === 'elm_parcel_status') {
+            $order = wc_get_order($post->ID);
+            $custom_meta_data = $order->get_meta('parcel_status');
+            echo '<span>' . $custom_meta_data . '</span>';
+        }
+    } */
 
     public function elm_show_confirm_modal()
     {
@@ -164,7 +174,7 @@ class ExpressLabelMaker
 
             ob_start();
 
-            include('express-label-maker-form.php');
+            include('forms/express-label-maker-form.php');
         ?>
 <?php
 

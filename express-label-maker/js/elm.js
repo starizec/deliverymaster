@@ -71,6 +71,7 @@ jQuery(document).ready(function ($) {
         }, {}); */
     var courier = $("#hiddenCourier").val();
     var form = $("#elm_order_details_form");
+    var orderId = $("#hiddenOrderId").val();
 
     switch (courier) {
       case "dpd":
@@ -80,6 +81,7 @@ jQuery(document).ready(function ($) {
 
     console.log(parcelData, "parceldata");
     console.log(courier, "courier");
+    console.log(orderId, "orderId");
 
     $.ajax({
       url: elm_ajax.ajax_url,
@@ -89,6 +91,7 @@ jQuery(document).ready(function ($) {
         parcel: parcelData,
         security: elm_ajax.nonce,
         chosenCourier: courier,
+        orderId: orderId
       },
       success: function (response) {
         if (response.success) {
