@@ -53,11 +53,20 @@ class ElmPrintLabel
                 $decoded_data = base64_decode($body_response['data']['labels']);
 
                 $meta_key = $saved_country . "_" . $courier . "_adresnica";
-                update_post_meta($order_id, $meta_key, $body_response['data']['parcels']);
 
-                $upload_dir = wp_upload_dir();
+                $existing_meta_value = get_post_meta($order_id, $meta_key, true);
         
                 $parcel_value = isset($body_response['data']['parcels']) ? $body_response['data']['parcels'] : 'unknown';
+
+                if (!empty($existing_meta_value)) {
+                    $new_meta_value = $existing_meta_value . "," . $parcel_value;
+                } else {
+                    $new_meta_value = $parcel_value;
+                }
+    
+                update_post_meta($order_id, $meta_key, $new_meta_value);
+
+                $upload_dir = wp_upload_dir();
         
                 $file_name = "$courier-" . $parcel_value . ".pdf";
 
@@ -69,9 +78,15 @@ class ElmPrintLabel
             
                     file_put_contents($file_path, $decoded_data);
             
-                    wp_send_json_success(array('file_path' => $upload_dir['url'] . '/' . $file_name));
+                    wp_send_json_success(array(
+                        'file_path' => $upload_dir['url'] . '/' . $file_name,
+                        'file_name' => $file_name
+                    ));
                 } else {
-                    wp_send_json_success(array('pdf_data' => base64_encode($decoded_data)));
+                    wp_send_json_success(array(
+                        'pdf_data' => base64_encode($decoded_data),
+                        'file_name' => $file_name
+                    ));
                 }
 
             } else {

@@ -35,6 +35,7 @@ class ExpressLabelMaker
         add_action('plugins_loaded', array($this, 'load_plugin_textdomain'));
         add_action('woocommerce_admin_order_actions_end', array($this, 'elm_order_column_content'));
         add_action('woocommerce_admin_order_data_after_order_details', array($this, 'elm_add_icon_to_order_data_column'));
+        add_action('woocommerce_admin_order_data_after_order_details', array($this, 'elm_add_pdf_to_order_column'));
         add_action('wp_ajax_elm_show_confirm_modal', array($this, 'elm_show_confirm_modal'));
 /*         add_filter('manage_edit-shop_order_columns', 'elm_add_custom_order_column');
         add_action('manage_shop_order_posts_custom_column', 'elm_display_custom_order_meta_data'); */
@@ -131,6 +132,55 @@ class ExpressLabelMaker
         </script>
     <?php
     }
+
+    public function elm_add_pdf_to_order_column($order) {
+        $order_id = method_exists($order, 'get_id') ? $order->get_id() : $order->id;
+        $courier_icons = $this->couriers->get_courier_icons();
+        
+        $upload_dir = wp_upload_dir();
+        $dir_path = $upload_dir['basedir'];
+        $url_base = $upload_dir['baseurl'];
+    
+        $meta_keys = get_post_custom_keys($order_id);
+        $relevant_meta_key = null;
+        foreach ($meta_keys as $key) {
+            if (strpos($key, '_adresnica') !== false) {
+                $relevant_meta_key = $key;
+                break;
+            }
+        }
+    
+        if ($relevant_meta_key) {
+            $adresnica_values = get_post_meta($order_id, $relevant_meta_key, true);
+            $labels = explode(',', $adresnica_values);
+        } else {
+            $labels = array();
+        }
+
+        ?>
+        <script>
+            jQuery(document).ready(function($) {
+                var pdfContainer = $('<div class="elm_pdf_container"></div>');
+                
+                <?php
+                foreach ($courier_icons as $courier => $icon) :
+                foreach ($labels as $label) :
+                    $file_name = $courier . "-" . $label . ".pdf"; 
+                    $matching_files = glob($dir_path . '/*/*/' . $file_name);
+                    foreach ($matching_files as $file_path) {
+                        $file_url = $url_base . '/' . substr($file_path, strlen($dir_path) + 1);
+                    ?>
+                        var labelLink = $('<a href="<?php echo esc_url($file_url); ?>" target="_blank"><?php echo esc_html($file_name); ?></a>');
+                        labelLink.appendTo(pdfContainer);
+                    <?php } ?>
+                <?php endforeach; endforeach;?>
+    
+                pdfContainer.appendTo('.order_data_column:last-child');
+            });
+        </script>
+        <?php
+    }
+    
 
 /*     public function elm_add_custom_order_column($columns)
         {

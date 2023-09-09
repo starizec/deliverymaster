@@ -94,6 +94,8 @@ jQuery(document).ready(function ($) {
         orderId: orderId
       },
       success: function (response) {
+
+        console.log(response, 'response')
         if (response.success) {
           console.log(response, "success");
           $(".elm_loading_panel").fadeOut(300);
@@ -110,6 +112,14 @@ jQuery(document).ready(function ($) {
             let blob = new Blob([uint8Array], { type: "application/pdf" });
             let url = URL.createObjectURL(blob);
             window.open(url, "_blank");
+
+            let a = document.createElement('a');
+            a.href = url;
+            a.download = response.data.file_name;
+            document.body.appendChild(a);
+            a.click();
+            URL.revokeObjectURL(url);
+            document.body.removeChild(a);
           }
 
           jQuery(".elm_modal_wrapper").fadeOut(300, function () {
