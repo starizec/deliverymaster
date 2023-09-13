@@ -12,11 +12,12 @@ class user
 
     public function HrDPD(){
         return [
-            'domain' => $_SERVER['SERVER_NAME'],
-            'activation_key' => get_option('elm_activation_key_option', ''),
+            'domain' => /* $_SERVER['SERVER_NAME'] */'emedia.hr',
+            'licence' => get_option('elm_licence_option', ''),
             'email' => get_option('elm_email_option', ''),
             'username' => get_option("elm_dpd_username_option", ''),
-            'password' => get_option("elm_dpd_password_option", '')
+            'password' => get_option("elm_dpd_password_option", ''),
+            'platform' => 'wordpress'
         ];
     }
 }

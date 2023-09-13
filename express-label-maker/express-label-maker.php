@@ -15,7 +15,6 @@
 
 require_once 'settings/general-settings.php';
 require_once 'settings/dpd-settings.php';
-require_once 'settings/all-labels.php';
 require_once 'settings/user-data.php';
 require_once 'couriers/print-label.php';
 require_once 'couriers/all-couriers.php';
@@ -37,8 +36,6 @@ class ExpressLabelMaker
         add_action('woocommerce_admin_order_data_after_order_details', array($this, 'elm_add_icon_to_order_data_column'));
         add_action('woocommerce_admin_order_data_after_order_details', array($this, 'elm_add_pdf_to_order_column'));
         add_action('wp_ajax_elm_show_confirm_modal', array($this, 'elm_show_confirm_modal'));
-/*         add_filter('manage_edit-shop_order_columns', 'elm_add_custom_order_column');
-        add_action('manage_shop_order_posts_custom_column', 'elm_display_custom_order_meta_data'); */
         $this->couriers = new Couriers();
     }
 
@@ -89,15 +86,12 @@ class ExpressLabelMaker
         echo '<nav class="nav-tab-wrapper woo-nav-tab-wrapper">';
         echo '<a href="?page=express_label_maker&tab=settings" class="nav-tab ' . ($tab == 'settings' ? 'nav-tab-active' : '') . '">' . __('Settings', 'express-label-maker') . '</a>';
         echo '<a href="?page=express_label_maker&tab=dpd" class="nav-tab ' . ($tab == 'dpd' ? 'nav-tab-active' : '') . '">' . __('DPD', 'express-label-maker') . '</a>';
-        echo '<a href="?page=express_label_maker&tab=all_labels" class="nav-tab ' . ($tab == 'all_labels' ? 'nav-tab-active' : '') . '">' . __('All Labels', 'express-label-maker') . '</a>';
         echo '</nav>';
     
         if ($tab == 'settings') {
             settings_tab_content();
         } elseif ($tab == 'dpd') {
             dpd_tab_content();
-        } elseif ($tab == 'all_labels') {
-            all_labels_tab_content();
         }
     
         echo '</div>';
@@ -156,7 +150,7 @@ class ExpressLabelMaker
         } else {
             $labels = array();
         }
-
+    
         ?>
         <script>
             jQuery(document).ready(function($) {
@@ -165,13 +159,16 @@ class ExpressLabelMaker
                 <?php
                 foreach ($courier_icons as $courier => $icon) :
                 foreach ($labels as $label) :
-                    $file_name = $courier . "-" . $label . ".pdf"; 
-                    $matching_files = glob($dir_path . '/*/*/' . $file_name);
+                    $file_pattern = $courier . "-*" . $label . "*.pdf"; 
+                    $matching_files = glob($dir_path . '/*/*/' . $file_pattern);
                     foreach ($matching_files as $file_path) {
+                        $actual_file_name = basename($file_path);
                         $file_url = $url_base . '/' . substr($file_path, strlen($dir_path) + 1);
                     ?>
-                        var labelLink = $('<a href="<?php echo esc_url($file_url); ?>" target="_blank"><?php echo esc_html($file_name); ?></a>');
-                        labelLink.appendTo(pdfContainer);
+                        if(pdfContainer.find('a[href="<?php echo esc_url($file_url); ?>"]').length === 0) {
+                            var labelLink = $('<a href="<?php echo esc_url($file_url); ?>" target="_blank"><?php echo esc_html($actual_file_name); ?></a>');
+                            labelLink.appendTo(pdfContainer);
+                        }
                     <?php } ?>
                 <?php endforeach; endforeach;?>
     
@@ -179,26 +176,7 @@ class ExpressLabelMaker
             });
         </script>
         <?php
-    }
-    
-
-/*     public function elm_add_custom_order_column($columns)
-        {
-            $columns['elm_parcel_status'] = __('Parcel status', 'delivery-master');
-            return $columns;
-        }
-
-
-    public function elm_display_custom_order_meta_data($column)
-    {
-        global $post;
-
-        if ($column === 'elm_parcel_status') {
-            $order = wc_get_order($post->ID);
-            $custom_meta_data = $order->get_meta('parcel_status');
-            echo '<span>' . $custom_meta_data . '</span>';
-        }
-    } */
+    }      
 
     public function elm_show_confirm_modal()
     {

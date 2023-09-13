@@ -14,11 +14,7 @@ class ElmPrintLabel
 
         $courier = $_POST['chosenCourier'];
         $saved_country = get_option("elm_country_option", '');
-        $domain = $_SERVER['SERVER_NAME'];
         $order_id = $_POST['orderId'];
-
-        error_log(print_r($courier, true));
-        error_log(print_r($saved_country, true));
     
         $userObj = new user();
         $user_data = $userObj->getData($saved_country.$courier);
@@ -39,18 +35,18 @@ class ElmPrintLabel
             'body' => json_encode($body)
         );
     
-        $response = wp_remote_request('https://api.expresslabelmaker.com/wordpress/' . $saved_country . '/' . $courier . '/printLabel', $args);
+        $response = wp_remote_request('https://api.expresslabelmaker.com/v1/' . $saved_country . '/' . $courier . '/create/label', $args);
     
         if (is_wp_error($response)) {
             wp_send_json_error(array('info' => $response->get_error_message()));
         } else {
             $body_response = json_decode(wp_remote_retrieve_body($response), true);
-            error_log(print_r($response, true));
+            /* error_log(print_r($response, true)); */
             /* error_log(print_r($body_response, true)); */
 
-            if (substr($response['response']['code'], 0, 1) == '2') {
+            if ($response['response']['code'] == '201') {
    
-                $decoded_data = base64_decode($body_response['data']['labels']);
+                $decoded_data = base64_decode($body_response['data']['label']);
 
                 $meta_key = $saved_country . "_" . $courier . "_adresnica";
 
@@ -90,7 +86,10 @@ class ElmPrintLabel
                 }
 
             } else {
-                wp_send_json_error($body_response);
+                error_log(print_r($body_response, true));
+                $error_id = $body_response['errors'][0]['error_id'];
+                $error_message = $body_response['errors'][0]['error_details'];
+                wp_send_json_error(array('error_id' => $error_id, 'error_message' => $error_message));
             }
         }
     }

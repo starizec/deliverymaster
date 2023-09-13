@@ -2,9 +2,27 @@
 function settings_tab_content()
     {
 
+        if (isset($_POST['delete_all_labels'])) {
+            $upload_dir = wp_upload_dir();
+            $dir_path = $upload_dir['basedir'];
+            //dodati kurire
+            $patterns = array(
+                'dpd-*.pdf',
+            );
+    
+            foreach ($patterns as $pattern) {
+                $files = glob($dir_path . '/*/*/' . $pattern);
+                foreach ($files as $file) {
+                    unlink($file);
+                }
+            }
+    
+            echo '<div class="updated"><p>' . __('All labels deleted.', 'express-label-maker') . '</p></div>';
+        }
+
         if (isset($_POST['elm_settings_nonce']) && wp_verify_nonce($_POST['elm_settings_nonce'], 'elm_save_settings')) {
             $email = isset($_POST['elm_email']) ? sanitize_email($_POST['elm_email']) : '';
-            $activation_key = isset($_POST['elm_activation_key']) ? sanitize_text_field($_POST['elm_activation_key']) : '';
+            $licence_key = isset($_POST['elm_licence_key']) ? sanitize_text_field($_POST['elm_licence_key']) : '';
             $country = isset($_POST['elm_country']) ? sanitize_text_field($_POST['elm_country']) : '';
             if (!empty($country)) {
                 update_option('elm_country_option', $country);
@@ -15,8 +33,8 @@ function settings_tab_content()
 
             if (!empty($email)) {
                 update_option('elm_email_option', $email);
-                if (!empty($activation_key)) {
-                    update_option('elm_activation_key_option', $activation_key);
+                if (!empty($licence_key)) {
+                    update_option('elm_licence_option', $licence_key);
                 }
                 echo '<div class="updated"><p>' . __('Settings saved.', 'express-label-maker') . '</p></div>';
             } else {
@@ -25,7 +43,7 @@ function settings_tab_content()
         }
 
         $saved_email = get_option('elm_email_option', '');
-        $saved_activation_key = get_option('elm_activation_key_option', '');
+        $saved_licence_key = get_option('elm_licence_option', '');
         $saved_country = get_option('elm_country_option', '');
         $save_pdf_on_server = get_option('elm_save_pdf_on_server_option', 'false');
 
@@ -38,8 +56,8 @@ function settings_tab_content()
         echo '<td><input name="elm_email" type="email" id="elm_email" value="' . esc_attr($saved_email) . '" class="regular-text" required></td>';
         echo '</tr>';
         echo '<tr>';
-        echo '<th scope="row"><label for="elm_activation_key">' . __('Activation Key', 'express-label-maker') . '</label></th>';
-        echo '<td><input name="elm_activation_key" type="text" id="elm_activation_key" value="' . esc_attr($saved_activation_key) . '" class="regular-text"></td>';
+        echo '<th scope="row"><label for="elm_licence_key">' . __('Licence', 'express-label-maker') . '</label></th>';
+        echo '<td><input name="elm_licence_key" type="text" id="elm_licence_key" value="' . esc_attr($saved_licence_key) . '" class="regular-text"></td>';
         echo '</tr>';
         echo '<tr>';
         echo '<th scope="row"><label for="elm_country">' . __('Country', 'express-label-maker') . '</label></th>';
@@ -52,6 +70,10 @@ function settings_tab_content()
         echo '<tr>';
         echo '<th scope="row"><label for="elm_save_pdf_on_server">' . __('Saving PDF labels to your server', 'express-label-maker') . '</label></th>';
         echo '<td><input name="elm_save_pdf_on_server" type="checkbox" id="elm_save_pdf_on_server"' . ($save_pdf_on_server == 'true' ? ' checked' : '') . ' value="true"></td>';
+        echo '</tr>';
+        echo '<tr>';
+        echo '<th scope="row"><label>' . __('Delete all labels from server', 'express-label-maker') . '</label></th>';
+        echo '<td><input type="submit" name="delete_all_labels" value="Delete All" class="button button-delete" onclick="return confirm(\'Are you sure you want to delete all labels?\');"></td>';
         echo '</tr>';
         echo '</table>';
         echo '<p class="submit">';

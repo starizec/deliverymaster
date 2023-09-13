@@ -10,8 +10,6 @@ jQuery(document).ready(function ($) {
     var order_id = $(this).data("order-id");
     let courier = $(this).data("courier");
 
-    console.log(courier, "KURIR");
-
     $(".elm_loading_panel").fadeIn(300);
     $(".elm_loading_panel").css("display", "flex");
 
@@ -79,10 +77,6 @@ jQuery(document).ready(function ($) {
         break;
     }
 
-    console.log(parcelData, "parceldata");
-    console.log(courier, "courier");
-    console.log(orderId, "orderId");
-
     $.ajax({
       url: elm_ajax.ajax_url,
       method: "POST",
@@ -91,13 +85,10 @@ jQuery(document).ready(function ($) {
         parcel: parcelData,
         security: elm_ajax.nonce,
         chosenCourier: courier,
-        orderId: orderId
+        orderId: orderId,
       },
       success: function (response) {
-
-        console.log(response, 'response')
         if (response.success) {
-          console.log(response, "success");
           $(".elm_loading_panel").fadeOut(300);
 
           if (response.data.file_path) {
@@ -113,7 +104,7 @@ jQuery(document).ready(function ($) {
             let url = URL.createObjectURL(blob);
             window.open(url, "_blank");
 
-            let a = document.createElement('a');
+            let a = document.createElement("a");
             a.href = url;
             a.download = response.data.file_name;
             document.body.appendChild(a);
@@ -126,8 +117,12 @@ jQuery(document).ready(function ($) {
             jQuery(this).remove();
           });
         } else {
-          alert("Error sending to API");
-          console.error(response);
+          alert(
+            "Error ID: " +
+              response.data.error_id +
+              "\nMessage: " +
+              response.data.error_message
+          );
           $(".elm_loading_panel").fadeOut(300);
         }
       },
@@ -153,6 +148,7 @@ jQuery(document).ready(function ($) {
           ? "D-COD"
           : "D",
       num_of_parcel: form.find('input[name="package_number"]').val(),
+      phone: form.find('input[name="phone"]').val()
     };
   }
 });
