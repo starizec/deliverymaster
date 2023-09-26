@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ExpressLabelMaker\n"
-"POT-Creation-Date: 2023-09-27 01:12+0200\n"
-"PO-Revision-Date: 2023-09-27 01:16+0200\n"
+"POT-Creation-Date: 2023-09-27 01:48+0200\n"
+"PO-Revision-Date: 2023-09-27 01:49+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: hr_HR\n"
@@ -17,44 +17,44 @@ msgstr ""
 "X-Poedit-KeywordsList: __;_e;esc_html_e; __;esc_html_e\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: express-label-maker.php:75 express-label-maker.php:76
-#: express-label-maker.php:125
-msgid "Express Label Maker"
-msgstr "Express Label Maker"
-
-#: express-label-maker.php:88
-msgid "Licence"
-msgstr "Licenca"
-
-#: express-label-maker.php:89
+#: express-label-maker.php:73 express-label-maker.php:96
 msgid "Settings"
 msgstr "Postavke"
 
-#: express-label-maker.php:90
+#: express-label-maker.php:82 express-label-maker.php:83
+#: express-label-maker.php:132
+msgid "Express Label Maker"
+msgstr "Express Label Maker"
+
+#: express-label-maker.php:95
+msgid "Licence"
+msgstr "Licenca"
+
+#: express-label-maker.php:97
 msgid "DPD"
 msgstr "DPD"
 
-#: express-label-maker.php:106
+#: express-label-maker.php:113
 msgid "DPD Print Label"
 msgstr "DPD Print Naljepnica"
 
-#: express-label-maker.php:117
+#: express-label-maker.php:124
 msgid "Package status"
 msgstr "Status paketa"
 
-#: express-label-maker.php:144
+#: express-label-maker.php:151
 msgid "Print label"
 msgstr "Print naljepnica"
 
-#: express-label-maker.php:156
+#: express-label-maker.php:163
 msgid "Collection request"
 msgstr "Zahtjev za prikup"
 
-#: express-label-maker.php:160
+#: express-label-maker.php:167
 msgid "Labels"
 msgstr "Naljepnice"
 
-#: express-label-maker.php:289 express-label-maker.php:326
+#: express-label-maker.php:296 express-label-maker.php:333
 msgid "Order not found."
 msgstr "Narudžba nije pronađena."
 
@@ -141,107 +141,132 @@ msgid "Property number:"
 msgstr "Kućni broj:"
 
 #: forms/express-label-maker-collection-form.php:100
+#: settings/dpd-settings.php:98
 msgid "Austria"
 msgstr "Austrija"
 
 #: forms/express-label-maker-collection-form.php:101
+#: settings/dpd-settings.php:99
 msgid "Belgium"
 msgstr "Belgija"
 
 #: forms/express-label-maker-collection-form.php:102
+#: settings/dpd-settings.php:100
 msgid "Bulgaria"
 msgstr "Bugarska"
 
 #: forms/express-label-maker-collection-form.php:103
-#: settings/licence-settings.php:46
+#: settings/dpd-settings.php:101 settings/licence-settings.php:46
 msgid "Croatia"
 msgstr "Hrvatska"
 
 #: forms/express-label-maker-collection-form.php:104
+#: settings/dpd-settings.php:102
 msgid "Czechia"
 msgstr "Češka"
 
 #: forms/express-label-maker-collection-form.php:105
+#: settings/dpd-settings.php:103
 msgid "Denmark"
 msgstr "Danska"
 
 #: forms/express-label-maker-collection-form.php:106
+#: settings/dpd-settings.php:104
 msgid "Estonia"
 msgstr "Estonija"
 
 #: forms/express-label-maker-collection-form.php:107
+#: settings/dpd-settings.php:105
 msgid "Finland"
 msgstr "Finska"
 
 #: forms/express-label-maker-collection-form.php:108
+#: settings/dpd-settings.php:106
 msgid "France"
 msgstr "Francuska"
 
 #: forms/express-label-maker-collection-form.php:109
+#: settings/dpd-settings.php:107
 msgid "Germany"
 msgstr "Njemačka"
 
 #: forms/express-label-maker-collection-form.php:110
+#: settings/dpd-settings.php:108
 msgid "Hungary"
 msgstr "Mađarska"
 
 #: forms/express-label-maker-collection-form.php:111
+#: settings/dpd-settings.php:109
 msgid "Ireland"
 msgstr "Irska"
 
 #: forms/express-label-maker-collection-form.php:112
+#: settings/dpd-settings.php:110
 msgid "Italy"
 msgstr "Italija"
 
 #: forms/express-label-maker-collection-form.php:113
+#: settings/dpd-settings.php:111
 msgid "Latvia"
 msgstr "Latvija"
 
 #: forms/express-label-maker-collection-form.php:114
+#: settings/dpd-settings.php:112
 msgid "Lithuania"
 msgstr "Litva"
 
 #: forms/express-label-maker-collection-form.php:115
+#: settings/dpd-settings.php:113
 msgid "Luxembourg"
 msgstr "Luksemburg"
 
 #: forms/express-label-maker-collection-form.php:116
+#: settings/dpd-settings.php:114
 msgid "Netherlands"
 msgstr "Nizozemska"
 
 #: forms/express-label-maker-collection-form.php:117
+#: settings/dpd-settings.php:115
 msgid "Poland"
 msgstr "Poljska"
 
 #: forms/express-label-maker-collection-form.php:118
+#: settings/dpd-settings.php:116
 msgid "Portugal"
 msgstr "Portugal"
 
 #: forms/express-label-maker-collection-form.php:119
+#: settings/dpd-settings.php:117
 msgid "Romania"
 msgstr "Rumunjska"
 
 #: forms/express-label-maker-collection-form.php:120
+#: settings/dpd-settings.php:118
 msgid "Serbia"
 msgstr "Srbija"
 
 #: forms/express-label-maker-collection-form.php:121
+#: settings/dpd-settings.php:119
 msgid "Slovakia"
 msgstr "Slovačka"
 
 #: forms/express-label-maker-collection-form.php:122
+#: settings/dpd-settings.php:120
 msgid "Slovenia"
 msgstr "Slovenija"
 
 #: forms/express-label-maker-collection-form.php:123
+#: settings/dpd-settings.php:121
 msgid "Spain"
 msgstr "Španjolska"
 
 #: forms/express-label-maker-collection-form.php:124
+#: settings/dpd-settings.php:122
 msgid "Sweden"
 msgstr "Švedska"
 
 #: forms/express-label-maker-collection-form.php:125
+#: settings/dpd-settings.php:123
 msgid "Switzerland"
 msgstr "Švicarska"
 
@@ -365,7 +390,7 @@ msgstr "Grad"
 
 #: settings/dpd-settings.php:81
 msgid "Country"
-msgstr "Država:"
+msgstr "Država"
 
 #: settings/dpd-settings.php:82
 msgid "Postal Code"
@@ -414,6 +439,10 @@ msgstr "Email*"
 #: settings/licence-settings.php:38
 msgid "Licence*"
 msgstr "Licenca*"
+
+#: settings/licence-settings.php:39
+msgid "Your licence key or click Start Trial"
+msgstr "Vaš licenca ili kliknite Pokreni probnu verziju"
 
 #: settings/licence-settings.php:40
 msgid "Start Trial"

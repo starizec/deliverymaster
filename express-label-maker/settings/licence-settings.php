@@ -36,7 +36,7 @@ function licence_tab_content()
         echo '</tr>';
         echo '<tr>';
         echo '<th scope="row"><label for="elm_licence_key">' . __('Licence*', 'express-label-maker') . '</label></th>';
-        echo '<td><input name="elm_licence_key" type="text" id="elm_licence_key" value="' . esc_attr($saved_licence_key) . '" class="regular-text" placeholder="Your licence key or click Start Trial">';
+        echo '<td><input name="elm_licence_key" type="text" id="elm_licence_key" value="' . esc_attr($saved_licence_key) . '" class="regular-text" placeholder="' . __( 'Your licence key or click Start Trial', 'express-label-maker' ) . '">';
         echo '<button id="start-trial-btn" class="button elm-start-trial-btn" style="display:none;margin-left:15px;">' . __('Start Trial', 'express-label-maker') . '</button></td>';
         echo '</tr>';
         echo '<tr>';

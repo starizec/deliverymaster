@@ -47,6 +47,7 @@ class ExpressLabelMaker
         add_action('manage_shop_order_posts_custom_column', array($this, 'display_custom_order_meta_data'));
         add_action('add_meta_boxes', array($this, 'elm_add_custom_meta_box'));
         add_action('plugins_loaded', array($this, 'elm_plugin_load_textdomain'), 30);
+        add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'elm_add_plugin_settings_link'));
         $this->couriers = new Couriers();
     }
 
@@ -66,6 +67,12 @@ class ExpressLabelMaker
 
     public function elm_plugin_load_textdomain() {
         load_plugin_textdomain('express-label-maker', false, plugin_basename(dirname(__FILE__)) . '/languages/');
+    }    
+
+    public function elm_add_plugin_settings_link($links) {
+        $settings_link = '<a href="' . admin_url('admin.php?page=express_label_maker') . '">' . __('Settings', 'express-label-maker') . '</a>';
+        array_unshift($links, $settings_link);
+        return $links;
     }    
 
     public function add_submenu_page()
