@@ -3,77 +3,60 @@ function settings_tab_content()
     {
 
         if (isset($_POST['delete_all_labels'])) {
-            $upload_dir = wp_upload_dir();
-            $dir_path = $upload_dir['basedir'];
-            //dodati kurire
-            $patterns = array(
-                'dpd-*.pdf',
-            );
-    
-            foreach ($patterns as $pattern) {
-                $files = glob($dir_path . '/*/*/' . $pattern);
+            $delete_dir = wp_upload_dir();
+            $dir_path = $delete_dir['basedir'] . '/elm-labels/';
+        
+            if (is_dir($dir_path)) {
+                $files = glob($dir_path . '*');
+        
                 foreach ($files as $file) {
-                    unlink($file);
+                    if (is_file($file)) {
+                        unlink($file);
+                    }
                 }
             }
-    
+        
+            $orders = wc_get_orders(['status' => 'any']);
+        
+            foreach ($orders as $order) {
+                $order_id = $order->get_id();
+                $existing_pdf_url_route = get_post_meta($order_id, 'elm_route_labels', true);
+        
+                if (!empty($existing_pdf_url_route)) {
+                    delete_post_meta($order_id, 'elm_route_labels');
+                }
+            }
+        
             echo '<div class="updated"><p>' . __('All labels deleted.', 'express-label-maker') . '</p></div>';
-        }
+        }         
 
         if (isset($_POST['elm_settings_nonce']) && wp_verify_nonce($_POST['elm_settings_nonce'], 'elm_save_settings')) {
-            $email = isset($_POST['elm_email']) ? sanitize_email($_POST['elm_email']) : '';
-            $licence_key = isset($_POST['elm_licence_key']) ? sanitize_text_field($_POST['elm_licence_key']) : '';
-            $country = isset($_POST['elm_country']) ? sanitize_text_field($_POST['elm_country']) : '';
-            if (!empty($country)) {
-                update_option('elm_country_option', $country);
-            }
+
             $save_pdf = isset($_POST['elm_save_pdf_on_server']) ? 'true' : 'false';
             update_option('elm_save_pdf_on_server_option', $save_pdf);
 
-
-            if (!empty($email)) {
-                update_option('elm_email_option', $email);
-                if (!empty($licence_key)) {
-                    update_option('elm_licence_option', $licence_key);
-                }
-                echo '<div class="updated"><p>' . __('Settings saved.', 'express-label-maker') . '</p></div>';
-            } else {
-                echo '<div class="error"><p>' . __('Email is required.', 'express-label-maker') . '</p></div>';
-            }
+            echo '<div class="updated"><p>' . __('Settings saved.', 'express-label-maker') . '</p></div>';
         }
 
-        $saved_email = get_option('elm_email_option', '');
-        $saved_licence_key = get_option('elm_licence_option', '');
-        $saved_country = get_option('elm_country_option', '');
         $save_pdf_on_server = get_option('elm_save_pdf_on_server_option', 'false');
 
         echo '<div style="display:block;">';
         echo '<div style="float: left; width: 48%; padding-right: 2%;">';
+        echo '<table class="form-table delete-form-table">';
+        echo '<tr>';
+        echo '<th scope="row"><label>' . __('Delete all labels from server', 'express-label-maker') . '</label></th>';
+        echo '<td>';
+        echo '<form method="post" action="" onsubmit="return confirm(\'' . esc_js( __( 'Are you sure you want to delete all labels?', 'express-label-maker' ) ) . '\');">';
+        echo '<input type="submit" name="delete_all_labels" value="' . esc_attr( __( 'Delete All', 'express-label-maker' ) ) . '" class="button button-delete">';
+        echo '</form>';        
+        echo '</td>';
+        echo '</tr>';
+        echo '</table>';
         echo '<form method="post" action="">';
         echo '<table class="form-table">';
         echo '<tr>';
-        echo '<th scope="row"><label for="elm_email">' . __('Email', 'express-label-maker') . '</label></th>';
-        echo '<td><input name="elm_email" type="email" id="elm_email" value="' . esc_attr($saved_email) . '" class="regular-text" required></td>';
-        echo '</tr>';
-        echo '<tr>';
-        echo '<th scope="row"><label for="elm_licence_key">' . __('Licence', 'express-label-maker') . '</label></th>';
-        echo '<td><input name="elm_licence_key" type="text" id="elm_licence_key" value="' . esc_attr($saved_licence_key) . '" class="regular-text"></td>';
-        echo '</tr>';
-        echo '<tr>';
-        echo '<th scope="row"><label for="elm_country">' . __('Country', 'express-label-maker') . '</label></th>';
-        echo '<td>';
-        echo '<select name="elm_country" id="elm_country">';
-        echo '<option value="hr"' . selected($saved_country, 'hr', false) . '>' . __('Croatia', 'express-label-maker') . '</option>';
-        echo '</select>';
-        echo '</td>';
-        echo '</tr>';
-        echo '<tr>';
         echo '<th scope="row"><label for="elm_save_pdf_on_server">' . __('Saving PDF labels to your server', 'express-label-maker') . '</label></th>';
         echo '<td><input name="elm_save_pdf_on_server" type="checkbox" id="elm_save_pdf_on_server"' . ($save_pdf_on_server == 'true' ? ' checked' : '') . ' value="true"></td>';
-        echo '</tr>';
-        echo '<tr>';
-        echo '<th scope="row"><label>' . __('Delete all labels from server', 'express-label-maker') . '</label></th>';
-        echo '<td><input type="submit" name="delete_all_labels" value="Delete All" class="button button-delete" onclick="return confirm(\'Are you sure you want to delete all labels?\');"></td>';
         echo '</tr>';
         echo '</table>';
         echo '<p class="submit">';
@@ -83,19 +66,8 @@ function settings_tab_content()
         echo '</form>';
         echo '</div>';
 
-        // upute
         echo '<div style="float: right; width: 48%;">';
-        echo '<h2>' . __('Plugin Instructions', 'express-label-maker') . '</h2>';
-        echo '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum.</p>';
-        echo '<button id="buyNowBtn" class="button">' . __('BUY NOW', 'express-label-maker') . '</button>';
-        echo '</div>';
-        echo '</div>';
 
-        // trenutna domena
-        echo '<script type="text/javascript">
-        document.getElementById("buyNowBtn").addEventListener("click", function(){
-            var currentDomain = window.location.hostname;
-            console.log(currentDomain);
-        });
-    </script>';
-    }
+        echo '</div>';
+        echo '</div>';
+}

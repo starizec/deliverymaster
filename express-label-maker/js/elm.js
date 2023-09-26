@@ -1,4 +1,5 @@
-//adresnica
+//ADRESNICA
+console.log(elm_ajax)
 jQuery(document).ready(function ($) {
   $("body").append(
     '<div class="elm_loading_panel"><div class="elm_spinner"></div></div>'
@@ -9,6 +10,8 @@ jQuery(document).ready(function ($) {
 
     var order_id = $(this).data("order-id");
     let courier = $(this).data("courier");
+
+    console.log(order_id, 'orderIDDD')
 
     $(".elm_loading_panel").fadeIn(300);
     $(".elm_loading_panel").css("display", "flex");
@@ -49,7 +52,7 @@ jQuery("body").on("click", ".elm_cancel_action", function (e) {
   e.preventDefault();
 });
 
-//print label
+//PRINT LABEL
 jQuery(document).ready(function ($) {
   $("body").append(
     '<div class="elm_loading_panel"><div class="elm_spinner"></div></div>'
@@ -63,10 +66,6 @@ jQuery(document).ready(function ($) {
       "z-index": "9999999",
     });
 
-    /*         let parcelData = $('#elm_order_details_form').serializeArray().reduce(function(obj, item) {
-            obj[item.name] = item.value;
-            return obj;
-        }, {}); */
     var courier = $("#hiddenCourier").val();
     var form = $("#elm_order_details_form");
     var orderId = $("#hiddenOrderId").val();
@@ -148,7 +147,468 @@ jQuery(document).ready(function ($) {
           ? "D-COD"
           : "D",
       num_of_parcel: form.find('input[name="package_number"]').val(),
-      phone: form.find('input[name="phone"]').val()
+      phone: form.find('input[name="phone"]').val(),
+      contact: form.find('input[name="contact_person"]').val(),
+    };
+  }
+});
+
+//PRINT LABELS
+jQuery(document).ready(function ($) {
+  $("body").append('<div class="elm_loading_panel"><div class="elm_spinner"></div></div>');
+
+  $('#posts-filter').on('submit', function (e) {
+      const actionValue = $(this).find('select[name="action"]').val();
+
+      const supportedActionValues = ['elm_dpd_print_label', 'elm_gls_print_label', 'elm_overseas_print_label', 'elm_hp_print_label'];
+
+      if (supportedActionValues.includes(actionValue)) {
+        e.preventDefault();
+        
+          $(".elm_loading_panel").fadeIn(300);
+          $(".elm_loading_panel").css({
+              display: "flex",
+              "z-index": "9999999",
+          });
+
+          var checkedPostIds = $('input[name="post[]"]:checked').map(function () {
+            return $(this).val();
+        }).get();
+
+
+          $.ajax({
+            url: elm_ajax.ajax_url,
+            method: "POST",
+            data: {
+              action: "elm_print_labels",
+              security: elm_ajax.nonce,
+              post_ids: checkedPostIds,
+              actionValue: actionValue
+            },
+              success: function (response) {
+                console.log(response, 'response')
+                  if (response.success) {
+                      $(".elm_loading_panel").fadeOut(300);
+
+                      if (response.data.file_path) {
+                          window.open(response.data.file_path, "_blank");
+                      } else if (response.data.pdf_data) {
+                          let pdfData = atob(response.data.pdf_data);
+                          let uint8Array = new Uint8Array(pdfData.length);
+                          for (let i = 0; i < pdfData.length; i++) {
+                              uint8Array[i] = pdfData.charCodeAt(i);
+                          }
+
+                          let blob = new Blob([uint8Array], { type: "application/pdf" });
+                          let url = URL.createObjectURL(blob);
+                          window.open(url, "_blank");
+
+                          let a = document.createElement("a");
+                          a.href = url;
+                          a.download = response.data.file_name;
+                          document.body.appendChild(a);
+                          a.click();
+                          URL.revokeObjectURL(url);
+                          document.body.removeChild(a);
+                      }
+
+                      jQuery(".elm_modal_wrapper").fadeOut(300, function () {
+                          jQuery(this).remove();
+                      });
+                  } else {
+                      alert(
+                          "Error ID: " +
+                          response.data.error_id +
+                          "\nMessage: " +
+                          response.data.error_message
+                      );
+                      $(".elm_loading_panel").fadeOut(300);
+                  }
+              },
+          });
+      }
+  });
+});
+
+//STATUS
+function update_parcel_status(order_id, pl_status) {
+  console.log(order_id, pl_status);
+  jQuery.ajax({
+    url: elm_ajax.ajax_url,
+    type: "POST",
+    data: {
+      action: "elm_parcel_statuses",
+      security: elm_ajax.nonce,
+      order_id: order_id,
+      pl_status: pl_status,
+    },
+    success: function (response) {
+      console.log(response);
+      if (response.success) {
+        console.log("Parcel status updated successfully.");
+      } else {
+        console.error("Error updating Status: ", response.data);
+      }
+    },
+    error: function (error) {
+      console.error("Error updating Status.", error);
+    },
+  });
+}
+
+function displayError(error) {
+  $(".elm-error").text(error);
+  $(".elm-error").removeAttr("style");
+}
+
+jQuery(document).ready(function ($) {
+  const urlParams = new URLSearchParams(window.location.search);
+
+  const orders_page = urlParams.get("post_type");
+  const pagination_page =
+    urlParams.get("paged") != undefined ? urlParams.get("paged") : "1";
+
+  if (orders_page != "shop_order") {
+    return;
+  }
+
+  const limit = 20;
+  const offset = +pagination_page * limit - limit;
+
+  $.ajax({
+    url: elm_ajax.ajax_url,
+    type: "POST",
+    data: {
+      action: "get_orders",
+      security: elm_ajax.nonce,
+      limit: limit,
+      offset: offset,
+    },
+    success: function (response) {
+      if (response.success) {
+        const orders = response.data;
+
+        console.log(orders, 'respo')
+
+        $.each(orders, function (index, order) {
+          const pl_number = order.pl_number.split("-").pop();
+
+          if (order.pl_number != "") {
+            const parcel_status_element = $(`tr#post-${order.order_id}`).find(
+              "td.elm_parcel_status"
+            );
+            parcel_status_element.html('<img src="/wp-content/plugins/express-label-maker/assets/statusloading.gif" alt="loading">');
+
+            $.ajax({
+              url: order.pl_parcels.url,
+              type: "POST",
+              success: function (r) {
+                if (r.status === "err") {
+                  displayError(r.errlog);
+                  return;
+                }
+                update_parcel_status(order.order_id, r.parcel_status);
+                const spanElement = $('<span>' + r.parcel_status + '</span>');
+                applyStatusClass(spanElement, r.parcel_status);
+                parcel_status_element.html(spanElement);
+
+              },
+              error: function (error) {
+                console.error("API call failed: ", error);
+              },
+            });
+          }
+        });
+      } else {
+        // Handle error response
+        console.error(response.data);
+      }
+    },
+    error: function (error) {
+      // Handle AJAX error
+      console.error(error);
+    },
+  });
+});
+
+function applyStatusClass(element, status) {
+if (status) {
+  element.addClass('elm-package-status order-status');
+  switch (status) {
+    case 'PRINTED':
+      element.addClass('elm-status-printed');
+      break;
+    case 'DELIVERED':
+      element.addClass('elm-status-delivered');
+      break;
+    case 'CANCELLED':
+      element.addClass('elm-status-cancelled');
+      break;
+    default:
+      element.addClass('elm-status-rest');
+      break;
+  }
+}
+}
+
+jQuery(document).ready(function($) {
+$('td.elm_parcel_status span').each(function() {
+  var status = $(this).text();
+  applyStatusClass($(this), status);
+});
+});
+
+//START TRIAL
+
+jQuery(document).ready(function ($) {
+  $("body").append(
+    '<div class="elm_loading_panel"><div class="elm_spinner"></div></div>'
+  );
+  $(document).on("click", ".elm-start-trial-btn", function (e) {
+    e.preventDefault();
+
+    $(".elm_loading_panel").fadeIn(300);
+    $(".elm_loading_panel").css({
+      display: "flex",
+      "z-index": "9999999",
+    });
+
+    $.ajax({
+      url: elm_ajax.ajax_url,
+      type: "POST",
+      data: {
+        action: "elm_start_trial",
+        security: elm_ajax.nonce,
+        email: $('#elm_email').val(),
+        domain: window.location.hostname,
+        licence: 'trial'
+    },
+      success: function (response) {
+        console.log(response, 'response')
+        if (response.success) {
+          $(".elm_loading_panel").fadeOut(300);
+          $('#elm_email').val(response.data.email);
+          $('#elm_licence_key').val(response.data.licence);
+          $(".elm-start-trial-btn").hide();
+          $("#elm_submit_btn").prop("disabled", false);
+          alert("Your license has been generated and your trial has started.");
+          jQuery(".elm_modal_wrapper").fadeOut(300, function () {
+            jQuery(this).remove();
+          });
+        } else {
+          alert(
+            "Error ID: " +
+              response.data.error_id +
+              "\nMessage: " +
+              response.data.error_message
+          );
+          $(".elm_loading_panel").fadeOut(300);
+        }
+      },
+    });
+  });
+});
+
+//LICENCE CHECK
+
+jQuery(document).ready(function ($) {
+  const urlParams = new URLSearchParams(window.location.search);
+
+  const page = urlParams.get("page");
+  /* const tab = urlParams.get("tab"); */
+
+  if (page != "express_label_maker") {
+      return;
+  }
+    $.ajax({
+      url: elm_ajax.ajax_url,
+      type: "POST",
+      data: {
+        action: "elm_licence_check",
+        security: elm_ajax.nonce,
+        domain: window.location.hostname,
+    },
+      success: function (response) {
+        console.log(response, 'response')
+        if (response.success) {
+          $('#elm_valid_from').val(response.data.valid_from);
+          $('#elm_valid_until').val(response.data.valid_until);
+          $('#elm_usage_limit').val(response.data.usage_limit);
+          $('#elm_usage').val(response.data.usage);
+
+          if ((response.data.usage_limit - response.data.usage) <= 2) {
+            alert("Only " + (response.data.usage_limit - response.data.usage) + "label(s) to the limit!");
+          }
+
+          if (response.data.valid_until != null) {
+          let today = new Date();
+          let validUntil = new Date(response.data.valid_until);
+
+          let timeDifference = validUntil.getTime() - today.getTime();
+          let dayDifference = timeDifference / (1000 * 3600 * 24);
+
+          if (dayDifference <= 10) {
+            alert("You have " + Math.round(dayDifference) + " day(s) left until your license expires!!");
+          }
+        }
+        } else {
+          alert(
+            "Error ID: " +
+              response.data.error_id +
+              "\nMessage: " +
+              response.data.error_message
+          );
+        }
+      },
+    });
+  });
+
+
+//COLLECTION REQUEST
+
+jQuery(document).ready(function ($) {
+  $("body").append(
+    '<div class="elm_loading_panel"><div class="elm_spinner"></div></div>'
+  );
+
+  $("body").on("click", "#elm_collection_request", function (e) {
+    e.preventDefault();
+
+    var order_id = $(this).data("order-id");
+
+    console.log(order_id, 'order_id')
+
+    $(".elm_loading_panel").fadeIn(300);
+    $(".elm_loading_panel").css("display", "flex");
+
+    $.ajax({
+      url: elm_ajax.ajax_url,
+      type: "POST",
+      data: {
+        action: "elm_show_collection_modal",
+        security: elm_ajax.nonce,
+        order_id: order_id,
+      },
+      success: function (response) {
+        if (response.success) {
+          $("body").append(response.data);
+          $(".elm_modal_wrapper").fadeIn(300);
+          $(".elm_modal_wrapper").css("display", "flex");
+        } else {
+          console.error("Error: ", response.data);
+        }
+        $(".elm_loading_panel").fadeOut(300);
+      },
+      error: function () {
+        $(".elm_loading_panel").fadeOut(300);
+      },
+    });
+  });
+});
+
+jQuery("body").on("click", ".elm_cancel_action", function () {
+  jQuery(".elm_modal_wrapper").fadeOut(300, function () {
+    jQuery(this).remove();
+  });
+});
+
+jQuery("body").on("click", ".elm_cancel_action", function (e) {
+  e.preventDefault();
+});
+
+//SEND COLLECTION REQUEST
+jQuery(document).ready(function ($) {
+  $("body").append(
+    '<div class="elm_loading_panel"><div class="elm_spinner"></div></div>'
+  );
+  $(document).on("click", ".elm_confirm_collection_action", function (e) {
+    e.preventDefault();
+
+    $(".elm_loading_panel").fadeIn(300);
+    $(".elm_loading_panel").css({
+      display: "flex",
+      "z-index": "9999999",
+    });
+
+    var courier = $("#collection_courier").val();
+    var form = $("#elm_collection_order_details_form");
+    var orderId = $("#hiddenOrderId").val();
+    var country = $("#hiddenCountry").val();
+
+    console.log(courier, 'courier');
+    console.log(country, 'country');
+
+    switch (courier) {
+      case "dpd":
+        var parcelData = setDPDCollectionData(form);
+        break;
+    }
+
+    $.ajax({
+      url: elm_ajax.ajax_url,
+      method: "POST",
+      data: {
+        action: "elm_collection_request",
+        parcel: parcelData,
+        security: elm_ajax.nonce,
+        chosenCourier: courier,
+        orderId: orderId,
+        country: country
+      },
+      success: function (response) {
+        if (response.success) {
+          $(".elm_loading_panel").fadeOut(300);
+          console.log(response, 'response')
+          alert(
+            "Collection request successfully sent.\n" +
+            "Code: " +
+              response.data.code +
+              "\nReference: " +
+              response.data.reference
+          );
+
+          jQuery(".elm_modal_wrapper").fadeOut(300, function () {
+            jQuery(this).remove();
+          });
+        } else {
+          alert(
+            "Error ID: " +
+              response.data.error_id +
+              "\nMessage: " +
+              response.data.error_message
+          );
+          $(".elm_loading_panel").fadeOut(300);
+        }
+      },
+    });
+  });
+
+  function setDPDCollectionData(form) {
+    var rawDate = form.find('input[name="collection_pickup_date"]').val();
+    var formattedDate = rawDate.split('-').join('');
+    /* var country = $("#hiddenCountry").val().toUpperCase(); */
+    return {
+      cname: form.find('input[name="customer_name"]').val(),
+      cname1: form.find('input[name="contact_person"]').val(),
+      cstreet: form.find('input[name="customer_address"]').val(),
+      cPropertyNumber: form.find('input[name="house_number"]').val(),
+      ccity: form.find('input[name="city"]').val(),
+      cpostal: form.find('input[name="zip_code"]').val(),
+      ccountry: form.find('input[name="country"]').val(),
+      cphone: form.find('input[name="phone"]').val(),
+      cemail: form.find('input[name="email"]').val(),
+      info1: form.find('input[name="collection_info_for_sender"]').val(),
+      info2: form.find('input[name="collection_info_for_courier"]').val(),
+      rname: form.find('input[name="collection_company_or_personal_name"]').val(),
+      rname2: form.find('input[name="collection_contact_person"]').val(),
+      rstreet: form.find('input[name="collection_street"]').val(),
+      rPropertyNumber: form.find('input[name="collection_property_number"]').val(),
+      rcity: form.find('input[name="collection_city"]').val(),
+      rpostal: form.find('input[name="collection_postal_code"]').val(),
+      rcountry: form.find('select[name="collection_country"]').val(),
+      rphone: form.find('input[name="collection_phone"]').val(),
+      remail: form.find('input[name="collection_email"]').val(),
+      pickup_date: formattedDate,
     };
   }
 });

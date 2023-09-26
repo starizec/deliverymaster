@@ -29,7 +29,8 @@
   box-shadow: none;
 }
 
-#elm_order_details_form {
+#elm_order_details_form,
+#elm_collection_order_details_form {
   display: flex;
   flex-direction: row;
 }
@@ -121,7 +122,32 @@
   display: flex;
   flex-direction: column;
 }
+
+.elm_licence_inputs {
+  width: 200px;
+}
+
+.elm_custom_order_wrapper {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.elm_custom_order_pdf_wrapper {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.elm_custom_order_metabox_title {
+  margin: 0;
+}
 /*PARCEL STATUS*/
+.column-elm_parcel_status{
+  text-align: right !important;
+}
+
 .elm-package-status {
   padding: 0 5px;
 }
