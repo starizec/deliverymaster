@@ -1,5 +1,4 @@
 //ADRESNICA
-console.log(elm_ajax)
 jQuery(document).ready(function ($) {
   $("body").append(
     '<div class="elm_loading_panel"><div class="elm_spinner"></div></div>'
@@ -10,8 +9,6 @@ jQuery(document).ready(function ($) {
 
     var order_id = $(this).data("order-id");
     let courier = $(this).data("courier");
-
-    console.log(order_id, 'orderIDDD')
 
     $(".elm_loading_panel").fadeIn(300);
     $(".elm_loading_panel").css("display", "flex");
@@ -31,7 +28,12 @@ jQuery(document).ready(function ($) {
           $(".elm_modal_wrapper").css("display", "flex");
           $("#hiddenCourier").val(courier);
         } else {
-          console.error("Error: ", response.data);
+          alert(
+            "Error ID: " +
+              (response.data.error_id ? response.data.error_id : "null") +
+              "\nMessage: " +
+              (response.data.error_message ? response.data.error_message : "null")
+          );
         }
         $(".elm_loading_panel").fadeOut(300);
       },
@@ -186,7 +188,6 @@ jQuery(document).ready(function ($) {
               actionValue: actionValue
             },
               success: function (response) {
-                console.log(response, 'response')
                   if (response.success) {
                       $(".elm_loading_panel").fadeOut(300);
 
@@ -232,7 +233,6 @@ jQuery(document).ready(function ($) {
 
 //STATUS
 function update_parcel_status(order_id, pl_status) {
-  console.log(order_id, pl_status);
   jQuery.ajax({
     url: elm_ajax.ajax_url,
     type: "POST",
@@ -243,15 +243,17 @@ function update_parcel_status(order_id, pl_status) {
       pl_status: pl_status,
     },
     success: function (response) {
-      console.log(response);
       if (response.success) {
         console.log("Parcel status updated successfully.");
-      } else {
-        console.error("Error updating Status: ", response.data);
       }
     },
-    error: function (error) {
-      console.error("Error updating Status.", error);
+    error: function (response) {
+      alert(
+        "Error ID: " +
+          (response.data.error_id ? response.data.error_id : "null") +
+          "\nMessage: " +
+          (response.data.error_message ? response.data.error_message : "null")
+      );
     },
   });
 }
@@ -288,8 +290,6 @@ jQuery(document).ready(function ($) {
       if (response.success) {
         const orders = response.data;
 
-        console.log(orders, 'respo')
-
         $.each(orders, function (index, order) {
           const pl_number = order.pl_number.split("-").pop();
 
@@ -313,20 +313,33 @@ jQuery(document).ready(function ($) {
                 parcel_status_element.html(spanElement);
 
               },
-              error: function (error) {
-                console.error("API call failed: ", error);
+              error: function (response) {
+                alert(
+                  "Error ID: " +
+                    (response.data.error_id ? response.data.error_id : "null") +
+                    "\nMessage: " +
+                    (response.data.error_message ? response.data.error_message : "null")
+                );
               },
             });
           }
         });
       } else {
-        // Handle error response
-        console.error(response.data);
+        alert(
+          "Error ID: " +
+            (response.data.error_id ? response.data.error_id : "null") +
+            "\nMessage: " +
+            (response.data.error_message ? response.data.error_message : "null")
+        );
       }
     },
-    error: function (error) {
-      // Handle AJAX error
-      console.error(error);
+    error: function (response) {
+      alert(
+        "Error ID: " +
+          (response.data.error_id ? response.data.error_id : "null") +
+          "\nMessage: " +
+          (response.data.error_message ? response.data.error_message : "null")
+      );
     },
   });
 });
@@ -384,7 +397,6 @@ jQuery(document).ready(function ($) {
         licence: 'trial'
     },
       success: function (response) {
-        console.log(response, 'response')
         if (response.success) {
           $(".elm_loading_panel").fadeOut(300);
           $('#elm_email').val(response.data.email);
@@ -420,6 +432,10 @@ jQuery(document).ready(function ($) {
   if (page != "express_label_maker") {
       return;
   }
+
+  if (!elmData.email || !elmData.licence) {
+    return;
+}
     $.ajax({
       url: elm_ajax.ajax_url,
       type: "POST",
@@ -429,7 +445,6 @@ jQuery(document).ready(function ($) {
         domain: window.location.hostname,
     },
       success: function (response) {
-        console.log(response, 'response')
         if (response.success) {
           $('#elm_valid_from').val(response.data.valid_from);
           $('#elm_valid_until').val(response.data.valid_until);
@@ -476,8 +491,6 @@ jQuery(document).ready(function ($) {
 
     var order_id = $(this).data("order-id");
 
-    console.log(order_id, 'order_id')
-
     $(".elm_loading_panel").fadeIn(300);
     $(".elm_loading_panel").css("display", "flex");
 
@@ -495,7 +508,12 @@ jQuery(document).ready(function ($) {
           $(".elm_modal_wrapper").fadeIn(300);
           $(".elm_modal_wrapper").css("display", "flex");
         } else {
-          console.error("Error: ", response.data);
+          alert(
+            "Error ID: " +
+              (response.data.error_id ? response.data.error_id : "null") +
+              "\nMessage: " +
+              (response.data.error_message ? response.data.error_message : "null")
+          );
         }
         $(".elm_loading_panel").fadeOut(300);
       },
@@ -535,9 +553,6 @@ jQuery(document).ready(function ($) {
     var orderId = $("#hiddenOrderId").val();
     var country = $("#hiddenCountry").val();
 
-    console.log(courier, 'courier');
-    console.log(country, 'country');
-
     switch (courier) {
       case "dpd":
         var parcelData = setDPDCollectionData(form);
@@ -558,7 +573,6 @@ jQuery(document).ready(function ($) {
       success: function (response) {
         if (response.success) {
           $(".elm_loading_panel").fadeOut(300);
-          console.log(response, 'response')
           alert(
             "Collection request successfully sent.\n" +
             "Code: " +

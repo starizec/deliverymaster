@@ -107,11 +107,9 @@ function licence_tab_content()
                     submitButton.disabled = emailInput.value.trim() === "" || licenceKeyInput.value.trim() === "" || countrySelect.value.trim() === "";
                 }
         
-                // Initial checks
                 toggleStartTrialButton();
                 toggleSubmitButton();
         
-                // Update visibility whenever the input value changes
                 licenceKeyInput.addEventListener("input", function() {
                     toggleStartTrialButton();
                     toggleSubmitButton();

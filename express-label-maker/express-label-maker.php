@@ -38,8 +38,6 @@ class ExpressLabelMaker
         add_action('admin_enqueue_scripts', array($this, 'elm_enqueue_scripts'));
         add_action('admin_menu', array($this, 'add_submenu_page'));
         add_action('woocommerce_admin_order_actions_end', array($this, 'elm_order_column_content'));
-        /* add_action('woocommerce_admin_order_data_after_order_details', array($this, 'elm_add_icon_to_order_data_column')); */
-        /* add_action('woocommerce_admin_order_data_after_order_details', array($this, 'elm_add_pdf_to_order_column')); */
         add_action('wp_ajax_elm_show_confirm_modal', array($this, 'elm_show_confirm_modal'));
         add_action('wp_ajax_elm_show_collection_modal', array($this, 'elm_show_collection_modal'));
         add_filter('manage_edit-shop_order_columns', array($this, 'elm_add_status_column_header'), 20);
@@ -55,15 +53,21 @@ class ExpressLabelMaker
     {
         wp_enqueue_style('elm_admin_css', plugin_dir_url(__FILE__) . 'css/elm.css');
         wp_enqueue_script('elm_admin_js', plugin_dir_url(__FILE__) . 'js/elm.js', array('jquery'), null, true);
+    
+        $email = get_option('elm_email_option', '');
+        $licence = get_option('elm_licence_option', '');
+    
         wp_localize_script(
             'elm_admin_js',
             'elm_ajax',
             array(
                 'ajax_url' => admin_url('admin-ajax.php'),
                 'nonce' => wp_create_nonce('elm_nonce'),
+                'email' => $email,
+                'licence' => $licence
             )
         );
-    }
+    }    
 
     public function elm_plugin_load_textdomain() {
         load_plugin_textdomain('express-label-maker', false, plugin_basename(dirname(__FILE__)) . '/languages/');
@@ -142,15 +146,25 @@ class ExpressLabelMaker
         $order_id = method_exists($order, 'get_id') ? $order->get_id() : $order->id;
         $courier_icons = $this->couriers->get_courier_icons();
     
-        // Get the PDF URLs for this order
         $pdf_routes = get_post_meta($order_id, 'elm_route_labels', true);
         $pdf_urls = explode(',', $pdf_routes);
-        
+
+        $saved_country = get_option("elm_country_option", '');
+    
+        // DPD STACK AND TRACE
+        $meta_key = $saved_country . '_dpd_parcels';
+        $dpd_parcels_value = get_post_meta($order_id, $meta_key, true);
+        $dpd_parcel_link = null;
+        if ($dpd_parcels_value) {
+            $first_value = explode(',', $dpd_parcels_value)[0];
+            $dpd_parcel_link = 'https://www.dpdgroup.com/' . $saved_country . '/mydpd/my-parcels/incoming?parcelNumber=' . esc_attr($first_value);
+        }
+    
         ?>
         <div class="elm_custom_order_metabox_content">
             <h4 class="elm_custom_order_metabox_title"><?php echo __('Print label', 'express-label-maker'); ?></h4>
             <div class="elm_custom_order_wrapper">
-                <?php foreach ($courier_icons as $courier => $icon) :
+                <?php foreach ($courier_icons as $courier => $icon):
                     $icon_url = plugin_dir_url(__FILE__) . $icon['url'];
                 ?>
                     <div class="elm_icon_container">
@@ -159,19 +173,34 @@ class ExpressLabelMaker
                         </a>
                     </div>
                 <?php endforeach; ?>
-                <div class="elm_collection_request_button">
+            </div>
+            <?php
+                        if (!empty($pdf_urls) && !empty($pdf_urls[0])) :
+            ?>
+                <div class="elm_custom_order_pdf_wrapper">
+                    <h4 class="elm_custom_order_metabox_title"><?php echo __('Labels', 'express-label-maker'); ?></h4>
+                    <?php foreach ($pdf_urls as $pdf_url): ?>
+                        <?php if (!empty($pdf_url)) : ?>
+                            <a href="<?php echo esc_url($pdf_url); ?>" target="_blank" class="elm_pdf_link"><?php echo __(basename($pdf_url)); ?></a>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+            <?php
+            endif;
+            ?>
+            <div class="elm_custom_order_buttons">
+            <?php if ($dpd_parcel_link): ?>
+                    <div class="elm_stack_and_trace_button">
+                        <a href="<?php echo esc_url($dpd_parcel_link); ?>" target="_blank" class="button button-secondary"><?php echo __('Stack and trace', 'express-label-maker'); ?></a>
+                    </div>
+                <?php endif; ?>
+            <div class="elm_collection_request_button">
                     <button data-order-id="<?php echo esc_attr($order_id); ?>" id="elm_collection_request" class="button button-primary"><?php echo __('Collection request', 'express-label-maker'); ?></button>
                 </div>
             </div>
-            <div class="elm_custom_order_pdf_wrapper">
-            <h4 class="elm_custom_order_metabox_title"><?php echo __('Labels', 'express-label-maker'); ?></h4>
-                <?php foreach ($pdf_urls as $pdf_url): ?>
-                    <a href="<?php echo esc_url($pdf_url); ?>" target="_blank" class="elm_pdf_link"><?php echo __(basename($pdf_url)); ?></a>
-                <?php endforeach; ?>
-            </div>
         </div>
         <?php
-    }    
+    }      
         
 
     public function elm_order_column_content($order)
@@ -186,69 +215,6 @@ class ExpressLabelMaker
         }
     }
 
-/*     public function elm_add_icon_to_order_data_column($order) {
-        $order_id = method_exists($order, 'get_id') ? $order->get_id() : $order->id;
-        
-        $courier_icons = $this->couriers->get_courier_icons();
-    ?>
-        <script>
-            jQuery(document).ready(function($) {
-                <?php foreach ($courier_icons as $courier => $icon) :
-                    $icon_url = plugin_dir_url(__FILE__) . $icon['url'];
-                ?>
-                    var iconContainer = $('<div class="elm_icon_container" style="margin-top: 20px;"><a href="#" class="elm_open_modal" data-order-id="<?php echo esc_attr($order_id); ?>" data-courier="<?php echo $courier; ?>"><img src="<?php echo esc_url($icon_url); ?>" alt="<?php echo esc_attr($icon['alt']); ?>" style="max-width: 30px; height: auto; cursor: pointer;" /></a></div>');
-                    iconContainer.appendTo('.order_data_column:first-child');
-                <?php endforeach; ?>
-            });
-        </script>
-    <?php
-    } */
-
-   /*  public function elm_add_pdf_to_order_column($order) {
-        $order_id = method_exists($order, 'get_id') ? $order->get_id() : $order->id;
-        $courier_icons = $this->couriers->get_courier_icons();
-        
-        $upload_dir = wp_upload_dir();
-        $dir_path = $upload_dir['basedir'];
-        $url_base = $upload_dir['baseurl'];
-    
-        $meta_keys = get_post_custom_keys($order_id);
-        $relevant_meta_key = null;
-        foreach ($meta_keys as $key) {
-            if (strpos($key, '_parcels') !== false) {
-                $relevant_meta_key = $key;
-                break;
-            }
-        }
-    
-        if ($relevant_meta_key) {
-            $adresnica_values = get_post_meta($order_id, $relevant_meta_key, true);
-            $labels = explode(',', $adresnica_values);
-        } else {
-            $labels = array();
-        }
-    
-        $pdf_routes = get_post_meta($order_id, 'elm_route_labels', true);
-        $pdf_urls = explode(',', $pdf_routes);
-    
-        ?>
-        <script>
-            jQuery(document).ready(function($) {
-                var pdfContainer = $('<div class="elm_pdf_container"></div>');
-    
-                <?php foreach ($pdf_urls as $pdf_url): ?>
-                    if (pdfContainer.find('a[href="<?php echo esc_url($pdf_url); ?>"]').length === 0) {
-                        var pdfLink = $('<a href="<?php echo esc_url($pdf_url); ?>" target="_blank"><?php echo (basename($pdf_url)); ?></a>');
-                        pdfLink.appendTo(pdfContainer);
-                    }
-                <?php endforeach; ?>
-    
-                pdfContainer.appendTo('.order_data_column:first-child');
-            });
-        </script>
-        <?php
-    }
- */
     function display_custom_order_meta_data($column)
     {
         global $post;

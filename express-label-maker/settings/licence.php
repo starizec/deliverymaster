@@ -82,8 +82,6 @@ class ElmLicence
         );
     
         $response = wp_remote_request('https://api.expresslabelmaker.com/v1/licence/check', $args);
-
-        /* error_log(print_r($response, true)); */
     
         if (is_wp_error($response)) {
             wp_send_json_error(array('error_id' => null, 'error_message' => $response->get_error_message()));

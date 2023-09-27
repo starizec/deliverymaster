@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ExpressLabelMaker\n"
-"POT-Creation-Date: 2023-09-27 01:48+0200\n"
-"PO-Revision-Date: 2023-09-27 01:49+0200\n"
+"POT-Creation-Date: 2023-09-28 00:26+0200\n"
+"PO-Revision-Date: 2023-09-28 00:26+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: hr_HR\n"
@@ -17,44 +17,48 @@ msgstr ""
 "X-Poedit-KeywordsList: __;_e;esc_html_e; __;esc_html_e\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: express-label-maker.php:73 express-label-maker.php:96
+#: express-label-maker.php:77 express-label-maker.php:100
 msgid "Settings"
 msgstr "Postavke"
 
-#: express-label-maker.php:82 express-label-maker.php:83
-#: express-label-maker.php:132
+#: express-label-maker.php:86 express-label-maker.php:87
+#: express-label-maker.php:136
 msgid "Express Label Maker"
 msgstr "Express Label Maker"
 
-#: express-label-maker.php:95
+#: express-label-maker.php:99
 msgid "Licence"
 msgstr "Licenca"
 
-#: express-label-maker.php:97
+#: express-label-maker.php:101
 msgid "DPD"
 msgstr "DPD"
 
-#: express-label-maker.php:113
+#: express-label-maker.php:117
 msgid "DPD Print Label"
 msgstr "DPD Print Naljepnica"
 
-#: express-label-maker.php:124
+#: express-label-maker.php:128
 msgid "Package status"
 msgstr "Status paketa"
 
-#: express-label-maker.php:151
+#: express-label-maker.php:165
 msgid "Print label"
 msgstr "Print naljepnica"
 
-#: express-label-maker.php:163
-msgid "Collection request"
-msgstr "Zahtjev za prikup"
-
-#: express-label-maker.php:167
+#: express-label-maker.php:178
 msgid "Labels"
 msgstr "Naljepnice"
 
-#: express-label-maker.php:296 express-label-maker.php:333
+#: express-label-maker.php:186
+msgid "Stack and trace"
+msgstr "Praćenje pošiljke"
+
+#: express-label-maker.php:190
+msgid "Collection request"
+msgstr "Zahtjev za prikup"
+
+#: express-label-maker.php:254 express-label-maker.php:291
 msgid "Order not found."
 msgstr "Narudžba nije pronađena."
 

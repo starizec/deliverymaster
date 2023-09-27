@@ -38,7 +38,6 @@ class ElmParcelStatuses {
         foreach ($orders as $order) {
             $order = wc_get_order($order->get_id());
             
-            // Pokušavamo pronaći ključ koji završava s "_parcels".
             $pl_number_raw = null;
             $meta_data = $order->get_meta_data();
             foreach ($meta_data as $meta) {
@@ -48,8 +47,7 @@ class ElmParcelStatuses {
                     break;
                 }
             }
-            error_log(print_r($pl_number_meta, true));
-            // Ako nije pronađen takav ključ, preskačemo ovu iteraciju petlje.
+
             if ($pl_number_raw === null) {
                 continue;
             }
