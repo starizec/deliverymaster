@@ -433,9 +433,9 @@ jQuery(document).ready(function ($) {
       return;
   }
 
-  if (!elmData.email || !elmData.licence) {
+  if (!elm_ajax.email || !elm_ajax.licence) {
     return;
-}
+  }
     $.ajax({
       url: elm_ajax.ajax_url,
       type: "POST",

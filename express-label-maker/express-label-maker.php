@@ -164,16 +164,15 @@ class ExpressLabelMaker
         <div class="elm_custom_order_metabox_content">
             <h4 class="elm_custom_order_metabox_title"><?php echo __('Print label', 'express-label-maker'); ?></h4>
             <div class="elm_custom_order_wrapper">
-                <?php foreach ($courier_icons as $courier => $icon):
-                    $icon_url = plugin_dir_url(__FILE__) . $icon['url'];
-                ?>
-                    <div class="elm_icon_container">
-                        <a href="#" class="elm_open_modal" data-order-id="<?php echo esc_attr($order_id); ?>" data-courier="<?php echo $courier; ?>">
-                            <img src="<?php echo esc_url($icon_url); ?>" alt="<?php echo esc_attr($icon['alt'], 'express-label-maker'); ?>" style="max-width: 30px; height: auto; cursor: pointer;" />
-                        </a>
-                    </div>
-                <?php endforeach; ?>
-            </div>
+            <?php foreach ($courier_icons as $courier => $icon): ?>
+                <div class="elm_icon_container">
+                    <a href="#" class="elm_open_modal button button-primary elm_open_modal_order" data-order-id="<?php echo esc_attr($order_id); ?>" data-courier="<?php echo $courier; ?>">
+                        <?php echo esc_html($icon['button_text']); ?>
+                    </a>
+                </div>
+            <?php endforeach; ?>
+        </div>
+
             <?php
                         if (!empty($pdf_urls) && !empty($pdf_urls[0])) :
             ?>

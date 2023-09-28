@@ -5,7 +5,8 @@ class Couriers {
         'dpd' => array(
             'url' => 'assets/dpd-logo.png',
             'alt' => 'DPD Logo',
-            'ajax_action' => 'elm_show_confirm_modal'
+            'ajax_action' => 'elm_show_confirm_modal',
+            'button_text' => 'DPD Print',
         ),
     );
 
