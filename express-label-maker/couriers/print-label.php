@@ -60,31 +60,33 @@ class ElmPrintLabel
             
                 update_post_meta($order_id, $meta_key, $new_meta_value);
             
-                // Novi način izračunavanja putanje i URL-a
+                // novi način izračunavanja putanje i URL-a
                 $timestamp = date('dmy');
                 $file_name_new = uniqid('', true)."-$courier-$timestamp.pdf";
             
                 $upload_dir = wp_upload_dir();
-                $labels_dir = $upload_dir['basedir'] . '/elm-labels';  // Nova putanja
+                $labels_dir = $upload_dir['basedir'] . '/elm-labels';  // nova putanja
                 $file_path = $labels_dir . '/' . $file_name_new;
+
+                if (!file_exists($labels_dir)) {
+                    mkdir($labels_dir, 0755, true);
+                }
                 
                 if (get_option('elm_save_pdf_on_server_option', 'false') == 'true') {
                     file_put_contents($file_path, $decoded_data);
             
-                    // Koristi novi način generiranja URL-a
-                    $pdf_url_route = $upload_dir['baseurl'] . '/elm-labels/' . $file_name_new;  // Ispravljena URL putanja
+                    $pdf_url_route = $upload_dir['baseurl'] . '/elm-labels/' . $file_name_new;
                     
-                    // Dohvaća trenutnu URL rutu
+                    // dohvati trenutnu URL rutu
                     $existing_pdf_url_route = get_post_meta($order_id, 'elm_route_labels', true);
                     
-                    // Ako postoji prethodna URL ruta, dodaj novu s zarezom
+                    // ako postoji prethodna URL ruta, dodaj novu s zarezom
                     if (!empty($existing_pdf_url_route)) {
                         $pdf_url_route_to_store = $existing_pdf_url_route . ',' . $pdf_url_route;
                     } else {
                         $pdf_url_route_to_store = $pdf_url_route;
                     }
                     
-                    // Ažurira metapodatke s kombiniranom vrijednošću
                     update_post_meta($order_id, 'elm_route_labels', $pdf_url_route_to_store);
                     
                     wp_send_json_success(array(
