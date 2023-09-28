@@ -113,10 +113,12 @@ jQuery(document).ready(function ($) {
             URL.revokeObjectURL(url);
             document.body.removeChild(a);
           }
+          
 
           jQuery(".elm_modal_wrapper").fadeOut(300, function () {
             jQuery(this).remove();
           });
+          location.reload();
         } else {
           alert(
             "Error ID: " +
@@ -216,6 +218,7 @@ jQuery(document).ready(function ($) {
                       jQuery(".elm_modal_wrapper").fadeOut(300, function () {
                           jQuery(this).remove();
                       });
+                      location.reload();
                   } else {
                       alert(
                           "Error ID: " +
