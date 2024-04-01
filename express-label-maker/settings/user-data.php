@@ -14,7 +14,7 @@ class user
 
     public function HrDPD(){
         return [
-            'domain' => /* $_SERVER['SERVER_NAME'] */'emedia.hr',
+            'domain' => $_SERVER['SERVER_NAME'], //DODATI EVENTUALNO ZA TEST
             'licence' => get_option('elm_licence_option', ''),
             'email' => get_option('elm_email_option', ''),
             'username' => get_option("elm_dpd_username_option", ''),

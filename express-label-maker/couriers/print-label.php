@@ -32,7 +32,7 @@ class ElmPrintLabel
             'body' => json_encode($body)
         );
     
-        $response = wp_remote_request('https://api.expresslabelmaker.com/v1/' . $saved_country . '/' . $courier . '/create/label', $args);
+        $response = wp_remote_request('https://expresslabelmaker.com/api/v1/' . $saved_country . '/' . $courier . '/create/label', $args);
     
         if (is_wp_error($response)) {
             wp_send_json_error(array('error_id' => null, 'error_message' => $response->get_error_message()));

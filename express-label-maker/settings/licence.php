@@ -33,7 +33,7 @@ class ElmLicence
             'body' => json_encode($body)
         );
     
-        $response = wp_remote_request('https://api.expresslabelmaker.com/v1/licence/start-trial', $args);
+        $response = wp_remote_request('https://expresslabelmaker.com/api/v1/licence/start-trial', $args);
 
         error_log(print_r($response, true));
     
@@ -62,7 +62,7 @@ class ElmLicence
         check_ajax_referer('elm_nonce', 'security');
     
         $email = get_option('elm_email_option', '');
-        $domain = /* sanitize_text_field($_POST['domain']) */ 'emedia.hr';
+        $domain = sanitize_text_field($_POST['domain']); //DODATI EVENTUALNO ZA TEST
         $licence = get_option('elm_licence_option', '');
     
         $body = array(
@@ -81,7 +81,7 @@ class ElmLicence
             'body' => json_encode($body)
         );
     
-        $response = wp_remote_request('https://api.expresslabelmaker.com/v1/licence/check', $args);
+        $response = wp_remote_request('https://expresslabelmaker.com/api/v1/licence/check', $args);
     
         if (is_wp_error($response)) {
             wp_send_json_error(array('error_id' => null, 'error_message' => $response->get_error_message()));
