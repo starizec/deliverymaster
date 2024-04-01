@@ -112,7 +112,7 @@ class ElmPrintLabels {
             update_post_meta($order_id, 'elm_route_labels', $pdf_url_route_to_store);
             }
         }
-        error_log(print_r($response, true));
+        /* error_log(print_r($response, true)); */
 
         if ($save_pdf_on_server == 'true') {
             file_put_contents($file_path, $decoded_data);

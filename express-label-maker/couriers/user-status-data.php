@@ -14,7 +14,7 @@ class userStatusData
 
     public function dpd_parcels($pl_number) {
         $saved_country = get_option("elm_country_option", '');
-        error_log(print_r($saved_country, true));
+        /* error_log(print_r($saved_country, true)); */
         $url = "https://easyship." . $saved_country . "/api/parcel/parcel_status?secret=FcJyN7vU7WKPtUh7m1bx&parcel_number=" . $pl_number;
         return [
             'url' => $url

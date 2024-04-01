@@ -41,7 +41,7 @@ class ElmPrintLabel
             $body_response = json_decode(wp_remote_retrieve_body($response), true);
 
             if ($response['response']['code'] != '201') {
-                error_log(print_r($body_response, true));
+                /* error_log(print_r($body_response, true)); */
                 $error_id = $body_response['errors'][0]['error_id'];
                 $error_message = $body_response['errors'][0]['error_details'];
                 wp_send_json_error(array('error_id' => $error_id, 'error_message' => $error_message));

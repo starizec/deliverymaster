@@ -16,8 +16,8 @@ class ElmCollectionRequest
         $saved_country = $_POST['country'];
         $order_id = $_POST['orderId'];
 
-        error_log(print_r($courier , true));
-        error_log(print_r($saved_country , true));
+/*         error_log(print_r($courier , true));
+        error_log(print_r($saved_country , true)); */
     
         $userObj = new user();
         $user_data = $userObj->getData($saved_country.$courier);
@@ -29,7 +29,7 @@ class ElmCollectionRequest
             "parcel" => $parcel_data
         );
 
-        error_log(print_r($body, true));
+/*         error_log(print_r($body, true)); */
     
         $args = array(
             'method' => 'POST',
@@ -46,7 +46,7 @@ class ElmCollectionRequest
             $body_response = json_decode(wp_remote_retrieve_body($response), true);
 
             if ($response['response']['code'] != '201') {
-                error_log(print_r($response, true));
+                /* error_log(print_r($response, true)); */
                 $error_id = $body_response['errors'][0]['error_id'];
                 $error_message = $body_response['errors'][0]['error_details'];
                 wp_send_json_error(array('error_id' => $error_id, 'error_message' => $error_message));

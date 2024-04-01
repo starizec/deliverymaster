@@ -25,7 +25,7 @@ class ElmLicence
             )
         );
 
-        error_log(print_r($body, true));
+        /* error_log(print_r($body, true)); */
     
         $args = array(
             'method' => 'POST',
@@ -35,7 +35,7 @@ class ElmLicence
     
         $response = wp_remote_request('https://expresslabelmaker.com/api/v1/licence/start-trial', $args);
 
-        error_log(print_r($response, true));
+        /* error_log(print_r($response, true)); */
     
         if (is_wp_error($response)) {
             wp_send_json_error(array('error_id' => null, 'error_message' => $response->get_error_message()));
@@ -73,7 +73,7 @@ class ElmLicence
             )
         );
 
-        error_log(print_r($body, true));
+        /* error_log(print_r($body, true)); */
     
         $args = array(
             'method' => 'POST',
