@@ -127,6 +127,8 @@ class ElmPrintLabels {
             ));
     }
 
+    //DODATI ZA OSTALE KURIRE PARCEL DATA
+
     public function setDPDParcelsData($shipping, $billing, $order_data, $order_total, $address_without_house_number, $house_number, $weight, $order_id, $parcel_type, $package_number) {
         return array(
             'cod_amount' => $order_total,

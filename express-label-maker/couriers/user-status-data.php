@@ -10,6 +10,8 @@ class userStatusData
         }
     }
 
+    //DODATI OSTALE KURIRE ZA PROVJERU STATUSA
+
     public function dpd_parcels($pl_number) {
         $saved_country = get_option("elm_country_option", '');
         error_log(print_r($saved_country, true));

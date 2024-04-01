@@ -10,6 +10,8 @@ class user
         }
     }
 
+    //DODATI OSTALE KURIR HrOverseas(), HrGLS
+
     public function HrDPD(){
         return [
             'domain' => /* $_SERVER['SERVER_NAME'] */'emedia.hr',
