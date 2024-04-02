@@ -31,11 +31,11 @@ function dpd_tab_content()
     echo '</tr>';
     echo '<tr>';
     echo '<th scope="row"><label for="elm_dpd_password">' . __('Password', 'express-label-maker') . '</label></th>';
-    echo '<td><input name="elm_dpd_password" type="password" id="elm_dpd_password" value="' . esc_attr($saved_password) . '" class="regular-text" required></td>';
+    echo '<td><input name="elm_dpd_password" type="password" id="elm_dpd_password" value="' . esc_attr($saved_password) . '" class="regular-text" required autocomplete></td>';
     echo '</tr>';
     echo '</table>';
     echo '<p class="submit">';
-    echo '<input type="submit" name="submit" id="submit" class="button button-primary" value="' . __('Save Changes', 'express-label-maker') . '">';
+    echo '<input type="submit" name="submit" id="submit-dpd-settings" class="button button-primary" value="' . __('Save Changes', 'express-label-maker') . '">';
     echo '</p>';
     wp_nonce_field('elm_save_dpd_settings', 'elm_dpd_nonce');
     echo '</form>';
@@ -139,7 +139,7 @@ function dpd_tab_content()
 
             echo '</table>';
             echo '<p class="submit">';
-            echo '<input type="submit" name="submit" id="submit" class="button button-primary" value="' . __('Save Changes', 'express-label-maker') . '">';
+            echo '<input type="submit" name="submit" id="submit-dpd-collection-request" class="button button-primary" value="' . __('Save Changes', 'express-label-maker') . '">';
             echo '</p>';
             wp_nonce_field('elm_save_collection_request_settings', 'elm_collection_request_nonce');
             echo '</form>';
