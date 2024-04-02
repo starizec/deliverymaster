@@ -43,8 +43,9 @@ function licence_tab_content()
         echo '<th scope="row"><label for="elm_country">' . __('Country*', 'express-label-maker') . '</label></th>';
         echo '<td>';
         echo '<select name="elm_country" id="elm_country">';
-        echo '<option value="hr"' . selected($saved_country, 'hr', false) . '>' . __('Croatia', 'express-label-maker') . '</option>';
-        echo '</select>';
+        echo '<option value="hr"' . selected($saved_country, 'hr', true) . '>' . __('Croatia', 'express-label-maker') . '</option>';
+        echo '<option value="si"' . selected($saved_country, 'si', false) . '>' . __('Slovenia', 'express-label-maker') . '</option>';
+        echo '</select>'; 
         echo '</td>';
         echo '</tr>';
         echo '</table>';
