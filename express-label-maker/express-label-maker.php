@@ -74,7 +74,7 @@ class ExpressLabelMaker
     }    
 
     public function elm_add_plugin_settings_link($links) {
-        $settings_link = '<a href="' . admin_url('admin.php?page=express_label_maker') . '">' . __('Settings', 'express-label-maker') . '</a>';
+        $settings_link = '<a href="' . admin_url('admin.php?page=express_label_maker&tab=licence') . '">' . __('Settings', 'express-label-maker') . '</a>';
         array_unshift($links, $settings_link);
         return $links;
     }    

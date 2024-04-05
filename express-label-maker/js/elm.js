@@ -430,9 +430,9 @@ jQuery(document).ready(function ($) {
   const urlParams = new URLSearchParams(window.location.search);
 
   const page = urlParams.get("page");
-  const tab = urlParams.get("tab");
+  /* const tab = urlParams.get("tab"); */
 
-  if (tab !== "licence" && page === "express_label_maker") {
+  if (/* tab !== "licence" && */ page !== "express_label_maker") {
       return;
   }
 
