@@ -306,15 +306,21 @@ jQuery(document).ready(function ($) {
               url: order.pl_parcels.url,
               type: "POST",
               success: function (r) {
-                if (r.status === "err") {
-                  displayError(r.errlog);
-                  return;
-                }
-                update_parcel_status(order.order_id, r.parcel_status);
-                const spanElement = $('<span>' + r.parcel_status + '</span>');
-                applyStatusClass(spanElement, r.parcel_status);
-                parcel_status_element.html(spanElement);
-
+                  if (r.status === "err") {
+                      displayError(r.errlog);
+                      return;
+                  }
+                  update_parcel_status(order.order_id, r.parcel_status);
+          
+                  const spanElement = $('<span title="' + r.parcel_status + '">' + r.parcel_status + '</span>');
+          
+                  if (r.parcel_status.length > 30) {
+                      spanElement.text(r.parcel_status.substring(0, 30) + '...');
+                      spanElement.attr('title', r.parcel_status);
+                  }
+          
+                  applyStatusClass(spanElement, r.parcel_status);
+                  parcel_status_element.html(spanElement);
               },
               error: function (response) {
                 alert(
@@ -432,7 +438,7 @@ jQuery(document).ready(function ($) {
   const page = urlParams.get("page");
   /* const tab = urlParams.get("tab"); */
 
-  if (/* tab !== "licence" && */ page !== "express_label_maker") {
+  if (/* tab !== "licence" &&  */page !== "express_label_maker") {
       return;
   }
 

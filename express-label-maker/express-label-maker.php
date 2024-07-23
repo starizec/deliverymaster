@@ -8,7 +8,7 @@
  * Version: 1.0.0
  * Author: Emedia
  * Author URI: https://emedia.hr/
- * Tested up to: 6.2.1
+ * Tested up to: 6.6.1
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  */
@@ -217,14 +217,18 @@ class ExpressLabelMaker
     function display_custom_order_meta_data($column)
     {
         global $post;
-
+    
         if ($column === 'elm_parcel_status') {
             $order = wc_get_order($post->ID);
             $custom_meta_data = $order->get_meta('elm_parcel_status');
-            echo '<span>' . $custom_meta_data . '</span>';
+            
+            if (strlen($custom_meta_data) > 30) {
+                echo '<span title="' . esc_attr($custom_meta_data) . '">' . substr($custom_meta_data, 0, 5) . '...</span>';
+            } else {
+                echo '<span title="' . esc_attr($custom_meta_data) . '">' . $custom_meta_data . '</span>';
+            }
         }
-    }
-    
+    }    
 
     public function elm_show_confirm_modal()
     {
