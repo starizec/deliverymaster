@@ -84,12 +84,12 @@ function licence_tab_content()
         echo '</div>'; */
         
         // trenutna domena
-        echo '<script type="text/javascript">
+/*         echo '<script type="text/javascript">
                 document.getElementById("buyNowBtn").addEventListener("click", function(){
                     var currentDomain = window.location.hostname;
                     console.log(currentDomain);
                 });
-            </script>';
+            </script>'; */
 
      
             echo '<script type="text/javascript">

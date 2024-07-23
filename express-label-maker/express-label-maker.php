@@ -5,7 +5,7 @@
  * Plugin URI: https://expresslabelmaker.com/
  * Description: Turn your WordPress into a central shipping station with the 'Express Label Maker' plugin. Making stickers has never been easier!
  * Tags: delivery, label, dpd
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: Emedia
  * Author URI: https://emedia.hr/
  * Tested up to: 6.6.1
