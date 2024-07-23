@@ -19,7 +19,7 @@ function dpd_tab_content() {
     $saved_username = get_option('elm_dpd_username_option', '');
     $saved_password = get_option('elm_dpd_password_option', '');
     $saved_service_type = get_option('elm_dpd_service_type_option', '');
-    $saved_country = get_option("elm_country_option", '');
+    $saved_country = strtoupper(get_option('elm_country_option', ''));
 
     echo '<div style="display:block;">';
     echo '<div style="float: left; width: 48%; padding-right: 2%;">';
@@ -134,7 +134,7 @@ function dpd_tab_content() {
                     ];
                     
                     foreach ($countries as $code => $name) {
-                        $selected_value = $saved_country ? $saved_country : $saved_value;
+                        $selected_value = $saved_value ? $saved_value : $saved_country;
                         echo '<option value="' . esc_attr($code) . '" ' . selected($selected_value, $code, false) . '>' . esc_html($name) . '</option>';
                     }                    
                     
