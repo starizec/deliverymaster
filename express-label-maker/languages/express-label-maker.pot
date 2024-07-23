@@ -1,485 +1,489 @@
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: ExpressLabelMaker\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"Project-Id-Version: Express Label Maker\n"
 "POT-Creation-Date: 2024-07-23 23:18+0200\n"
-"PO-Revision-Date: 2024-07-23 23:19+0200\n"
+"PO-Revision-Date: 2024-07-23 23:18+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
-"Language: hr_HR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.0.2\n"
 "X-Poedit-Basepath: ..\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"X-Poedit-Flags-xgettext: --add-comments=translators:\n"
+"X-Poedit-WPHeader: express-label-maker.php\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-KeywordsList: __;_e;esc_html_e; __;esc_html_e\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
 "X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
 
 #: express-label-maker.php:79 express-label-maker.php:102
 msgid "Settings"
-msgstr "Postavke"
+msgstr ""
 
 #. Plugin Name of the plugin/theme
 #: express-label-maker.php:88 express-label-maker.php:89
 #: express-label-maker.php:138
 msgid "Express Label Maker"
-msgstr "Express Label Maker"
+msgstr ""
 
 #: express-label-maker.php:101
 msgid "Licence"
-msgstr "Licenca"
+msgstr ""
 
 #: express-label-maker.php:103
 msgid "DPD"
-msgstr "DPD"
+msgstr ""
 
 #: express-label-maker.php:119
 msgid "DPD Print Label"
-msgstr "DPD Print Naljepnica"
+msgstr ""
 
 #: express-label-maker.php:130
 msgid "Package status"
-msgstr "Status paketa"
+msgstr ""
 
 #: express-label-maker.php:167
 msgid "Print label"
-msgstr "Print naljepnica"
+msgstr ""
 
 #: express-label-maker.php:182
 msgid "Labels"
-msgstr "Naljepnice"
+msgstr ""
 
 #: express-label-maker.php:195
 msgid "Stack and trace"
-msgstr "Praćenje pošiljke"
+msgstr ""
 
 #: express-label-maker.php:199
 msgid "Collection request"
-msgstr "Zahtjev za prikup"
+msgstr ""
 
 #: express-label-maker.php:267 express-label-maker.php:304
 msgid "Order not found."
-msgstr "Narudžba nije pronađena."
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:8
 #: forms/express-label-maker-form.php:8
 msgid "Order Details"
-msgstr "Detalji narudžbe"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:16
 msgid "Pickup address"
-msgstr "Adresa preuzimanja"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:19
 #: forms/express-label-maker-form.php:18
 msgid "Customer's Name:"
-msgstr "Ime kupca:"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:24
 #: forms/express-label-maker-form.php:23
 msgid "Customer's Address:"
-msgstr "Adresa kupca:"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:29
 #: forms/express-label-maker-form.php:28
 msgid "House Number:"
-msgstr "Kućni broj:"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:34
 #: forms/express-label-maker-collection-form.php:93
 #: forms/express-label-maker-form.php:33
 msgid "City:"
-msgstr "Grad:"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:39
 #: forms/express-label-maker-form.php:38
 msgid "ZIP Code:"
-msgstr "Poštanski broj:"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:44
 #: forms/express-label-maker-collection-form.php:98
 #: forms/express-label-maker-form.php:43
 msgid "Country:"
-msgstr "Država:"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:49
 #: forms/express-label-maker-form.php:48
 msgid "Contact Person:"
-msgstr "Kontakt osoba:"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:54
 #: forms/express-label-maker-collection-form.php:135
 #: forms/express-label-maker-form.php:53
 msgid "Phone:"
-msgstr "Telefon:"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:59
 #: forms/express-label-maker-collection-form.php:140
 #: forms/express-label-maker-form.php:58
 msgid "Email:"
-msgstr "Email:"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:64
 msgid "Info for sender:"
-msgstr "Napomena za pošiljatelja:"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:69
 msgid "Delivery address"
-msgstr "Adresa dostave"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:73
 msgid "Company or personal name:"
-msgstr "Tvrtka ili ime i prezime:"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:78
 msgid "Contact person:"
-msgstr "Kontakt osoba:"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:83
 msgid "Street:"
-msgstr "Ulica:"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:88
 msgid "Property number:"
-msgstr "Kućni broj:"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:100
 #: settings/dpd-settings.php:107
 msgid "Austria"
-msgstr "Austrija"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:101
 #: settings/dpd-settings.php:108
 msgid "Belgium"
-msgstr "Belgija"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:102
 #: settings/dpd-settings.php:109
 msgid "Bulgaria"
-msgstr "Bugarska"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:103
 #: settings/dpd-settings.php:110 settings/licence-settings.php:46
 msgid "Croatia"
-msgstr "Hrvatska"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:104
 #: settings/dpd-settings.php:111
 msgid "Czechia"
-msgstr "Češka"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:105
 #: settings/dpd-settings.php:112
 msgid "Denmark"
-msgstr "Danska"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:106
 #: settings/dpd-settings.php:113
 msgid "Estonia"
-msgstr "Estonija"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:107
 #: settings/dpd-settings.php:114
 msgid "Finland"
-msgstr "Finska"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:108
 #: settings/dpd-settings.php:115
 msgid "France"
-msgstr "Francuska"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:109
 #: settings/dpd-settings.php:116
 msgid "Germany"
-msgstr "Njemačka"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:110
 #: settings/dpd-settings.php:117
 msgid "Hungary"
-msgstr "Mađarska"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:111
 #: settings/dpd-settings.php:118
 msgid "Ireland"
-msgstr "Irska"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:112
 #: settings/dpd-settings.php:119
 msgid "Italy"
-msgstr "Italija"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:113
 #: settings/dpd-settings.php:120
 msgid "Latvia"
-msgstr "Latvija"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:114
 #: settings/dpd-settings.php:121
 msgid "Lithuania"
-msgstr "Litva"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:115
 #: settings/dpd-settings.php:122
 msgid "Luxembourg"
-msgstr "Luksemburg"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:116
 #: settings/dpd-settings.php:123
 msgid "Netherlands"
-msgstr "Nizozemska"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:117
 #: settings/dpd-settings.php:124
 msgid "Poland"
-msgstr "Poljska"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:118
 #: settings/dpd-settings.php:125
 msgid "Portugal"
-msgstr "Portugal"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:119
 #: settings/dpd-settings.php:126
 msgid "Romania"
-msgstr "Rumunjska"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:120
 #: settings/dpd-settings.php:127
 msgid "Serbia"
-msgstr "Srbija"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:121
 #: settings/dpd-settings.php:128
 msgid "Slovakia"
-msgstr "Slovačka"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:122
 #: settings/dpd-settings.php:129 settings/licence-settings.php:47
 msgid "Slovenia"
-msgstr "Slovenija"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:123
 #: settings/dpd-settings.php:130
 msgid "Spain"
-msgstr "Španjolska"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:124
 #: settings/dpd-settings.php:131
 msgid "Sweden"
-msgstr "Švedska"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:125
 #: settings/dpd-settings.php:132
 msgid "Switzerland"
-msgstr "Švicarska"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:130
 msgid "Postal Code:"
-msgstr "Poštanski broj:"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:145
 msgid "Pickup Date:"
-msgstr "Datum prikupa:"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:150
 msgid "Select Courier:"
-msgstr "Odaberi kurira:"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:157
 msgid "Info for courier:"
-msgstr "Napomena za kurira:"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:166
 msgid "Send request"
-msgstr "Pošalji zahtjev"
+msgstr ""
 
 #: forms/express-label-maker-collection-form.php:169
 #: forms/express-label-maker-form.php:117
 msgid "Cancel"
-msgstr "Otkaži"
+msgstr ""
 
 #: forms/express-label-maker-form.php:65
 msgid "Reference:"
-msgstr "Referenca:"
+msgstr ""
 
 #: forms/express-label-maker-form.php:70
 msgid "Payment Method:"
-msgstr "Metoda plaćanja:"
+msgstr ""
 
 #: forms/express-label-maker-form.php:75
 msgid "Payment:"
-msgstr "Plaćanje:"
+msgstr ""
 
 #: forms/express-label-maker-form.php:85
 msgid "Collection Date (Order Date):"
-msgstr "Datum preuzimanja (datum narudžbe):"
+msgstr ""
 
 #: forms/express-label-maker-form.php:90
 msgid "Weight:"
-msgstr "Težina:"
+msgstr ""
 
 #: forms/express-label-maker-form.php:95
 msgid "Package Number:"
-msgstr "Broj paketa:"
+msgstr ""
 
 #: forms/express-label-maker-form.php:100
 msgid "Cash on Delivery Amount:"
-msgstr "Iznos plaćanja pouzećem:"
+msgstr ""
 
 #: forms/express-label-maker-form.php:105
 msgid "Note:"
-msgstr "Napomena:"
+msgstr ""
 
 #: forms/express-label-maker-form.php:114
 msgid "Print"
-msgstr "Print"
+msgstr ""
 
 #: settings/dpd-settings.php:13
 msgid "DPD settings saved."
-msgstr "DPD postavke su spremljene."
+msgstr ""
 
 #: settings/dpd-settings.php:15
 msgid "Username, Password, and Service Type are required."
-msgstr "Korisničko ime, lozinka i tip servisa su obavezni."
+msgstr ""
 
 #: settings/dpd-settings.php:25
 msgid "DPD User Data"
-msgstr "DPD korisnički podaci"
+msgstr ""
 
 #: settings/dpd-settings.php:29
 msgid "Username"
-msgstr "Korisničko ime"
+msgstr ""
 
 #: settings/dpd-settings.php:33
 msgid "Password"
-msgstr "Lozinka"
+msgstr ""
 
 #: settings/dpd-settings.php:37
 msgid "Service Type"
-msgstr "Tip servisa"
+msgstr ""
 
 #: settings/dpd-settings.php:47 settings/dpd-settings.php:151
 #: settings/general-settings.php:63 settings/licence-settings.php:53
 msgid "Save Changes"
-msgstr "Spremi promjene"
+msgstr ""
 
 #: settings/dpd-settings.php:74
 msgid "Collection Request Data saved."
-msgstr "Spremljeni podaci za zahtjev za prikupljanje."
+msgstr ""
 
 #: settings/dpd-settings.php:76
 msgid "All fields are required."
-msgstr "Sva polja su obavezna."
+msgstr ""
 
 #: settings/dpd-settings.php:80
 msgid "Collection Request Data"
-msgstr "Podaci o zahtjevu za prikupljanje"
+msgstr ""
 
 #: settings/dpd-settings.php:85
 msgid "Company or personal name"
-msgstr "Tvrtka ili ime i prezime"
+msgstr ""
 
 #: settings/dpd-settings.php:86
 msgid "Contact person"
-msgstr "Kontakt osoba"
+msgstr ""
 
 #: settings/dpd-settings.php:87
 msgid "Street"
-msgstr "Ulica"
+msgstr ""
 
 #: settings/dpd-settings.php:88
 msgid "Property number"
-msgstr "Kućni broj"
+msgstr ""
 
 #: settings/dpd-settings.php:89
 msgid "City"
-msgstr "Grad"
+msgstr ""
 
 #: settings/dpd-settings.php:90
 msgid "Country"
-msgstr "Država"
+msgstr ""
 
 #: settings/dpd-settings.php:91
 msgid "Postal Code"
-msgstr "Poštanski broj"
+msgstr ""
 
 #: settings/dpd-settings.php:92
 msgid "Phone"
-msgstr "Telefon"
+msgstr ""
 
 #: settings/dpd-settings.php:93
 msgid "Email"
-msgstr "Email"
+msgstr ""
 
 #: settings/general-settings.php:30
 msgid "All labels deleted."
-msgstr "Sve naljepnice izbrisane."
+msgstr ""
 
 #: settings/general-settings.php:38 settings/licence-settings.php:19
 msgid "Settings saved."
-msgstr "Postavke spremljene."
+msgstr ""
 
 #: settings/general-settings.php:47
 msgid "Delete all labels from server"
-msgstr "Izbrišite sve naljepnice sa vašeg servera"
+msgstr ""
 
 #: settings/general-settings.php:49
 msgid "Are you sure you want to delete all labels?"
-msgstr "Jeste li sigurni da želite izbrisati sve naljepnice?"
+msgstr ""
 
 #: settings/general-settings.php:50
 msgid "Delete All"
-msgstr "Obriši sve"
+msgstr ""
 
 #: settings/general-settings.php:58
 msgid "Saving PDF labels to your server"
-msgstr "Spremanje PDF naljepnica na vaš server"
+msgstr ""
 
 #: settings/licence-settings.php:21
 msgid "Email is required."
-msgstr "Email je obavezan."
+msgstr ""
 
 #: settings/licence-settings.php:34
 msgid "Email*"
-msgstr "Email*"
+msgstr ""
 
 #: settings/licence-settings.php:38
 msgid "Licence*"
-msgstr "Licenca*"
+msgstr ""
 
 #: settings/licence-settings.php:39
 msgid "Your licence key or click Start Trial"
-msgstr "Vaš licenca ili kliknite Pokreni probnu verziju"
+msgstr ""
 
 #: settings/licence-settings.php:40
 msgid "Start Trial"
-msgstr "Pokreni probnu licencu"
+msgstr ""
 
 #: settings/licence-settings.php:43
 msgid "Country*"
-msgstr "Država*"
+msgstr ""
 
 #: settings/licence-settings.php:60
 msgid "Licence status"
-msgstr "Status licence"
+msgstr ""
 
 #: settings/licence-settings.php:62
 msgid "Valid from"
-msgstr "Vrijedi od"
+msgstr ""
 
 #: settings/licence-settings.php:64
 msgid "Label limit"
-msgstr "Limit naljepnica"
+msgstr ""
 
 #: settings/licence-settings.php:68
 msgid "Valid to"
-msgstr "Vrijedi do"
+msgstr ""
 
 #: settings/licence-settings.php:70
 msgid "Used"
-msgstr "Iskorišteno"
+msgstr ""
 
 #. Plugin URI of the plugin/theme
 msgid "https://expresslabelmaker.com/"
@@ -498,15 +502,3 @@ msgstr ""
 #. Author URI of the plugin/theme
 msgid "https://emedia.hr/"
 msgstr ""
-
-#~ msgid "Plugin Instructions"
-#~ msgstr "Instrukcije plugina"
-
-#~ msgid "BUY NOW"
-#~ msgstr "KUPI ODMAH"
-
-#~ msgid "Status licence"
-#~ msgstr "Status licence"
-
-#~ msgid "Status paketa"
-#~ msgstr "Status paketa"
