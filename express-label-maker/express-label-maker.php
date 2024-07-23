@@ -56,6 +56,7 @@ class ExpressLabelMaker
     
         $email = get_option('elm_email_option', '');
         $licence = get_option('elm_licence_option', '');
+        $saved_service_type = get_option('elm_dpd_service_type_option', '');
     
         wp_localize_script(
             'elm_admin_js',
@@ -64,7 +65,8 @@ class ExpressLabelMaker
                 'ajax_url' => admin_url('admin-ajax.php'),
                 'nonce' => wp_create_nonce('elm_nonce'),
                 'email' => $email,
-                'licence' => $licence
+                'licence' => $licence,
+                'serviceType' => $saved_service_type
             )
         );
     }    

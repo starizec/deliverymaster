@@ -133,6 +133,15 @@ jQuery(document).ready(function ($) {
   });
 
   function setDPDParcelData(form) {
+    var isCod = form.find('input[name="parcel_type"]:checked').val() === "cod";
+    var parcelType;
+  
+    // Određivanje tipa paketa na temelju vrste usluge
+    if (elm_ajax.serviceType === 'DPD Classic') {
+      parcelType = isCod ? "D-COD" : "D";
+    } else if (elm_ajax.serviceType === 'DPD Home') {
+      parcelType = isCod ? "D-COD-B2C" : "D-B2C";
+    }
     return {
       cod_amount: form.find('input[name="cod_amount"]').val(),
       name1: form.find('input[name="customer_name"]').val(),
@@ -146,10 +155,7 @@ jQuery(document).ready(function ($) {
       weight: form.find('input[name="weight"]').val(),
       order_number: form.find('input[name="reference"]').val(),
       cod_purpose: form.find('input[name="reference"]').val(),
-      parcel_type:
-        form.find('input[name="parcel_type"]:checked').val() === "cod"
-          ? "D-COD"
-          : "D",
+      parcel_type: parcelType,
       num_of_parcel: form.find('input[name="package_number"]').val(),
       phone: form.find('input[name="phone"]').val(),
       contact: form.find('input[name="contact_person"]').val(),

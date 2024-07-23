@@ -1,24 +1,24 @@
 <?php
 
-function dpd_tab_content()
-{
+function dpd_tab_content() {
     if (isset($_POST['elm_dpd_nonce']) && wp_verify_nonce($_POST['elm_dpd_nonce'], 'elm_save_dpd_settings')) {
         $username = isset($_POST['elm_dpd_username']) ? sanitize_text_field($_POST['elm_dpd_username']) : '';
         $password = isset($_POST['elm_dpd_password']) ? sanitize_text_field($_POST['elm_dpd_password']) : '';
+        $service_type = isset($_POST['elm_dpd_service_type']) ? sanitize_text_field($_POST['elm_dpd_service_type']) : ''; // Retrieve selected service type
 
-
-        if (!empty($username) && !empty($password)) {
+        if (!empty($username) && !empty($password) && !empty($service_type)) {
             update_option('elm_dpd_username_option', $username);
             update_option('elm_dpd_password_option', $password);
+            update_option('elm_dpd_service_type_option', $service_type); // Save the service type
             echo '<div class="updated"><p>' . __('DPD settings saved.', 'express-label-maker') . '</p></div>';
         } else {
-            echo '<div class="error"><p>' . __('Both Username and Password are required.', 'express-label-maker') . '</p></div>';
+            echo '<div class="error"><p>' . __('Username, Password, and Service Type are required.', 'express-label-maker') . '</p></div>';
         }
     }
 
     $saved_username = get_option('elm_dpd_username_option', '');
     $saved_password = get_option('elm_dpd_password_option', '');
-    $saved_country = strtoupper(get_option('elm_country_option', ''));
+    $saved_service_type = get_option('elm_dpd_service_type_option', '');
 
     echo '<div style="display:block;">';
     echo '<div style="float: left; width: 48%; padding-right: 2%;">';
@@ -31,7 +31,16 @@ function dpd_tab_content()
     echo '</tr>';
     echo '<tr>';
     echo '<th scope="row"><label for="elm_dpd_password">' . __('Password', 'express-label-maker') . '</label></th>';
-    echo '<td><input name="elm_dpd_password" type="password" id="elm_dpd_password" value="' . esc_attr($saved_password) . '" class="regular-text" required autocomplete></td>';
+    echo '<td><input name="elm_dpd_password" type="password" id="elm_dpd_password" value="' . esc_attr($saved_password) . '" class="regular-text" required autocomplete="new-password"></td>';
+    echo '</tr>';
+    echo '<tr>';
+    echo '<th scope="row"><label for="elm_dpd_service_type">' . __('Service Type', 'express-label-maker') . '</label></th>';
+    echo '<td>';
+    echo '<select name="elm_dpd_service_type" id="elm_dpd_service_type" required>';
+    echo '<option value="DPD Classic"' . ($saved_service_type == 'DPD Classic' ? ' selected' : '') . '>DPD Classic</option>';
+    echo '<option value="DPD Home"' . ($saved_service_type == 'DPD Home' ? ' selected' : '') . '>DPD Home</option>';
+    echo '</select>';
+    echo '</td>';
     echo '</tr>';
     echo '</table>';
     echo '<p class="submit">';

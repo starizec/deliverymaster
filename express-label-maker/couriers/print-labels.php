@@ -11,6 +11,7 @@ class ElmPrintLabels {
         check_ajax_referer('elm_nonce', 'security');
     
         $saved_country = get_option("elm_country_option", '');
+        $saved_service_type = get_option("elm_dpd_service_type_option", ''); // spremljena vrste usluge
         $actionValue = $_POST['actionValue'];
         $courier = '';
 
@@ -31,7 +32,11 @@ class ElmPrintLabels {
             $order_total = $order->get_total();
             $weight = 2;
             $payment_method = $order->get_payment_method();
-            $parcel_type = $payment_method === 'cod' ? 'D-COD' : 'D';
+            if ($saved_service_type === 'DPD Classic') {
+                $parcel_type = $payment_method === 'cod' ? 'D-COD' : 'D';
+            } else if ($saved_service_type === 'DPD Home') {
+                $parcel_type = $payment_method === 'cod' ? 'D-COD-B2C' : 'D-B2C';
+            }
     
             preg_match('/\d[\w\s-]*$/', $shipping['address_1'], $house_number);
             $house_number = isset($house_number[0]) ? $house_number[0] : '';

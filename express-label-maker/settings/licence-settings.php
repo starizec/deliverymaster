@@ -76,12 +76,12 @@ function licence_tab_content()
         echo '</div>';
 
         // upute
-        echo '<div style="float: right; width: 48%;">';
+/*         echo '<div style="float: right; width: 48%;">';
         echo '<h3>' . __('Plugin Instructions', 'express-label-maker') . '</h3>';
         echo '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum.</p>';
         echo '<button id="buyNowBtn" class="button">' . __('BUY NOW', 'express-label-maker') . '</button>';
         echo '</div>';
-        echo '</div>';
+        echo '</div>'; */
         
         // trenutna domena
         echo '<script type="text/javascript">
