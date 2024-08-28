@@ -26,7 +26,7 @@ class ElmPrintLabel
             "parcel" => $parcel_data
         );
 
-        error_log(print_r($body, true));
+        /* error_log(print_r($body, true)); */
     
         $args = array(
             'method' => 'POST',

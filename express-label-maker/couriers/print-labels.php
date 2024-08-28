@@ -55,9 +55,7 @@ class ElmPrintLabels {
         $body = array(
             "user" => $user_data,
             "parcels" => $parcels_array
-        );        
-
-
+        );
     
         $args = array(
             'method' => 'POST',
@@ -66,6 +64,8 @@ class ElmPrintLabels {
         );
     
         $response = wp_remote_request('https://expresslabelmaker.com/api/v1/' . $saved_country . '/' . $courier . '/create/labels', $args);
+
+        error_log(print_r($response, true));
     
         if (is_wp_error($response)) {
             wp_send_json_error(array('error_id' => null, 'error_message' => $response->get_error_message()));
@@ -162,15 +162,15 @@ class ElmPrintLabels {
             'cod_amount' => $order_total,
             'name1' => $shipping['first_name'] . ' ' . $shipping['last_name'],
             /* 'street' => $address_without_house_number, */
-            'rPropNum' => $address_without_house_number . ' ' . $house_number,
+            'rPropNum' => $address_without_house_number . $house_number,
             'city' => $shipping['city'],
             /* 'country' => $shipping['country'], */
             'pcode' => $shipping['postcode'],
             'email' => $billing['email'],
             'sender_remark' => $order_data['customer_note'],
             /* 'weight' => $weight, */
-/*             'order_number' => $order_id,
-            'cod_purpose' => $order_id,
+            'order_number' => $order_id,
+/*             'cod_purpose' => $order_id,
             'parcel_type' => $parcel_type, */
             'num_of_parcel' => $package_number,
             'phone' => $billing['phone'],

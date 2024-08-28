@@ -187,8 +187,8 @@ jQuery(document).ready(function ($) {
       email: form.find('input[name="email"]').val(),
       sender_remark: form.find('textarea[name="note"]').val(),
       /* weight: form.find('input[name="weight"]').val(), */
-/*       order_number: form.find('input[name="reference"]').val(),
-      cod_purpose: form.find('input[name="reference"]').val(), */
+      order_number: form.find('input[name="reference"]').val(),
+      /* cod_purpose: form.find('input[name="reference"]').val(), */
       /* parcel_type: parcelType, */
       num_of_parcel: form.find('input[name="package_number"]').val(),
       phone: form.find('input[name="phone"]').val(),
@@ -220,6 +220,8 @@ jQuery(document).ready(function ($) {
             return $(this).val();
         }).get();
 
+        console.log(elm_ajax.ajax_url, 'elm_ajax.ajax_url')
+
 
           $.ajax({
             url: elm_ajax.ajax_url,
@@ -231,6 +233,7 @@ jQuery(document).ready(function ($) {
               actionValue: actionValue
             },
               success: function (response) {
+                console.log("Response received:", response);
                   if (response.success) {
                       $(".elm_loading_panel").fadeOut(300);
 
