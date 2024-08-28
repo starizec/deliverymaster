@@ -60,6 +60,12 @@
                 </label>
             </div>
             <div class="elm_form_columns">
+
+            <?php //DODATI KURIRE
+                switch ($courier) {
+                    case 'dpd': 
+            ?>
+
                 <!-- Reference -->
                 <label class="labels">
                     <?php esc_html_e('Reference:', 'express-label-maker'); ?>
@@ -105,7 +111,56 @@
                     <?php esc_html_e('Note:', 'express-label-maker'); ?>
                     <textarea name="note"><?php echo esc_textarea($order_data['customer_note']); ?></textarea>
                 </label>
-                    <!-- Hidden courier for api -->
+
+                <?php 
+                    break;
+
+                    case 'overseas': 
+                ?>
+                <!-- Reference -->
+                <label class="labels">
+                    <?php esc_html_e('Reference:', 'express-label-maker'); ?>
+                    <input type="text" name="reference" value="<?php echo esc_attr($order_data['id']); ?>">
+                </label>
+                <!--Payment Method -->
+                <label class="labels">
+                    <?php esc_html_e('Payment Method:', 'express-label-maker'); ?>
+                    <input type="text" name="payment_method" value="<?php echo esc_attr($payment_method); ?>" disabled>
+                </label>
+                <!-- Collection Date (Order Date) -->
+                <label class="labels">
+                    <?php esc_html_e('Collection Date (Order Date):', 'express-label-maker'); ?>
+                    <input type="date" name="collection_date" value="<?php echo esc_attr($order_date); ?>">
+                </label>
+                <!-- Package Number -->
+                <label class="labels">
+                    <?php esc_html_e('Package Number:', 'express-label-maker'); ?>
+                    <input type="text" name="package_number" value="<?php echo esc_attr($package_number); ?>">
+                </label>
+                <!-- Cash on Delivery Amount -->
+                <label class="labels">
+                    <?php esc_html_e('Cash on Delivery Amount:', 'express-label-maker'); ?>
+                    <input type="text" name="cod_amount" value="<?php echo esc_attr($order_total); ?>">
+                </label>
+                <!-- Note -->
+                <label class="labels">
+                    <?php esc_html_e('Note:', 'express-label-maker'); ?>
+                    <textarea name="note"><?php echo esc_textarea($order_data['customer_note']); ?></textarea>
+                </label>
+
+                <?php 
+                    break;
+
+                    default: 
+                ?>
+                <!-- Error  -->
+                        <p><?php esc_html_e('Invalid courier selected.', 'express-label-maker'); ?></p>
+                <?php 
+                        break;
+                } 
+                ?>
+
+                <!-- Hidden courier for api -->
                 <input type="hidden" id="hiddenCourier" value="" />
                 <input type="hidden" id="hiddenOrderId" value="<?php echo esc_attr($order_data['id']); ?>" />
         </form>

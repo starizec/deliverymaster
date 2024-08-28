@@ -20,6 +20,7 @@ jQuery(document).ready(function ($) {
         action: "elm_show_confirm_modal",
         security: elm_ajax.nonce,
         order_id: order_id,
+        courier: courier
       },
       success: function (response) {
         if (response.success) {
@@ -73,8 +74,11 @@ jQuery(document).ready(function ($) {
     var orderId = $("#hiddenOrderId").val();
 
     switch (courier) {
-      case "dpd":
+      case "dpd": //DODATI OSTALE KURIRE
         var parcelData = setDPDParcelData(form);
+        break;
+        case "overseas":
+        var parcelData = setOverseasParcelData(form);
         break;
     }
 
@@ -91,19 +95,19 @@ jQuery(document).ready(function ($) {
       success: function (response) {
         if (response.success) {
           $(".elm_loading_panel").fadeOut(300);
-
           if (response.data.file_path) {
             window.open(response.data.file_path, "_blank");
           } else if (response.data.pdf_data) {
-            let pdfData = atob(response.data.pdf_data);
-            let uint8Array = new Uint8Array(pdfData.length);
-            for (let i = 0; i < pdfData.length; i++) {
-              uint8Array[i] = pdfData.charCodeAt(i);
+            let binaryString = atob(response.data.pdf_data);
+            let uint8Array = new Uint8Array(binaryString.length);
+            for (let i = 0; i < binaryString.length; i++) {
+                uint8Array[i] = binaryString.charCodeAt(i);
             }
-
-            let blob = new Blob([uint8Array], { type: "application/pdf" });
+            
+            let blob = new Blob([uint8Array], { type: 'application/pdf' });
             let url = URL.createObjectURL(blob);
-            window.open(url, "_blank");
+            window.open(url, '_blank');
+            
 
             let a = document.createElement("a");
             a.href = url;
@@ -161,6 +165,37 @@ jQuery(document).ready(function ($) {
       contact: form.find('input[name="contact_person"]').val(),
     };
   }
+
+  function setOverseasParcelData(form) {
+/*     var isCod = form.find('input[name="parcel_type"]:checked').val() === "cod";
+    var parcelType;
+   */
+    // Određivanje tipa paketa na temelju vrste usluge
+/*     if (elm_ajax.serviceType === 'DPD Classic') {
+      parcelType = isCod ? "D-COD" : "D";
+    } else if (elm_ajax.serviceType === 'DPD Home') {
+      parcelType = isCod ? "D-COD-B2C" : "D-B2C";
+    } */
+    return {
+      cod_amount: form.find('input[name="cod_amount"]').val(),
+      name1: form.find('input[name="customer_name"]').val(),
+      /* street: form.find('input[name="customer_address"]').val(), */
+      rPropNum: form.find('input[name="customer_address"]').val() + ' ' + form.find('input[name="house_number"]').val(),
+      city: form.find('input[name="city"]').val(),
+      /* country: form.find('input[name="country"]').val(), */
+      pcode: form.find('input[name="zip_code"]').val(),
+      email: form.find('input[name="email"]').val(),
+      sender_remark: form.find('textarea[name="note"]').val(),
+      /* weight: form.find('input[name="weight"]').val(), */
+/*       order_number: form.find('input[name="reference"]').val(),
+      cod_purpose: form.find('input[name="reference"]').val(), */
+      /* parcel_type: parcelType, */
+      num_of_parcel: form.find('input[name="package_number"]').val(),
+      phone: form.find('input[name="phone"]').val(),
+      /* contact: form.find('input[name="contact_person"]').val(), */
+    };
+  }
+
 });
 
 //PRINT LABELS

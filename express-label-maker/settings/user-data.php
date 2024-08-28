@@ -22,6 +22,16 @@ class user
             'platform' => 'wordpress'
         ];
     }
+
+    public function HrOverseas(){
+        return [
+            'domain' => $_SERVER['SERVER_NAME'], //DODATI EVENTUALNO ZA TEST
+            'licence' => get_option('elm_licence_option', ''),
+            'email' => get_option('elm_email_option', ''),
+            'apiKey' => get_option("elm_overseas_api_key_option", ''),
+            'platform' => 'wordpress'
+        ];
+    }
 }
 
 function initialize_elm_user_data()

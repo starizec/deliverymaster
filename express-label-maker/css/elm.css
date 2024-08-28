@@ -129,8 +129,9 @@
 
 .elm_custom_order_wrapper {
   display: flex;
-  justify-content: space-between;
   margin-top: 10px;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .elm_custom_order_pdf_wrapper {

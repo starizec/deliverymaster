@@ -4,7 +4,7 @@
  * Plugin Name: Express Label Maker
  * Plugin URI: https://expresslabelmaker.com/
  * Description: Turn your WordPress into a central shipping station with the 'Express Label Maker' plugin. Making stickers has never been easier!
- * Tags: delivery, label, dpd
+ * Tags: delivery, label, dpd, overseas
  * Version: 1.0.1
  * Author: Emedia
  * Author URI: https://emedia.hr/
@@ -20,6 +20,7 @@ if (!defined('ABSPATH')) {
 require_once 'settings/general-settings.php';
 require_once 'settings/licence-settings.php';
 require_once 'settings/dpd-settings.php';
+require_once 'settings/overseas-settings.php';
 require_once 'settings/user-data.php';
 require_once 'settings/licence.php';
 require_once 'couriers/print-label.php';
@@ -42,6 +43,7 @@ class ExpressLabelMaker
         add_action('wp_ajax_elm_show_collection_modal', array($this, 'elm_show_collection_modal'));
         add_filter('manage_edit-shop_order_columns', array($this, 'elm_add_status_column_header'), 20);
         add_filter('bulk_actions-edit-shop_order', array($this, 'elm_add_dpd_print_label_bulk_action'));
+        add_filter('bulk_actions-edit-shop_order', array($this, 'elm_add_overseas_print_label_bulk_action'));
         add_action('manage_shop_order_posts_custom_column', array($this, 'display_custom_order_meta_data'));
         add_action('add_meta_boxes', array($this, 'elm_add_custom_meta_box'));
         add_action('plugins_loaded', array($this, 'elm_plugin_load_textdomain'), 30);
@@ -101,6 +103,7 @@ class ExpressLabelMaker
         echo '<a href="?page=express_label_maker&tab=licence" class="nav-tab ' . ($tab == 'licence' ? 'nav-tab-active' : '') . '">' . __('Licence', 'express-label-maker') . '</a>';
         echo '<a href="?page=express_label_maker&tab=settings" class="nav-tab ' . ($tab == 'settings' ? 'nav-tab-active' : '') . '">' . __('Settings', 'express-label-maker') . '</a>';
         echo '<a href="?page=express_label_maker&tab=dpd" class="nav-tab ' . ($tab == 'dpd' ? 'nav-tab-active' : '') . '">' . __('DPD', 'express-label-maker') . '</a>';
+        echo '<a href="?page=express_label_maker&tab=overseas" class="nav-tab ' . ($tab == 'overseas' ? 'nav-tab-active' : '') . '">' . __('Overseas', 'express-label-maker') . '</a>';
         echo '</nav>';
     
         if ($tab == 'licence') {
@@ -109,6 +112,8 @@ class ExpressLabelMaker
             settings_tab_content();
         } elseif ($tab == 'dpd') {
             dpd_tab_content();
+        } elseif ($tab == 'overseas') {
+            overseas_tab_content();
         }
     
         echo '</div>';
@@ -117,6 +122,12 @@ class ExpressLabelMaker
     public function elm_add_dpd_print_label_bulk_action($actions)
     {
         $actions['elm_dpd_print_label'] = __('DPD Print Label', 'textdomain');
+        return $actions;
+    }
+
+    public function elm_add_overseas_print_label_bulk_action($actions)
+    {
+        $actions['elm_overseas_print_label'] = __('Overseas Print Label', 'textdomain');
         return $actions;
     }
 
@@ -153,7 +164,7 @@ class ExpressLabelMaker
 
         $saved_country = get_option("elm_country_option", '');
     
-        // DPD STACK AND TRACE
+        // DPD STACK AND TRACE  //DODATI ZA DRUGE KURIRE
         $meta_key = $saved_country . '_dpd_parcels';
         $dpd_parcels_value = get_post_meta($order_id, $meta_key, true);
         $dpd_parcel_link = null;
@@ -190,7 +201,7 @@ class ExpressLabelMaker
             endif;
             ?>
             <div class="elm_custom_order_buttons">
-            <?php if ($dpd_parcel_link): ?>
+            <?php if ($dpd_parcel_link): //DODATI ZA DRUGE KURIRE?>
                     <div class="elm_stack_and_trace_button">
                         <a href="<?php echo esc_url($dpd_parcel_link); ?>" target="_blank" class="button button-secondary"><?php echo __('Stack and trace', 'express-label-maker'); ?></a>
                     </div>
@@ -237,6 +248,7 @@ class ExpressLabelMaker
         check_ajax_referer('elm_nonce', 'security');
 
         $order_id = isset($_POST['order_id']) ? intval($_POST['order_id']) : 0;
+        $courier = isset($_POST['courier']) ? sanitize_text_field($_POST['courier']) : '';
 
         if ($order_id > 0) {
             $order = wc_get_order($order_id);

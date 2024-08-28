@@ -56,6 +56,8 @@ class ElmPrintLabels {
             "user" => $user_data,
             "parcels" => $parcels_array
         );        
+
+
     
         $args = array(
             'method' => 'POST',
@@ -152,6 +154,27 @@ class ElmPrintLabels {
             'num_of_parcel' => $package_number,
             'phone' => $billing['phone'],
             'contact' => $shipping['first_name'] . ' ' . $shipping['last_name']
+        );
+    }
+    
+    public function setOVERSEASParcelsData($shipping, $billing, $order_data, $order_total, $address_without_house_number, $house_number, $weight, $order_id, $parcel_type, $package_number) {
+        return array(
+            'cod_amount' => $order_total,
+            'name1' => $shipping['first_name'] . ' ' . $shipping['last_name'],
+            /* 'street' => $address_without_house_number, */
+            'rPropNum' => $address_without_house_number . ' ' . $house_number,
+            'city' => $shipping['city'],
+            /* 'country' => $shipping['country'], */
+            'pcode' => $shipping['postcode'],
+            'email' => $billing['email'],
+            'sender_remark' => $order_data['customer_note'],
+            /* 'weight' => $weight, */
+/*             'order_number' => $order_id,
+            'cod_purpose' => $order_id,
+            'parcel_type' => $parcel_type, */
+            'num_of_parcel' => $package_number,
+            'phone' => $billing['phone'],
+            /* 'contact' => $shipping['first_name'] . ' ' . $shipping['last_name'] */
         );
     }
 }

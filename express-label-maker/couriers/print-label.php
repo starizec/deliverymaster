@@ -25,6 +25,8 @@ class ElmPrintLabel
             "user" => $user_data,
             "parcel" => $parcel_data
         );
+
+        error_log(print_r($body, true));
     
         $args = array(
             'method' => 'POST',
@@ -47,7 +49,8 @@ class ElmPrintLabel
                 wp_send_json_error(array('error_id' => $error_id, 'error_message' => $error_message));
             }
 
-                $decoded_data = base64_decode($body_response['data']['label']);           
+                $decoded_data = base64_decode($body_response['data']['label'], true);
+                                
                 $meta_key = $saved_country . "_" . $courier . "_parcels";
                 $existing_meta_value = get_post_meta($order_id, $meta_key, true);
                 $parcel_value = isset($body_response['data']['parcels']) ? $body_response['data']['parcels'] : 'unknown';
@@ -67,6 +70,7 @@ class ElmPrintLabel
                 $upload_dir = wp_upload_dir();
                 $labels_dir = $upload_dir['basedir'] . '/elm-labels';  // nova putanja
                 $file_path = $labels_dir . '/' . $file_name_new;
+
 
                 if (!file_exists($labels_dir)) {
                     mkdir($labels_dir, 0755, true);
