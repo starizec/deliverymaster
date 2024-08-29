@@ -60,7 +60,8 @@ class ElmPrintLabels {
         $args = array(
             'method' => 'POST',
             'headers' => array('Content-Type' => 'application/json'),
-            'body' => json_encode($body)
+            'body' => json_encode($body),
+            'timeout' => 120
         );
     
         $response = wp_remote_request('https://expresslabelmaker.com/api/v1/' . $saved_country . '/' . $courier . '/create/labels', $args);
