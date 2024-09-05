@@ -10,7 +10,7 @@ class user
         }
     }
 
-    //DODATI OSTALE KURIR HrOverseas(), HrGLS
+    //DODATI KURIRE HrOverseas(), HrGLS
 
     public function HrDPD(){
         return [

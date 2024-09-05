@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: Express Label Maker\n"
-"POT-Creation-Date: 2024-07-23 23:18+0200\n"
+"POT-Creation-Date: 2024-09-05 23:55+0200\n"
 "PO-Revision-Date: 2024-07-23 23:18+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -16,54 +16,74 @@ msgstr ""
 "X-Poedit-WPHeader: express-label-maker.php\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
-"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
-"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;"
+"_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 
-#: express-label-maker.php:79 express-label-maker.php:102
+#: express-label-maker.php:84 express-label-maker.php:107
 msgid "Settings"
 msgstr ""
 
 #. Plugin Name of the plugin/theme
-#: express-label-maker.php:88 express-label-maker.php:89
-#: express-label-maker.php:138
+#: express-label-maker.php:93 express-label-maker.php:94
+#: express-label-maker.php:131
 msgid "Express Label Maker"
 msgstr ""
 
-#: express-label-maker.php:101
+#: express-label-maker.php:106
 msgid "Licence"
 msgstr ""
 
-#: express-label-maker.php:103
+#: express-label-maker.php:108
 msgid "DPD"
 msgstr ""
 
-#: express-label-maker.php:119
+#: express-label-maker.php:109
+msgid "Overseas"
+msgstr ""
+
+#: express-label-maker.php:145
 msgid "DPD Print Label"
 msgstr ""
 
-#: express-label-maker.php:130
-msgid "Package status"
+#: express-label-maker.php:154
+msgid "Overseas Print Label"
 msgstr ""
 
-#: express-label-maker.php:167
+#: express-label-maker.php:201
 msgid "Print label"
 msgstr ""
 
-#: express-label-maker.php:182
+#: express-label-maker.php:217
 msgid "Labels"
 msgstr ""
 
-#: express-label-maker.php:195
+#: express-label-maker.php:229
 msgid "Stack and trace"
 msgstr ""
 
-#: express-label-maker.php:199
+#: express-label-maker.php:232
+msgid "DPD Stack and trace"
+msgstr ""
+
+#: express-label-maker.php:238
+msgid "Overseas Stack and Trace"
+msgstr ""
+
+#: express-label-maker.php:243
 msgid "Collection request"
 msgstr ""
 
-#: express-label-maker.php:267 express-label-maker.php:304
+#: express-label-maker.php:245
+msgid "DPD Collection request"
+msgstr ""
+
+#: express-label-maker.php:261
+msgid "Package status"
+msgstr ""
+
+#: express-label-maker.php:327 express-label-maker.php:364
 msgid "Order not found."
 msgstr ""
 
@@ -150,132 +170,134 @@ msgid "Property number:"
 msgstr ""
 
 #: forms/express-label-maker-collection-form.php:100
-#: settings/dpd-settings.php:107
+#: settings/dpd-settings.php:109 settings/overseas-settings.php:93
 msgid "Austria"
 msgstr ""
 
 #: forms/express-label-maker-collection-form.php:101
-#: settings/dpd-settings.php:108
+#: settings/dpd-settings.php:110 settings/overseas-settings.php:94
 msgid "Belgium"
 msgstr ""
 
 #: forms/express-label-maker-collection-form.php:102
-#: settings/dpd-settings.php:109
+#: settings/dpd-settings.php:111 settings/overseas-settings.php:95
 msgid "Bulgaria"
 msgstr ""
 
 #: forms/express-label-maker-collection-form.php:103
-#: settings/dpd-settings.php:110 settings/licence-settings.php:46
+#: settings/dpd-settings.php:112 settings/licence-settings.php:46
+#: settings/overseas-settings.php:96
 msgid "Croatia"
 msgstr ""
 
 #: forms/express-label-maker-collection-form.php:104
-#: settings/dpd-settings.php:111
+#: settings/dpd-settings.php:113 settings/overseas-settings.php:97
 msgid "Czechia"
 msgstr ""
 
 #: forms/express-label-maker-collection-form.php:105
-#: settings/dpd-settings.php:112
+#: settings/dpd-settings.php:114 settings/overseas-settings.php:98
 msgid "Denmark"
 msgstr ""
 
 #: forms/express-label-maker-collection-form.php:106
-#: settings/dpd-settings.php:113
+#: settings/dpd-settings.php:115 settings/overseas-settings.php:99
 msgid "Estonia"
 msgstr ""
 
 #: forms/express-label-maker-collection-form.php:107
-#: settings/dpd-settings.php:114
+#: settings/dpd-settings.php:116 settings/overseas-settings.php:100
 msgid "Finland"
 msgstr ""
 
 #: forms/express-label-maker-collection-form.php:108
-#: settings/dpd-settings.php:115
+#: settings/dpd-settings.php:117 settings/overseas-settings.php:101
 msgid "France"
 msgstr ""
 
 #: forms/express-label-maker-collection-form.php:109
-#: settings/dpd-settings.php:116
+#: settings/dpd-settings.php:118 settings/overseas-settings.php:102
 msgid "Germany"
 msgstr ""
 
 #: forms/express-label-maker-collection-form.php:110
-#: settings/dpd-settings.php:117
+#: settings/dpd-settings.php:119 settings/overseas-settings.php:103
 msgid "Hungary"
 msgstr ""
 
 #: forms/express-label-maker-collection-form.php:111
-#: settings/dpd-settings.php:118
+#: settings/dpd-settings.php:120 settings/overseas-settings.php:104
 msgid "Ireland"
 msgstr ""
 
 #: forms/express-label-maker-collection-form.php:112
-#: settings/dpd-settings.php:119
+#: settings/dpd-settings.php:121 settings/overseas-settings.php:105
 msgid "Italy"
 msgstr ""
 
 #: forms/express-label-maker-collection-form.php:113
-#: settings/dpd-settings.php:120
+#: settings/dpd-settings.php:122 settings/overseas-settings.php:106
 msgid "Latvia"
 msgstr ""
 
 #: forms/express-label-maker-collection-form.php:114
-#: settings/dpd-settings.php:121
+#: settings/dpd-settings.php:123 settings/overseas-settings.php:107
 msgid "Lithuania"
 msgstr ""
 
 #: forms/express-label-maker-collection-form.php:115
-#: settings/dpd-settings.php:122
+#: settings/dpd-settings.php:124 settings/overseas-settings.php:108
 msgid "Luxembourg"
 msgstr ""
 
 #: forms/express-label-maker-collection-form.php:116
-#: settings/dpd-settings.php:123
+#: settings/dpd-settings.php:125 settings/overseas-settings.php:109
 msgid "Netherlands"
 msgstr ""
 
 #: forms/express-label-maker-collection-form.php:117
-#: settings/dpd-settings.php:124
+#: settings/dpd-settings.php:126 settings/overseas-settings.php:110
 msgid "Poland"
 msgstr ""
 
 #: forms/express-label-maker-collection-form.php:118
-#: settings/dpd-settings.php:125
+#: settings/dpd-settings.php:127 settings/overseas-settings.php:111
 msgid "Portugal"
 msgstr ""
 
 #: forms/express-label-maker-collection-form.php:119
-#: settings/dpd-settings.php:126
+#: settings/dpd-settings.php:128 settings/overseas-settings.php:112
 msgid "Romania"
 msgstr ""
 
 #: forms/express-label-maker-collection-form.php:120
-#: settings/dpd-settings.php:127
+#: settings/dpd-settings.php:129 settings/overseas-settings.php:113
 msgid "Serbia"
 msgstr ""
 
 #: forms/express-label-maker-collection-form.php:121
-#: settings/dpd-settings.php:128
+#: settings/dpd-settings.php:130 settings/overseas-settings.php:114
 msgid "Slovakia"
 msgstr ""
 
 #: forms/express-label-maker-collection-form.php:122
-#: settings/dpd-settings.php:129 settings/licence-settings.php:47
+#: settings/dpd-settings.php:131 settings/licence-settings.php:47
+#: settings/overseas-settings.php:115
 msgid "Slovenia"
 msgstr ""
 
 #: forms/express-label-maker-collection-form.php:123
-#: settings/dpd-settings.php:130
+#: settings/dpd-settings.php:132 settings/overseas-settings.php:116
 msgid "Spain"
 msgstr ""
 
 #: forms/express-label-maker-collection-form.php:124
-#: settings/dpd-settings.php:131
+#: settings/dpd-settings.php:133 settings/overseas-settings.php:117
 msgid "Sweden"
 msgstr ""
 
 #: forms/express-label-maker-collection-form.php:125
-#: settings/dpd-settings.php:132
+#: settings/dpd-settings.php:134 settings/overseas-settings.php:118
 msgid "Switzerland"
 msgstr ""
 
@@ -300,63 +322,83 @@ msgid "Send request"
 msgstr ""
 
 #: forms/express-label-maker-collection-form.php:169
-#: forms/express-label-maker-form.php:117
+#: forms/express-label-maker-form.php:191
 msgid "Cancel"
 msgstr ""
 
-#: forms/express-label-maker-form.php:65
+#: forms/express-label-maker-form.php:71
+#: forms/express-label-maker-form.php:127
 msgid "Reference:"
 msgstr ""
 
-#: forms/express-label-maker-form.php:70
+#: forms/express-label-maker-form.php:76
+#: forms/express-label-maker-form.php:132
 msgid "Payment Method:"
 msgstr ""
 
-#: forms/express-label-maker-form.php:75
+#: forms/express-label-maker-form.php:81
+#: forms/express-label-maker-form.php:137
 msgid "Payment:"
 msgstr ""
 
-#: forms/express-label-maker-form.php:85
+#: forms/express-label-maker-form.php:91
+#: forms/express-label-maker-form.php:147
 msgid "Collection Date (Order Date):"
 msgstr ""
 
-#: forms/express-label-maker-form.php:90
+#: forms/express-label-maker-form.php:96
 msgid "Weight:"
 msgstr ""
 
-#: forms/express-label-maker-form.php:95
+#: forms/express-label-maker-form.php:101
+#: forms/express-label-maker-form.php:152
 msgid "Package Number:"
 msgstr ""
 
-#: forms/express-label-maker-form.php:100
+#: forms/express-label-maker-form.php:106
+#: forms/express-label-maker-form.php:157
 msgid "Cash on Delivery Amount:"
 msgstr ""
 
-#: forms/express-label-maker-form.php:105
+#: forms/express-label-maker-form.php:111
+#: forms/express-label-maker-form.php:162
+msgid "Order Total:"
+msgstr ""
+
+#: forms/express-label-maker-form.php:116
+#: forms/express-label-maker-form.php:167
 msgid "Note:"
 msgstr ""
 
-#: forms/express-label-maker-form.php:114
+#: forms/express-label-maker-form.php:176
+msgid "Invalid courier selected."
+msgstr ""
+
+#: forms/express-label-maker-form.php:188
 msgid "Print"
 msgstr ""
 
-#: settings/dpd-settings.php:13
+#: settings/dpd-settings.php:8
+msgid "DPD account deleted."
+msgstr ""
+
+#: settings/dpd-settings.php:20
 msgid "DPD settings saved."
 msgstr ""
 
-#: settings/dpd-settings.php:15
+#: settings/dpd-settings.php:22
 msgid "Username, Password, and Service Type are required."
 msgstr ""
 
-#: settings/dpd-settings.php:25
+#: settings/dpd-settings.php:29
 msgid "DPD User Data"
 msgstr ""
 
-#: settings/dpd-settings.php:29
+#: settings/dpd-settings.php:33
 msgid "Username"
 msgstr ""
 
-#: settings/dpd-settings.php:33
+#: settings/dpd-settings.php:35
 msgid "Password"
 msgstr ""
 
@@ -364,56 +406,61 @@ msgstr ""
 msgid "Service Type"
 msgstr ""
 
-#: settings/dpd-settings.php:47 settings/dpd-settings.php:151
+#: settings/dpd-settings.php:46 settings/dpd-settings.php:153
 #: settings/general-settings.php:63 settings/licence-settings.php:53
+#: settings/overseas-settings.php:31 settings/overseas-settings.php:137
 msgid "Save Changes"
 msgstr ""
 
-#: settings/dpd-settings.php:74
+#: settings/dpd-settings.php:47
+msgid "Delete Account"
+msgstr ""
+
+#: settings/dpd-settings.php:76 settings/overseas-settings.php:60
 msgid "Collection Request Data saved."
 msgstr ""
 
-#: settings/dpd-settings.php:76
+#: settings/dpd-settings.php:78 settings/overseas-settings.php:62
 msgid "All fields are required."
 msgstr ""
 
-#: settings/dpd-settings.php:80
+#: settings/dpd-settings.php:82 settings/overseas-settings.php:66
 msgid "Collection Request Data"
 msgstr ""
 
-#: settings/dpd-settings.php:85
+#: settings/dpd-settings.php:87 settings/overseas-settings.php:71
 msgid "Company or personal name"
 msgstr ""
 
-#: settings/dpd-settings.php:86
+#: settings/dpd-settings.php:88 settings/overseas-settings.php:72
 msgid "Contact person"
 msgstr ""
 
-#: settings/dpd-settings.php:87
+#: settings/dpd-settings.php:89 settings/overseas-settings.php:73
 msgid "Street"
 msgstr ""
 
-#: settings/dpd-settings.php:88
+#: settings/dpd-settings.php:90 settings/overseas-settings.php:74
 msgid "Property number"
 msgstr ""
 
-#: settings/dpd-settings.php:89
+#: settings/dpd-settings.php:91 settings/overseas-settings.php:75
 msgid "City"
 msgstr ""
 
-#: settings/dpd-settings.php:90
+#: settings/dpd-settings.php:92 settings/overseas-settings.php:76
 msgid "Country"
 msgstr ""
 
-#: settings/dpd-settings.php:91
+#: settings/dpd-settings.php:93 settings/overseas-settings.php:77
 msgid "Postal Code"
 msgstr ""
 
-#: settings/dpd-settings.php:92
+#: settings/dpd-settings.php:94 settings/overseas-settings.php:78
 msgid "Phone"
 msgstr ""
 
-#: settings/dpd-settings.php:93
+#: settings/dpd-settings.php:95 settings/overseas-settings.php:79
 msgid "Email"
 msgstr ""
 
@@ -483,6 +530,30 @@ msgstr ""
 
 #: settings/licence-settings.php:70
 msgid "Used"
+msgstr ""
+
+#: settings/overseas-settings.php:6
+msgid "API key deleted."
+msgstr ""
+
+#: settings/overseas-settings.php:12
+msgid "API key saved."
+msgstr ""
+
+#: settings/overseas-settings.php:14
+msgid "API key is required."
+msgstr ""
+
+#: settings/overseas-settings.php:22
+msgid "Overseas API Settings"
+msgstr ""
+
+#: settings/overseas-settings.php:26
+msgid "API Key"
+msgstr ""
+
+#: settings/overseas-settings.php:32
+msgid "Delete API Key"
 msgstr ""
 
 #. Plugin URI of the plugin/theme
