@@ -74,7 +74,7 @@ jQuery(document).ready(function ($) {
     var orderId = $("#hiddenOrderId").val();
 
     switch (courier) {
-      case "dpd": //DODATI OSTALE KURIRE
+      case "dpd": //DODATI KURIRE
         var parcelData = setDPDParcelData(form);
         break;
         case "overseas":
@@ -167,9 +167,9 @@ jQuery(document).ready(function ($) {
   }
 
   function setOverseasParcelData(form) {
-/*     var isCod = form.find('input[name="parcel_type"]:checked').val() === "cod";
-    var parcelType;
-   */
+    var isCod = form.find('input[name="parcel_type"]:checked').val() === "cod";
+    /* var parcelType; */
+  
     // Određivanje tipa paketa na temelju vrste usluge
 /*     if (elm_ajax.serviceType === 'DPD Classic') {
       parcelType = isCod ? "D-COD" : "D";
@@ -177,7 +177,7 @@ jQuery(document).ready(function ($) {
       parcelType = isCod ? "D-COD-B2C" : "D-B2C";
     } */
     return {
-      cod_amount: form.find('input[name="cod_amount"]').val(),
+      cod_amount: isCod ? form.find('input[name="cod_amount"]').val() : null,
       name1: form.find('input[name="customer_name"]').val(),
       /* street: form.find('input[name="customer_address"]').val(), */
       rPropNum: form.find('input[name="customer_address"]').val() + ' ' + form.find('input[name="house_number"]').val(),
@@ -220,8 +220,6 @@ jQuery(document).ready(function ($) {
             return $(this).val();
         }).get();
 
-        console.log(elm_ajax.ajax_url, 'elm_ajax.ajax_url')
-
 
           $.ajax({
             url: elm_ajax.ajax_url,
@@ -233,7 +231,6 @@ jQuery(document).ready(function ($) {
               actionValue: actionValue
             },
               success: function (response) {
-                console.log("Response received:", response);
                   if (response.success) {
                       $(".elm_loading_panel").fadeOut(300);
 
@@ -310,6 +307,22 @@ function displayError(error) {
   $(".elm-error").removeAttr("style");
 }
 
+function getStatusText(r, meta) {
+  //DODATI KURIRE
+  const statusHandlers = {
+      '_dpd_': () => r.parcel_status || 'No status available',
+      '_overseas_': () => (r.data && r.data.Events && r.data.Events.length > 0) ? r.data.Events[0].StatusDescription : 'No status available'
+  };
+
+  for (let key in statusHandlers) {
+      if (meta.includes(key)) {
+          return statusHandlers[key]();
+      }
+  }
+
+  return 'No status available';
+}
+
 jQuery(document).ready(function ($) {
   const urlParams = new URLSearchParams(window.location.search);
 
@@ -354,16 +367,17 @@ jQuery(document).ready(function ($) {
                       displayError(r.errlog);
                       return;
                   }
-                  update_parcel_status(order.order_id, r.parcel_status);
           
-                  const spanElement = $('<span title="' + r.parcel_status + '">' + r.parcel_status + '</span>');
+                  const statusText = getStatusText(r, order.pl_number_meta);
           
-                  if (r.parcel_status.length > 30) {
-                      spanElement.text(r.parcel_status.substring(0, 30) + '...');
-                      spanElement.attr('title', r.parcel_status);
+                  update_parcel_status(order.order_id, statusText);
+                  const spanElement = $('<span title="' + statusText + '">' + statusText + '</span>');
+                  if (statusText.length > 30) {
+                      spanElement.text(statusText.substring(0, 30) + '...');
+                      spanElement.attr('title', statusText);
                   }
           
-                  applyStatusClass(spanElement, r.parcel_status);
+                  applyStatusClass(spanElement, statusText);
                   parcel_status_element.html(spanElement);
               },
               error: function (response) {
@@ -606,6 +620,7 @@ jQuery(document).ready(function ($) {
     var orderId = $("#hiddenOrderId").val();
     var country = $("#hiddenCountry").val();
 
+    //DODATI KURIRE
     switch (courier) {
       case "dpd":
         var parcelData = setDPDCollectionData(form);

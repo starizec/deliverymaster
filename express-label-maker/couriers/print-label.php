@@ -31,7 +31,8 @@ class ElmPrintLabel
         $args = array(
             'method' => 'POST',
             'headers' => array('Content-Type' => 'application/json'),
-            'body' => json_encode($body)
+            'body' => json_encode($body),
+            'timeout' => 120
         );
     
         $response = wp_remote_request('https://expresslabelmaker.com/api/v1/' . $saved_country . '/' . $courier . '/create/label', $args);
@@ -62,6 +63,10 @@ class ElmPrintLabel
                 }
             
                 update_post_meta($order_id, $meta_key, $new_meta_value);
+
+                $meta_key_timestamp = $meta_key . '_last_updated';
+                $timestamp = current_time('mysql');  // trenutno vrijeme radi statusa
+                update_post_meta($order_id, $meta_key_timestamp, $timestamp);
             
                 // novi način izračunavanja putanje i URL-a
                 $timestamp = date('dmy');

@@ -107,6 +107,10 @@ class ElmPrintLabels {
             }
         
             update_post_meta($order_id, $meta_key, $new_meta_value);
+
+            $meta_key_timestamp = $meta_key . '_last_updated';
+            $timestamp = current_time('mysql');  // trenutno vrijeme radi statusa
+            update_post_meta($order_id, $meta_key_timestamp, $timestamp);
             
             if ($save_pdf_on_server == 'true') {
                  $existing_pdf_url_route = get_post_meta($order_id, 'elm_route_labels', true);
@@ -135,7 +139,7 @@ class ElmPrintLabels {
             ));
     }
 
-    //DODATI ZA OSTALE KURIRE PARCEL DATA
+    //DODATI KURIRE
 
     public function setDPDParcelsData($shipping, $billing, $order_data, $order_total, $address_without_house_number, $house_number, $weight, $order_id, $parcel_type, $package_number) {
         return array(
@@ -160,7 +164,7 @@ class ElmPrintLabels {
     
     public function setOVERSEASParcelsData($shipping, $billing, $order_data, $order_total, $address_without_house_number, $house_number, $weight, $order_id, $parcel_type, $package_number) {
         return array(
-            'cod_amount' => $order_total,
+            'cod_amount' => $payment_method === 'cod' ? $order_total : null,
             'name1' => $shipping['first_name'] . ' ' . $shipping['last_name'],
             /* 'street' => $address_without_house_number, */
             'rPropNum' => $address_without_house_number . $house_number,

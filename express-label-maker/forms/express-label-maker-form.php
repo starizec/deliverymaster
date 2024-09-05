@@ -74,7 +74,7 @@
                 <!--Payment Method -->
                 <label class="labels">
                     <?php esc_html_e('Payment Method:', 'express-label-maker'); ?>
-                    <input type="text" name="payment_method" value="<?php echo esc_attr($payment_method); ?>">
+                    <input type="text" name="payment_method" value="<?php echo esc_attr($payment_method); ?>" disabled>
                 </label>
                 <!--Payment -->
                 <label class="labels">
@@ -104,7 +104,12 @@
                 <!-- Cash on Delivery Amount -->
                 <label class="labels">
                     <?php esc_html_e('Cash on Delivery Amount:', 'express-label-maker'); ?>
-                    <input type="text" name="cod_amount" value="<?php echo esc_attr($order_total); ?>">
+                    <input type="text" name="cod_amount" id="cod_amount" value="">
+                </label>
+                <!-- Order Total -->
+                <label class="labels">
+                    <?php esc_html_e('Order Total:', 'express-label-maker'); ?>
+                    <input type="text" name="order_total" value="<?php echo esc_attr($order_total); ?>">
                 </label>
                 <!-- Note -->
                 <label class="labels">
@@ -127,6 +132,16 @@
                     <?php esc_html_e('Payment Method:', 'express-label-maker'); ?>
                     <input type="text" name="payment_method" value="<?php echo esc_attr($payment_method); ?>" disabled>
                 </label>
+                <!--Payment -->
+                <label class="labels">
+                    <?php esc_html_e('Payment:', 'express-label-maker'); ?>
+                    <div class="payment">
+                        <input type="radio" name="parcel_type" value="cod" id="x-cod" <?php $payment_method === 'cod' ? print_r('checked') : '' ?>>
+                        <label for="x-cod" style="padding-right:5px;">COD</label>
+                        <input type="radio" name="parcel_type" value="classic" id="x-classic" <?php $payment_method != 'cod' ? print_r('checked') : '' ?>>
+                        <label for="x-classic">Classic</label>
+                    </div>
+                </label>
                 <!-- Collection Date (Order Date) -->
                 <label class="labels">
                     <?php esc_html_e('Collection Date (Order Date):', 'express-label-maker'); ?>
@@ -140,14 +155,18 @@
                 <!-- Cash on Delivery Amount -->
                 <label class="labels">
                     <?php esc_html_e('Cash on Delivery Amount:', 'express-label-maker'); ?>
-                    <input type="text" name="cod_amount" value="<?php echo esc_attr($order_total); ?>">
+                    <input type="text" name="cod_amount" id="cod_amount" value="">
+                </label>
+                <!-- Order Total -->
+                <label class="labels">
+                    <?php esc_html_e('Order Total:', 'express-label-maker'); ?>
+                    <input type="text" name="order_total" value="<?php echo esc_attr($order_total); ?>">
                 </label>
                 <!-- Note -->
                 <label class="labels">
                     <?php esc_html_e('Note:', 'express-label-maker'); ?>
                     <textarea name="note"><?php echo esc_textarea($order_data['customer_note']); ?></textarea>
                 </label>
-
                 <?php 
                     break;
 
@@ -174,3 +193,21 @@
         </div>
     </div>
 </div>
+
+<script>
+jQuery(document).ready(function($) {
+    function setCodAmount() {
+        if ($('#x-cod').is(':checked')) {
+            $('#cod_amount').val('<?php echo esc_js($order_total); ?>');
+        } else {
+            $('#cod_amount').val('');
+        }
+    }
+
+    setCodAmount();
+
+    $('input[name="parcel_type"]').change(function() {
+        setCodAmount();
+    });
+});
+</script>

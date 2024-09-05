@@ -1,7 +1,14 @@
 <?php
 
 function dpd_tab_content() {
-    if (isset($_POST['elm_dpd_nonce']) && wp_verify_nonce($_POST['elm_dpd_nonce'], 'elm_save_dpd_settings')) {
+    // Provjera za brisanje naloga
+    if (isset($_POST['delete_dpd_account']) && wp_verify_nonce($_POST['elm_dpd_nonce'], 'elm_save_dpd_settings')) {
+        delete_option('elm_dpd_username_option');
+        delete_option('elm_dpd_password_option');
+        echo '<div class="updated"><p>' . __('DPD account deleted.', 'express-label-maker') . '</p></div>';
+    }
+    // Provjera za spremanje postavki
+    elseif (isset($_POST['elm_dpd_nonce']) && wp_verify_nonce($_POST['elm_dpd_nonce'], 'elm_save_dpd_settings')) {
         $username = isset($_POST['elm_dpd_username']) ? sanitize_text_field($_POST['elm_dpd_username']) : '';
         $password = isset($_POST['elm_dpd_password']) ? sanitize_text_field($_POST['elm_dpd_password']) : '';
         $service_type = isset($_POST['elm_dpd_service_type']) ? sanitize_text_field($_POST['elm_dpd_service_type']) : '';
@@ -16,40 +23,34 @@ function dpd_tab_content() {
         }
     }
 
-    $saved_username = get_option('elm_dpd_username_option', '');
-    $saved_password = get_option('elm_dpd_password_option', '');
-    $saved_service_type = get_option('elm_dpd_service_type_option', '');
-    $saved_country = strtoupper(get_option('elm_country_option', ''));
-
+    // Prikaz forme
     echo '<div style="display:block;">';
     echo '<div style="float: left; width: 48%; padding-right: 2%;">';
     echo '<h3>' . __('DPD User Data', 'express-label-maker') . '</h3>';
     echo '<form method="post" action="">';
     echo '<table class="form-table">';
-    echo '<tr>';
-    echo '<th scope="row"><label for="elm_dpd_username">' . __('Username', 'express-label-maker') . '</label></th>';
-    echo '<td><input name="elm_dpd_username" type="text" id="elm_dpd_username" value="' . esc_attr($saved_username) . '" class="regular-text" required></td>';
-    echo '</tr>';
-    echo '<tr>';
-    echo '<th scope="row"><label for="elm_dpd_password">' . __('Password', 'express-label-maker') . '</label></th>';
-    echo '<td><input name="elm_dpd_password" type="password" id="elm_dpd_password" value="' . esc_attr($saved_password) . '" class="regular-text" required autocomplete></td>';
-    echo '</tr>';
-    echo '<tr>';
-    echo '<th scope="row"><label for="elm_dpd_service_type">' . __('Service Type', 'express-label-maker') . '</label></th>';
-    echo '<td>';
-    echo '<select name="elm_dpd_service_type" id="elm_dpd_service_type" required>';
-    echo '<option value="DPD Classic"' . ($saved_service_type == 'DPD Classic' ? ' selected' : '') . '>DPD Classic</option>';
-    echo '<option value="DPD Home"' . ($saved_service_type == 'DPD Home' ? ' selected' : '') . '>DPD Home</option>';
-    echo '</select>';
-    echo '</td>';
-    echo '</tr>';
+    // Input polja
+    echo '<tr><th scope="row"><label for="elm_dpd_username">' . __('Username', 'express-label-maker') . '</label></th>';
+    echo '<td><input name="elm_dpd_username" type="text" id="elm_dpd_username" value="' . esc_attr(get_option('elm_dpd_username_option', '')) . '" class="regular-text" required></td></tr>';
+    echo '<tr><th scope="row"><label for="elm_dpd_password">' . __('Password', 'express-label-maker') . '</label></th>';
+    echo '<td><input name="elm_dpd_password" type="password" id="elm_dpd_password" value="' . esc_attr(get_option('elm_dpd_password_option', '')) . '" class="regular-text" required></td></tr>';
+    echo '<tr><th scope="row"><label for="elm_dpd_service_type">' . __('Service Type', 'express-label-maker') . '</label></th>';
+    echo '<td><select name="elm_dpd_service_type" id="elm_dpd_service_type" required>';
+    echo '<option value="DPD Classic"' . (get_option('elm_dpd_service_type_option', '') == 'DPD Classic' ? ' selected' : '') . '>DPD Classic</option>';
+    echo '<option value="DPD Home"' . (get_option('elm_dpd_service_type_option', '') == 'DPD Home' ? ' selected' : '') . '>DPD Home</option>';
+    echo '</select></td></tr>';
     echo '</table>';
+
+    // Dugmad za snimanje i brisanje
     echo '<p class="submit">';
     echo '<input type="submit" name="submit" id="submit-dpd-settings" class="button button-primary" value="' . __('Save Changes', 'express-label-maker') . '">';
+    echo '<input type="submit" name="delete_dpd_account" class="button" value="' . __('Delete Account', 'express-label-maker') . '" style="background-color: transparent; color: red; border: 1px solid red; margin-left: 10px;">';
     echo '</p>';
     wp_nonce_field('elm_save_dpd_settings', 'elm_dpd_nonce');
     echo '</form>';
     echo '</div>';
+    echo '</div>';
+
 
     if (isset($_POST['elm_collection_request_nonce']) && wp_verify_nonce($_POST['elm_collection_request_nonce'], 'elm_save_collection_request_settings')) {
         $company_or_personal_name = isset($_POST['company_or_personal_name']) ? sanitize_text_field($_POST['company_or_personal_name']) : '';

@@ -174,8 +174,10 @@
 
 .elm_custom_order_buttons {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
   margin-top: 30px;
+  gap: 8px;
+  flex-direction: column;
 }
 
 .elm_open_modal.button.elm_open_modal_order {

@@ -1,9 +1,12 @@
 <?php
 
 function overseas_tab_content() {
-    if (isset($_POST['elm_overseas_nonce']) && wp_verify_nonce($_POST['elm_overseas_nonce'], 'elm_save_overseas_settings')) {
+    if (isset($_POST['delete_overseas_api_key']) && wp_verify_nonce($_POST['elm_overseas_nonce'], 'elm_save_overseas_settings')) {
+        delete_option('elm_overseas_api_key_option');
+        echo '<div class="updated"><p>' . __('API key deleted.', 'express-label-maker') . '</p></div>';
+    }
+    elseif (isset($_POST['elm_overseas_nonce']) && wp_verify_nonce($_POST['elm_overseas_nonce'], 'elm_save_overseas_settings')) {
         $api_key = isset($_POST['elm_overseas_api_key']) ? sanitize_text_field($_POST['elm_overseas_api_key']) : '';
-
         if (!empty($api_key)) {
             update_option('elm_overseas_api_key_option', $api_key);
             echo '<div class="updated"><p>' . __('API key saved.', 'express-label-maker') . '</p></div>';
@@ -13,7 +16,6 @@ function overseas_tab_content() {
     }
 
     $saved_api_key = get_option('elm_overseas_api_key_option', '');
-    $saved_country = strtoupper(get_option('elm_country_option', ''));
 
     echo '<div style="display:block;">';
     echo '<div style="float: left; width: 48%; padding-right: 2%;">';
@@ -27,9 +29,11 @@ function overseas_tab_content() {
     echo '</table>';
     echo '<p class="submit">';
     echo '<input type="submit" name="submit" id="submit-overseas-settings" class="button button-primary" value="' . __('Save Changes', 'express-label-maker') . '">';
+    echo '<input type="submit" name="delete_overseas_api_key" class="button" value="' . __('Delete API Key', 'express-label-maker') . '" style="background-color: transparent; color: red; border: 1px solid red; margin-left: 10px;">';
     echo '</p>';
     wp_nonce_field('elm_save_overseas_settings', 'elm_overseas_nonce');
     echo '</form>';
+    echo '</div>';
     echo '</div>';
 
     if (isset($_POST['elm_collection_request_nonce']) && wp_verify_nonce($_POST['elm_collection_request_nonce'], 'elm_save_collection_request_settings')) {
