@@ -22,7 +22,7 @@ class userStatusData
     public function overseas_parcels($pl_number) {
         $saved_country = get_option("elm_country_option", '');
         $saved_api_key = get_option('elm_overseas_api_key_option', '');
-        $url = "https://apitest.overseas." . $saved_country . "/shipmentbyid?apikey=" . $saved_api_key . "&shipmentid=" . $pl_number;
+        $url = "https://api.overseas." . $saved_country . "/shipmentbyid?apikey=" . $saved_api_key . "&shipmentid=" . $pl_number;
 
         return [
             'url' => $url,
