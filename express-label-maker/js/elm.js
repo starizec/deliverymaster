@@ -311,7 +311,7 @@ function getStatusText(r, meta) {
   //DODATI KURIRE
   const statusHandlers = {
       '_dpd_': () => r.parcel_status || 'No status available',
-      '_overseas_': () => (r.data && r.data.Events && r.data.Events.length > 0) ? r.data.Events[0].StatusDescription : 'No status available'
+      '_overseas_': () => (r.data && r.data.Events && r.data.Events.length > 0) ? r.data.Events[r.data.Events.length - 1].StatusDescription : 'No status available'
   };
 
   for (let key in statusHandlers) {
@@ -415,20 +415,23 @@ function applyStatusClass(element, status) {
 if (status) {
   element.addClass('elm-package-status order-status');
   switch (status) {
-    case 'PRINTED':
+    case 'PRINTED': //DPD
       element.addClass('elm-status-printed');
       break;
-    case 'DELIVERED':
+    case 'DELIVERED': //DPD
       element.addClass('elm-status-delivered');
       break;
-    case 'CANCELLED':
+    case 'CANCELLED': //DPD
       element.addClass('elm-status-cancelled');
       break;
+    case 'Otkupnina plaćena gotovinom.': //OVERSEAS
+      element.addClass('elm-status-delivered');
+      break;  
     default:
       element.addClass('elm-status-rest');
       break;
+    }
   }
-}
 }
 
 jQuery(document).ready(function($) {

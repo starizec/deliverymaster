@@ -147,10 +147,12 @@
 /*PARCEL STATUS*/
 .column-elm_parcel_status{
   text-align: right !important;
+  padding: 0 10px !important;
 }
 
 .elm-package-status {
-  padding: 0 5px;
+  padding-left: 5px;
+  padding-right: 15px;
 }
 
 .elm-status-delivered {
