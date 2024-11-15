@@ -97,32 +97,32 @@
                 <label class="labels">
                     <?php esc_html_e('Country:', 'express-label-maker'); ?>
                     <select name="collection_country">
-                        <option value="AT" <?php selected(get_option('elm_dpd_country'), 'AT'); ?>><?php echo __('Austria', 'express-label-maker'); ?></option>
-                        <option value="BE" <?php selected(get_option('elm_dpd_country'), 'BE'); ?>><?php echo __('Belgium', 'express-label-maker'); ?></option>
-                        <option value="BG" <?php selected(get_option('elm_dpd_country'), 'BG'); ?>><?php echo __('Bulgaria', 'express-label-maker'); ?></option>
-                        <option value="HR" <?php selected(get_option('elm_dpd_country'), 'HR'); ?>><?php echo __('Croatia', 'express-label-maker'); ?></option>
-                        <option value="CZ" <?php selected(get_option('elm_dpd_country'), 'CZ'); ?>><?php echo __('Czechia', 'express-label-maker'); ?></option>
-                        <option value="DK" <?php selected(get_option('elm_dpd_country'), 'DK'); ?>><?php echo __('Denmark', 'express-label-maker'); ?></option>
-                        <option value="EE" <?php selected(get_option('elm_dpd_country'), 'EE'); ?>><?php echo __('Estonia', 'express-label-maker'); ?></option>
-                        <option value="FI" <?php selected(get_option('elm_dpd_country'), 'FI'); ?>><?php echo __('Finland', 'express-label-maker'); ?></option>
-                        <option value="FR" <?php selected(get_option('elm_dpd_country'), 'FR'); ?>><?php echo __('France', 'express-label-maker'); ?></option>
-                        <option value="DE" <?php selected(get_option('elm_dpd_country'), 'DE'); ?>><?php echo __('Germany', 'express-label-maker'); ?></option>
-                        <option value="HU" <?php selected(get_option('elm_dpd_country'), 'HU'); ?>><?php echo __('Hungary', 'express-label-maker'); ?></option>
-                        <option value="IE" <?php selected(get_option('elm_dpd_country'), 'IE'); ?>><?php echo __('Ireland', 'express-label-maker'); ?></option>
-                        <option value="IT" <?php selected(get_option('elm_dpd_country'), 'IT'); ?>><?php echo __('Italy', 'express-label-maker'); ?></option>
-                        <option value="LV" <?php selected(get_option('elm_dpd_country'), 'LV'); ?>><?php echo __('Latvia', 'express-label-maker'); ?></option>
-                        <option value="LT" <?php selected(get_option('elm_dpd_country'), 'LT'); ?>><?php echo __('Lithuania', 'express-label-maker'); ?></option>
-                        <option value="LU" <?php selected(get_option('elm_dpd_country'), 'LU'); ?>><?php echo __('Luxembourg', 'express-label-maker'); ?></option>
-                        <option value="NL" <?php selected(get_option('elm_dpd_country'), 'NL'); ?>><?php echo __('Netherlands', 'express-label-maker'); ?></option>
-                        <option value="PL" <?php selected(get_option('elm_dpd_country'), 'PL'); ?>><?php echo __('Poland', 'express-label-maker'); ?></option>
-                        <option value="PT" <?php selected(get_option('elm_dpd_country'), 'PT'); ?>><?php echo __('Portugal', 'express-label-maker'); ?></option>
-                        <option value="RO" <?php selected(get_option('elm_dpd_country'), 'RO'); ?>><?php echo __('Romania', 'express-label-maker'); ?></option>
-                        <option value="RS" <?php selected(get_option('elm_dpd_country'), 'RS'); ?>><?php echo __('Serbia', 'express-label-maker'); ?></option>
-                        <option value="SK" <?php selected(get_option('elm_dpd_country'), 'SK'); ?>><?php echo __('Slovakia', 'express-label-maker'); ?></option>
-                        <option value="SI" <?php selected(get_option('elm_dpd_country'), 'SI'); ?>><?php echo __('Slovenia', 'express-label-maker'); ?></option>
-                        <option value="ES" <?php selected(get_option('elm_dpd_country'), 'ES'); ?>><?php echo __('Spain', 'express-label-maker'); ?></option>
-                        <option value="SE" <?php selected(get_option('elm_dpd_country'), 'SE'); ?>><?php echo __('Sweden', 'express-label-maker'); ?></option>
-                        <option value="CH" <?php selected(get_option('elm_dpd_country'), 'CH'); ?>><?php echo __('Switzerland', 'express-label-maker'); ?></option>
+                        <option value="AT" <?php selected(get_option('elm_dpd_country'), 'AT'); ?>><?php echo esc_html__('Austria', 'express-label-maker'); ?></option>
+                        <option value="BE" <?php selected(get_option('elm_dpd_country'), 'BE'); ?>><?php echo esc_html__('Belgium', 'express-label-maker'); ?></option>
+                        <option value="BG" <?php selected(get_option('elm_dpd_country'), 'BG'); ?>><?php echo esc_html__('Bulgaria', 'express-label-maker'); ?></option>
+                        <option value="HR" <?php selected(get_option('elm_dpd_country'), 'HR'); ?>><?php echo esc_html__('Croatia', 'express-label-maker'); ?></option>
+                        <option value="CZ" <?php selected(get_option('elm_dpd_country'), 'CZ'); ?>><?php echo esc_html__('Czechia', 'express-label-maker'); ?></option>
+                        <option value="DK" <?php selected(get_option('elm_dpd_country'), 'DK'); ?>><?php echo esc_html__('Denmark', 'express-label-maker'); ?></option>
+                        <option value="EE" <?php selected(get_option('elm_dpd_country'), 'EE'); ?>><?php echo esc_html__('Estonia', 'express-label-maker'); ?></option>
+                        <option value="FI" <?php selected(get_option('elm_dpd_country'), 'FI'); ?>><?php echo esc_html__('Finland', 'express-label-maker'); ?></option>
+                        <option value="FR" <?php selected(get_option('elm_dpd_country'), 'FR'); ?>><?php echo esc_html__('France', 'express-label-maker'); ?></option>
+                        <option value="DE" <?php selected(get_option('elm_dpd_country'), 'DE'); ?>><?php echo esc_html__('Germany', 'express-label-maker'); ?></option>
+                        <option value="HU" <?php selected(get_option('elm_dpd_country'), 'HU'); ?>><?php echo esc_html__('Hungary', 'express-label-maker'); ?></option>
+                        <option value="IE" <?php selected(get_option('elm_dpd_country'), 'IE'); ?>><?php echo esc_html__('Ireland', 'express-label-maker'); ?></option>
+                        <option value="IT" <?php selected(get_option('elm_dpd_country'), 'IT'); ?>><?php echo esc_html__('Italy', 'express-label-maker'); ?></option>
+                        <option value="LV" <?php selected(get_option('elm_dpd_country'), 'LV'); ?>><?php echo esc_html__('Latvia', 'express-label-maker'); ?></option>
+                        <option value="LT" <?php selected(get_option('elm_dpd_country'), 'LT'); ?>><?php echo esc_html__('Lithuania', 'express-label-maker'); ?></option>
+                        <option value="LU" <?php selected(get_option('elm_dpd_country'), 'LU'); ?>><?php echo esc_html__('Luxembourg', 'express-label-maker'); ?></option>
+                        <option value="NL" <?php selected(get_option('elm_dpd_country'), 'NL'); ?>><?php echo esc_html__('Netherlands', 'express-label-maker'); ?></option>
+                        <option value="PL" <?php selected(get_option('elm_dpd_country'), 'PL'); ?>><?php echo esc_html__('Poland', 'express-label-maker'); ?></option>
+                        <option value="PT" <?php selected(get_option('elm_dpd_country'), 'PT'); ?>><?php echo esc_html__('Portugal', 'express-label-maker'); ?></option>
+                        <option value="RO" <?php selected(get_option('elm_dpd_country'), 'RO'); ?>><?php echo esc_html__('Romania', 'express-label-maker'); ?></option>
+                        <option value="RS" <?php selected(get_option('elm_dpd_country'), 'RS'); ?>><?php echo esc_html__('Serbia', 'express-label-maker'); ?></option>
+                        <option value="SK" <?php selected(get_option('elm_dpd_country'), 'SK'); ?>><?php echo esc_html__('Slovakia', 'express-label-maker'); ?></option>
+                        <option value="SI" <?php selected(get_option('elm_dpd_country'), 'SI'); ?>><?php echo esc_html__('Slovenia', 'express-label-maker'); ?></option>
+                        <option value="ES" <?php selected(get_option('elm_dpd_country'), 'ES'); ?>><?php echo esc_html__('Spain', 'express-label-maker'); ?></option>
+                        <option value="SE" <?php selected(get_option('elm_dpd_country'), 'SE'); ?>><?php echo esc_html__('Sweden', 'express-label-maker'); ?></option>
+                        <option value="CH" <?php selected(get_option('elm_dpd_country'), 'CH'); ?>><?php echo esc_html__('Switzerland', 'express-label-maker'); ?></option>
                     </select>
                 </label>
                 <!-- Postal Code -->
@@ -143,7 +143,7 @@
                  <!-- Pickup Date -->
                 <label class="labels">
                     <?php esc_html_e('Pickup Date:', 'express-label-maker'); ?>
-                    <input type="date" name="collection_pickup_date" value="<?php echo date('Y-m-d', strtotime('+1 day')); ?>">
+                    <input type="date" name="collection_pickup_date" value="<?php echo esc_attr(gmdate('Y-m-d', strtotime('+1 day'))); ?>">
                 </label>
                 <!-- Courier selection -->
                 <label class="labels">

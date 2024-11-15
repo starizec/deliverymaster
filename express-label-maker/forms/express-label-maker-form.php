@@ -80,9 +80,9 @@
                 <label class="labels">
                     <?php esc_html_e('Payment:', 'express-label-maker'); ?>
                     <div class="payment">
-                        <input type="radio" name="parcel_type" value="cod" id="x-cod" <?php $payment_method === 'cod' ? print_r('checked') : '' ?>>
+                    <input type="radio" name="parcel_type" value="cod" id="x-cod" <?php echo $payment_method === 'cod' ? 'checked' : ''; ?>>
                         <label for="x-cod" style="padding-right:5px;">COD</label>
-                        <input type="radio" name="parcel_type" value="classic" id="x-classic" <?php $payment_method != 'cod' ? print_r('checked') : '' ?>>
+                        <input type="radio" name="parcel_type" value="classic" id="x-classic" <?php echo $payment_method != 'cod' ? 'checked' : '' ?>>
                         <label for="x-classic">Classic</label>
                     </div>
                 </label>
@@ -136,9 +136,9 @@
                 <label class="labels">
                     <?php esc_html_e('Payment:', 'express-label-maker'); ?>
                     <div class="payment">
-                        <input type="radio" name="parcel_type" value="cod" id="x-cod" <?php $payment_method === 'cod' ? print_r('checked') : '' ?>>
+                        <input type="radio" name="parcel_type" value="cod" id="x-cod" <?php echo $payment_method === 'cod' ? 'checked' : '' ?>>
                         <label for="x-cod" style="padding-right:5px;">COD</label>
-                        <input type="radio" name="parcel_type" value="classic" id="x-classic" <?php $payment_method != 'cod' ? print_r('checked') : '' ?>>
+                        <input type="radio" name="parcel_type" value="classic" id="x-classic" <?php echo $payment_method != 'cod' ? 'checked' : '' ?>>
                         <label for="x-classic">Classic</label>
                     </div>
                 </label>
