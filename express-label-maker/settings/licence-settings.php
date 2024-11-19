@@ -1,6 +1,8 @@
 <?php
 function licence_tab_content()
 {       
+    wp_enqueue_script('elm_admin_js', plugin_dir_url(__FILE__) . 'js/elm.js', array('jquery'), '1.0.1', true);
+
     if (isset($_POST['elm_settings_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['elm_settings_nonce'])), 'elm_save_settings')) {
         $email = isset($_POST['elm_email']) ? sanitize_email(wp_unslash($_POST['elm_email'])) : '';
         $licence_key = isset($_POST['elm_licence_key']) ? sanitize_text_field(wp_unslash($_POST['elm_licence_key'])) : '';
@@ -73,48 +75,34 @@ function licence_tab_content()
 
     echo '</div>';
 
-            // upute
-/*         echo '<div style="float: right; width: 48%;">';
-        echo '<h3>' . esc_html__('Plugin Instructions', 'express-label-maker') . '</h3>';
-        echo '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum.</p>';
-        echo '<button id="buyNowBtn" class="button">' . esc_html__('BUY NOW', 'express-label-maker') . '</button>';
-        echo '</div>';
-        echo '</div>'; */
-        
-        // trenutna domena
-/*         echo '<script type="text/javascript">
-                document.getElementById("buyNowBtn").addEventListener("click", function(){
-                    var currentDomain = window.location.hostname;
-                    console.log(currentDomain);
-                });
-            </script>'; */
+    $inline_script = <<<EOD
+    document.addEventListener("DOMContentLoaded", function() {
+    var emailInput = document.getElementById("elm_email");
+    var licenceKeyInput = document.getElementById("elm_licence_key");
+    var countrySelect = document.getElementById("elm_country");
+    var startTrialButton = document.getElementById("start-trial-btn");
+    var submitButton = document.getElementById("elm_submit_btn");
 
-    echo '<script type="text/javascript">
-            document.addEventListener("DOMContentLoaded", function() {
-                var emailInput = document.getElementById("elm_email");
-                var licenceKeyInput = document.getElementById("elm_licence_key");
-                var countrySelect = document.getElementById("elm_country");
-                var startTrialButton = document.getElementById("start-trial-btn");
-                var submitButton = document.getElementById("elm_submit_btn");
+    function toggleStartTrialButton() {
+        startTrialButton.style.display = licenceKeyInput.value.trim() === "" ? "inline-block" : "none";
+    }
 
-                function toggleStartTrialButton() {
-                    startTrialButton.style.display = licenceKeyInput.value.trim() === "" ? "inline-block" : "none";
-                }
+    function toggleSubmitButton() {
+        submitButton.disabled = emailInput.value.trim() === "" || licenceKeyInput.value.trim() === "" || countrySelect.value.trim() === "";
+    }
 
-                function toggleSubmitButton() {
-                    submitButton.disabled = emailInput.value.trim() === "" || licenceKeyInput.value.trim() === "" || countrySelect.value.trim() === "";
-                }
+    toggleStartTrialButton();
+    toggleSubmitButton();
 
-                toggleStartTrialButton();
-                toggleSubmitButton();
+    licenceKeyInput.addEventListener("input", function() {
+        toggleStartTrialButton();
+        toggleSubmitButton();
+    });
 
-                licenceKeyInput.addEventListener("input", function() {
-                    toggleStartTrialButton();
-                    toggleSubmitButton();
-                });
-
-                emailInput.addEventListener("input", toggleSubmitButton);
-                countrySelect.addEventListener("change", toggleSubmitButton);
-            });        
-        </script>';
+    emailInput.addEventListener("input", toggleSubmitButton);
+    countrySelect.addEventListener("change", toggleSubmitButton);
+    });
+    EOD;
+    
+    wp_add_inline_script('elm_admin_js', $inline_script);
 }

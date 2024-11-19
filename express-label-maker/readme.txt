@@ -19,6 +19,24 @@ Key Features:
 - Options for both individual and multi-print functionalities.
 - Real-time tracking of parcel statuses to keep both shop owners and customers informed.
 
+== External Services ==
+
+This plugin communicates with several external APIs to provide shipping label printing and parcel tracking functionalities. These external connections include:
+
+- **Express Label Maker API**: For creating shipping labels and collection requests.
+  - Endpoint: `https://expresslabelmaker.com/api/v1/`
+  - Privacy concerns and terms of use should be referenced at [Express Label Maker Privacy Policy](URL_to_privacy_policy)
+
+- **Overseas API**: Used for obtaining parcel statuses.
+  - Endpoint: `https://api.overseas.com/`
+  - https://www.dpd.com/hr/en/legal-and-copyright-notice/
+
+- **EasyShip API**: Used for real-time parcel tracking.
+  - Endpoint: `https://easyship.hr/api/parcel/parcel_status`
+  - https://overseas.hr/hr/info/izjava-o-privatnosti-2
+
+It is important that users of the plugin are aware that their location data may be transmitted to these services to enhance functionality and user experience. All data handling practices are compliant with GDPR and other privacy regulations.
+
 == Installation ==
 
 1. Upload the plugin files to the `/wp-content/plugins/expres-label-maker` directory, or install the plugin through the WordPress plugins screen directly.

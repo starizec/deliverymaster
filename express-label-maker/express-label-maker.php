@@ -7,7 +7,6 @@
  * Tags: woocommerce, shipping, label printing, DPD, Overseas
  * Version: 1.0.0
  * Author: expresslabelmaker
- * Author URI: https://expresslabelmaker.com/
  * Tested up to: 6.7
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
