@@ -1,18 +1,24 @@
-<div class="elm_loading_panel">
-    <div class="elm_spinner"></div>
+<?php 
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly.
+}
+?>
+
+<div class="explm_loading_panel">
+    <div class="explm_spinner"></div>
 </div>
-<div class="elm_modal_wrapper">
-    <div class="elm_modal">
-        <div class="elm_modal_header">
+<div class="explm_modal_wrapper">
+    <div class="explm_modal">
+        <div class="explm_modal_header">
             <h2 style="margin-top: 0;">
                 <?php esc_html_e('Order Details', 'express-label-maker'); ?> #
                 <?php echo esc_attr($order_data['id']); ?>
             </h2>
-            <button class="elm_close_button elm_cancel_action">&times;</button>
+            <button class="explm_close_button explm_cancel_action">&times;</button>
         </div>
         <div class="elm-error" style="display: none"></div>
-        <form id="elm_order_details_form">
-            <div class="elm_form_columns">
+        <form id="explm_order_details_form">
+            <div class="explm_form_columns">
                 <!-- Customer's Name -->
                 <label class="labels">
                     <?php esc_html_e("Customer's Name:", 'express-label-maker'); ?>
@@ -59,7 +65,7 @@
                     <input type="email" name="email" value="<?php echo esc_attr($billing['email']); ?>">
                 </label>
             </div>
-            <div class="elm_form_columns">
+            <div class="explm_form_columns">
 
             <?php //DODATI KURIRE
                 switch ($courier) {
@@ -183,11 +189,11 @@
                 <input type="hidden" id="hiddenCourier" value="" />
                 <input type="hidden" id="hiddenOrderId" value="<?php echo esc_attr($order_data['id']); ?>" />
         </form>
-        <div class="elm_modal_actions">
-            <button class="button button-primary elm_confirm_action">
+        <div class="explm_modal_actions">
+            <button class="button button-primary explm_confirm_action">
                 <?php esc_html_e('Print', 'express-label-maker'); ?>
             </button>
-            <button class="button elm_cancel_action">
+            <button class="button explm_cancel_action">
                 <?php esc_html_e('Cancel', 'express-label-maker'); ?>
             </button>
         </div>

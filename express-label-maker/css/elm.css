@@ -1,4 +1,4 @@
-.elm_modal_wrapper {
+.explm_modal_wrapper {
   background-color: rgba(0, 0, 0, 0.6);
   position: fixed;
   top: 0;
@@ -11,7 +11,7 @@
   z-index: 99999;
 }
 
-.elm_modal {
+.explm_modal {
   background-color: #fff;
   padding: 20px;
   border-radius: 4px;
@@ -19,18 +19,18 @@
   max-width: 800px;
 }
 
-.elm_modal_actions {
+.explm_modal_actions {
   display: flex;
   justify-content: space-around;
   margin-top: 20px;
 }
 
-.elm_open_modal:focus {
+.explm_open_modal:focus {
   box-shadow: none;
 }
 
-#elm_order_details_form,
-#elm_collection_order_details_form {
+#explm_order_details_form,
+#explm_collection_order_details_form {
   display: flex;
   flex-direction: row;
 }
@@ -41,14 +41,14 @@
   padding: 3px;
 }
 
-.elm_form_columns {
+.explm_form_columns {
   flex: 1;
   display: flex;
   flex-direction: column;
   padding: 0 10px;
 }
 
-.elm_loading_panel {
+.explm_loading_panel {
   display: none;
   position: fixed;
   top: 0;
@@ -61,7 +61,7 @@
   align-items: center;
 }
 
-.elm_spinner {
+.explm_spinner {
   border: 4px solid rgba(0, 0, 0, 0.1);
   width: 36px;
   height: 36px;
@@ -96,17 +96,17 @@
   height: 100% !important;
 }
 
-.elm_open_modal.button {
+.explm_open_modal.button {
   width: 2.5em !important;
   border: none !important;
 }
 
-.elm_modal_header {
+.explm_modal_header {
   display: flex;
   justify-content: space-between;
 }
 
-.elm_close_button.elm_cancel_action {
+.explm_close_button.explm_cancel_action {
   width: 25px;
   height: 25px;
   display: flex;
@@ -114,38 +114,38 @@
   cursor: pointer;
 }
 
-.elm_icon_container {
+.explm_icon_container {
   display: inline-flex;
 }
 
-.elm_pdf_container {
+.explm_pdf_container {
   display: flex;
   flex-direction: column;
 }
 
-.elm_licence_inputs {
+.explm_licence_inputs {
   width: 200px;
 }
 
-.elm_custom_order_wrapper {
+.explm_custom_order_wrapper {
   display: flex;
   margin-top: 10px;
   gap: 10px;
   flex-wrap: wrap;
 }
 
-.elm_custom_order_pdf_wrapper {
+.explm_custom_order_pdf_wrapper {
   margin-top: 20px;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.elm_custom_order_metabox_title {
+.explm_custom_order_metabox_title {
   margin: 0;
 }
 /*PARCEL STATUS*/
-.column-elm_parcel_status{
+.column-explm_parcel_status{
   text-align: right !important;
 }
 
@@ -173,7 +173,7 @@
   width: 100px !important;
 }
 
-.elm_custom_order_buttons {
+.explm_custom_order_buttons {
   display: flex;
   flex-wrap: wrap;
   margin-top: 30px;
@@ -181,6 +181,6 @@
   flex-direction: column;
 }
 
-.elm_open_modal.button.elm_open_modal_order {
+.explm_open_modal.button.explm_open_modal_order {
   width: 100% !important;
 }

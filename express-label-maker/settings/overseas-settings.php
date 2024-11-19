@@ -1,22 +1,26 @@
 <?php
 
-function overseas_tab_content() {
-    if (isset($_POST['delete_overseas_api_key']) && isset($_POST['elm_overseas_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['elm_overseas_nonce'])), 'elm_save_overseas_settings')) {
-        delete_option('elm_overseas_api_key_option');
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly.
+}
+
+function explm_overseas_tab_content() {
+    if (isset($_POST['delete_overseas_api_key']) && isset($_POST['explm_overseas_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['explm_overseas_nonce'])), 'explm_save_overseas_settings')) {
+        delete_option('explm_overseas_api_key_option');
         echo '<div class="updated"><p>' . esc_html__('API key deleted.', 'express-label-maker') . '</p></div>';
     }
-    elseif (isset($_POST['elm_overseas_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['elm_overseas_nonce'])), 'elm_save_overseas_settings')) {
-        $api_key = isset($_POST['elm_overseas_api_key']) ? sanitize_text_field(wp_unslash($_POST['elm_overseas_api_key'])) : '';
+    elseif (isset($_POST['explm_overseas_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['explm_overseas_nonce'])), 'explm_save_overseas_settings')) {
+        $api_key = isset($_POST['explm_overseas_api_key']) ? sanitize_text_field(wp_unslash($_POST['explm_overseas_api_key'])) : '';
         if (!empty($api_key)) {
-            update_option('elm_overseas_api_key_option', $api_key);
+            update_option('explm_overseas_api_key_option', $api_key);
             echo '<div class="updated"><p>' . esc_html__('API key saved.', 'express-label-maker') . '</p></div>';
         } else {
             echo '<div class="error"><p>' . esc_html__('API key is required.', 'express-label-maker') . '</p></div>';
         }
     }
 
-    $saved_api_key = get_option('elm_overseas_api_key_option', '');
-    $saved_country = strtoupper(get_option('elm_country_option', ''));
+    $saved_api_key = get_option('explm_overseas_api_key_option', '');
+    $saved_country = strtoupper(get_option('explm_country_option', ''));
 
     echo '<div style="display:block;">';
     echo '<div style="float: left; width: 48%; padding-right: 2%;">';
@@ -24,20 +28,20 @@ function overseas_tab_content() {
     echo '<form method="post" action="">';
     echo '<table class="form-table">';
     echo '<tr>';
-    echo '<th scope="row"><label for="elm_overseas_api_key">' . esc_html__('API Key', 'express-label-maker') . '</label></th>';
-    echo '<td><input name="elm_overseas_api_key" type="text" id="elm_overseas_api_key" value="' . esc_attr($saved_api_key) . '" class="regular-text" required></td>';
+    echo '<th scope="row"><label for="explm_overseas_api_key">' . esc_html__('API Key', 'express-label-maker') . '</label></th>';
+    echo '<td><input name="explm_overseas_api_key" type="text" id="explm_overseas_api_key" value="' . esc_attr($saved_api_key) . '" class="regular-text" required></td>';
     echo '</tr>';
     echo '</table>';
     echo '<p class="submit">';
     echo '<input type="submit" name="submit" id="submit-overseas-settings" class="button button-primary" value="' . esc_attr__('Save Changes', 'express-label-maker') . '">';
     echo '<input type="submit" name="delete_overseas_api_key" class="button" value="' . esc_attr__('Delete API Key', 'express-label-maker') . '" style="background-color: transparent; color: red; border: 1px solid red; margin-left: 10px;">';
     echo '</p>';
-    wp_nonce_field('elm_save_overseas_settings', 'elm_overseas_nonce');
+    wp_nonce_field('explm_save_overseas_settings', 'explm_overseas_nonce');
     echo '</form>';
     echo '</div>';
     echo '</div>';
 
-    if (isset($_POST['elm_collection_request_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['elm_collection_request_nonce'])), 'elm_save_collection_request_settings')) {
+    if (isset($_POST['explm_collection_request_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['explm_collection_request_nonce'])), 'explm_save_collection_request_settings')) {
         $company_or_personal_name = isset($_POST['company_or_personal_name']) ? sanitize_text_field(wp_unslash($_POST['company_or_personal_name'])) : '';
         $contact_person = isset($_POST['contact_person']) ? sanitize_text_field(wp_unslash($_POST['contact_person'])) : '';
         $street = isset($_POST['street']) ? sanitize_text_field(wp_unslash($_POST['street'])) : '';
@@ -49,15 +53,15 @@ function overseas_tab_content() {
         $country = isset($_POST['collection_country']) ? sanitize_text_field(wp_unslash($_POST['collection_country'])) : '';
 
         if ($company_or_personal_name && $contact_person && $street && $property_number && $city && $postal_code && $phone && $email) {
-            update_option('elm_overseas_company_or_personal_name', $company_or_personal_name);
-            update_option('elm_overseas_contact_person', $contact_person);
-            update_option('elm_overseas_street', $street);
-            update_option('elm_overseas_property_number', $property_number);
-            update_option('elm_overseas_city', $city);
-            update_option('elm_overseas_postal_code', $postal_code);
-            update_option('elm_overseas_phone', $phone);
-            update_option('elm_overseas_email', $email);
-            update_option('elm_overseas_country', $country);
+            update_option('explm_overseas_company_or_personal_name', $company_or_personal_name);
+            update_option('explm_overseas_contact_person', $contact_person);
+            update_option('explm_overseas_street', $street);
+            update_option('explm_overseas_property_number', $property_number);
+            update_option('explm_overseas_city', $city);
+            update_option('explm_overseas_postal_code', $postal_code);
+            update_option('explm_overseas_phone', $phone);
+            update_option('explm_overseas_email', $email);
+            update_option('explm_overseas_country', $country);
             echo '<div style="display: flex;" class="updated"><p>' . esc_html__('Collection Request Data saved.', 'express-label-maker') . '</p></div>';
         } else {
             echo '<div style="display: flex;" class="error"><p>' . esc_html__('All fields are required.', 'express-label-maker') . '</p></div>';
@@ -82,7 +86,7 @@ function overseas_tab_content() {
     ];
 
     foreach ($fields as $field_name => $label) {
-        $saved_value = get_option('elm_overseas_' . $field_name, '');
+        $saved_value = get_option('explm_overseas_' . $field_name, '');
     
         echo '<tr>';
         echo '<th scope="row"><label for="' . esc_attr($field_name) . '">' . esc_html($label) . '</label></th>';
@@ -138,7 +142,7 @@ function overseas_tab_content() {
     echo '<p class="submit">';
     echo '<input type="submit" name="submit" id="submit-overseas-collection-request" class="button button-primary" value="' . esc_attr__('Save Changes', 'express-label-maker') . '">';
     echo '</p>';
-    wp_nonce_field('elm_save_collection_request_settings', 'elm_collection_request_nonce');
+    wp_nonce_field('explm_save_collection_request_settings', 'explm_collection_request_nonce');
     echo '</form>';
     echo '</div>';
     echo '</div>';

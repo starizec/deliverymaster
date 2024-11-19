@@ -1,22 +1,26 @@
 <?php
 
-class ElmPrintLabel
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly.
+}
+
+class ExplmPrintLabel
 {
     public function __construct()
     {
-        add_action('wp_ajax_elm_print_label', array($this, 'elm_print_label'));
+        add_action('wp_ajax_explm_print_label', array($this, 'explm_print_label'));
     }
 
-    function elm_print_label() {
-        check_ajax_referer('elm_nonce', 'security');
+    function explm_print_label() {
+        check_ajax_referer('explm_nonce', 'security');
 
         $courier = isset($_POST['chosenCourier']) ? sanitize_text_field(wp_unslash($_POST['chosenCourier'])) : '';
         $order_id = isset($_POST['orderId']) ? intval(wp_unslash($_POST['orderId'])) : 0;
         $parcel_data = isset($_POST['parcel']) ? array_map('sanitize_text_field', wp_unslash($_POST['parcel'])) : array();
 
-        $saved_country = get_option("elm_country_option", '');
+        $saved_country = get_option("explm_country_option", '');
 
-        $userObj = new user();
+        $userObj = new ExplmUser();
         $user_data = $userObj->getData($saved_country . $courier);
 
         $body = array(
@@ -80,12 +84,12 @@ class ElmPrintLabel
             $wp_filesystem->mkdir($labels_dir, FS_CHMOD_DIR);
         }
 
-        if (get_option('elm_save_pdf_on_server_option', 'false') == 'true') {
+        if (get_option('explm_save_pdf_on_server_option', 'false') == 'true') {
             $wp_filesystem->put_contents($file_path, $decoded_data, FS_CHMOD_FILE);
 
             $pdf_url_route = $upload_dir['baseurl'] . '/elm-labels/' . $file_name_new;
 
-            $existing_pdf_url_route = get_post_meta($order_id, 'elm_route_labels', true);
+            $existing_pdf_url_route = get_post_meta($order_id, 'explm_route_labels', true);
 
             if (!empty($existing_pdf_url_route)) {
                 $pdf_url_route_to_store = $existing_pdf_url_route . ',' . $pdf_url_route;
@@ -93,7 +97,7 @@ class ElmPrintLabel
                 $pdf_url_route_to_store = $pdf_url_route;
             }
 
-            update_post_meta($order_id, 'elm_route_labels', $pdf_url_route_to_store);
+            update_post_meta($order_id, 'explm_route_labels', $pdf_url_route_to_store);
 
             wp_send_json_success(array(
                 'file_path' => $pdf_url_route,
@@ -110,8 +114,8 @@ class ElmPrintLabel
     }
 }
 
-function initialize_elm_print_label()
+function explm_initialize_print_label()
 {
-    new ElmPrintLabel();
+    new ExplmPrintLabel();
 }
-add_action('plugins_loaded', 'initialize_elm_print_label');
+add_action('plugins_loaded', 'explm_initialize_print_label');

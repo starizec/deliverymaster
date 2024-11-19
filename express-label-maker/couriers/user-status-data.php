@@ -1,8 +1,12 @@
 <?php
 
-class userStatusData 
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly.
+}
+
+class ExplmUserStatusData 
 {
-    public function getUserStatusData($funcName, $pl_number = '') {
+    public function explm_getUserStatusData($funcName, $pl_number = '') {
         if(method_exists($this, $funcName)){
             return $this->$funcName($pl_number);
         } else {
@@ -13,15 +17,15 @@ class userStatusData
     //DODATI KURIRE
 
     public function dpd_parcels($pl_number) {
-        $saved_country = get_option("elm_country_option", '');
+        $saved_country = get_option("explm_country_option", '');
         $url = "https://easyship." . $saved_country . "/api/parcel/parcel_status?secret=FcJyN7vU7WKPtUh7m1bx&parcel_number=" . $pl_number;
         return [
             'url' => $url
         ];
     }
     public function overseas_parcels($pl_number) {
-        $saved_country = get_option("elm_country_option", '');
-        $saved_api_key = get_option('elm_overseas_api_key_option', '');
+        $saved_country = get_option("explm_country_option", '');
+        $saved_api_key = get_option('explm_overseas_api_key_option', '');
         $url = "https://api.overseas." . $saved_country . "/shipmentbyid?apikey=" . $saved_api_key . "&shipmentid=" . $pl_number;
 
         return [
@@ -30,8 +34,8 @@ class userStatusData
     }
 }
 
-function initialize_elm_user_status_data()
+function explm_initialize_user_status_data()
 {
-    return new userStatusData();
+    return new ExplmUserStatusData();
 }
-add_action('plugins_loaded', 'initialize_elm_user_status_data');
+add_action('plugins_loaded', 'explm_initialize_user_status_data');

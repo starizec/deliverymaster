@@ -1,20 +1,24 @@
 <?php
 
-class ElmParcelStatuses {
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly.
+}
+
+class ExplmParcelStatuses {
 
     public function __construct() {
-        add_action('wp_ajax_elm_parcel_statuses', array($this, 'elm_parcel_statuses'));
+        add_action('wp_ajax_explm_parcel_statuses', array($this, 'explm_parcel_statuses'));
         add_action('wp_ajax_get_orders', array($this, 'get_orders'));
     }
 
-    function elm_parcel_statuses() {
-        check_ajax_referer('elm_nonce', 'security');
+    function explm_parcel_statuses() {
+        check_ajax_referer('explm_nonce', 'security');
 
         $order_id = isset($_POST['order_id']) ? intval(wp_unslash($_POST['order_id'])) : 0;
         $pl_status = isset($_POST['pl_status']) ? sanitize_text_field(wp_unslash($_POST['pl_status'])) : '';
 
         if ($order_id > 0 && !empty($pl_status)) {
-            update_post_meta($order_id, 'elm_parcel_status', $pl_status);
+            update_post_meta($order_id, 'explm_parcel_status', $pl_status);
             wp_send_json_success();
         } else {
             wp_send_json_error('Invalid order ID or pl_status.');
@@ -25,7 +29,7 @@ class ElmParcelStatuses {
 
     function get_orders() {
         global $wpdb;
-        check_ajax_referer('elm_nonce', 'security');
+        check_ajax_referer('explm_nonce', 'security');
 
         $limit = isset($_POST['limit']) ? intval(wp_unslash($_POST['limit'])) : 10;
         $offset = isset($_POST['offset']) ? intval(wp_unslash($_POST['offset'])) : 0;
@@ -75,8 +79,8 @@ class ElmParcelStatuses {
             $pl_number_parts = explode(',', $pl_number_raw);
             $pl_number = trim(end($pl_number_parts));
 
-            $userStatusObj = new userStatusData();
-            $user_data_status = $userStatusObj->getUserStatusData($pl_parcels, $pl_number);
+            $userStatusObj = new ExplmUserStatusData();
+            $user_data_status = $userStatusObj->explm_getUserStatusData($pl_parcels, $pl_number);
 
             $response[] = array(
                 'order_id' => $order_id,
@@ -90,7 +94,7 @@ class ElmParcelStatuses {
     }
 }
 
-function initialize_elm_parcel_statuses() {
-    new ElmParcelStatuses();
+function explm_initialize_parcel_statuses() {
+    new ExplmParcelStatuses();
 }
-add_action('plugins_loaded', 'initialize_elm_parcel_statuses');
+add_action('plugins_loaded', 'explm_initialize_parcel_statuses');

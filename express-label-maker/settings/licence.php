@@ -1,16 +1,20 @@
 <?php
 
-class ElmLicence
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly.
+}
+
+class ExplmLicence
 {
     public function __construct()
     {
-        add_action('wp_ajax_elm_start_trial', array($this, 'elm_start_trial'));
-        add_action('wp_ajax_elm_licence_check', array($this, 'elm_licence_check'));
+        add_action('wp_ajax_explm_start_trial', array($this, 'explm_start_trial'));
+        add_action('wp_ajax_explm_licence_check', array($this, 'explm_licence_check'));
     }
 
-    function elm_start_trial()
+    function explm_start_trial()
     {
-        check_ajax_referer('elm_nonce', 'security');
+        check_ajax_referer('explm_nonce', 'security');
 
         $email = isset($_POST['email']) ? sanitize_email(wp_unslash($_POST['email'])) : '';
         $domain = isset($_POST['domain']) ? sanitize_text_field(wp_unslash($_POST['domain'])) : '';
@@ -45,8 +49,8 @@ class ElmLicence
             wp_send_json_error(array('error_id' => $error_id, 'error_message' => $error_message));
         }
 
-        update_option('elm_email_option', $body_response['email']);
-        update_option('elm_licence_option', $body_response['licence']);
+        update_option('explm_email_option', $body_response['email']);
+        update_option('explm_licence_option', $body_response['licence']);
 
         wp_send_json_success(array(
             'email' => $body_response['email'],
@@ -54,13 +58,13 @@ class ElmLicence
         ));
     }
 
-    function elm_licence_check()
+    function explm_licence_check()
     {
-        check_ajax_referer('elm_nonce', 'security');
+        check_ajax_referer('explm_nonce', 'security');
 
-        $email = get_option('elm_email_option', '');
+        $email = get_option('explm_email_option', '');
         $domain = isset($_POST['domain']) ? sanitize_text_field(wp_unslash($_POST['domain'])) : '';
-        $licence = get_option('elm_licence_option', '');
+        $licence = get_option('explm_licence_option', '');
 
         $body = array(
             "user" => array(
@@ -100,8 +104,8 @@ class ElmLicence
     }
 }
 
-function initialize_elm_start_trial()
+function explm_initialize_start_trial()
 {
-    new ElmLicence();
+    new ExplmLicence();
 }
-add_action('plugins_loaded', 'initialize_elm_start_trial');
+add_action('plugins_loaded', 'explm_initialize_start_trial');

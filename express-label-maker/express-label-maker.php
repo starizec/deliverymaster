@@ -29,42 +29,42 @@ require_once 'couriers/user-status-data.php';
 require_once 'couriers/parcel-statuses.php';
 require_once 'couriers/collection-request.php';
 
-class ExpressLabelMaker
+class ExplmLabelMaker
 {
     protected $couriers;
 
     public function __construct()
     {
-        add_action('admin_enqueue_scripts', array($this, 'elm_enqueue_scripts'));
+        add_action('admin_enqueue_scripts', array($this, 'explm_enqueue_scripts'));
         add_action('admin_menu', array($this, 'add_submenu_page'));
-        add_action('woocommerce_admin_order_actions_end', array($this, 'elm_order_column_content'));
-        add_action('wp_ajax_elm_show_confirm_modal', array($this, 'elm_show_confirm_modal'));
-        add_action('wp_ajax_elm_show_collection_modal', array($this, 'elm_show_collection_modal'));
-        add_filter('manage_edit-shop_order_columns', array($this, 'elm_add_status_column_header'), 20);
-        add_filter('bulk_actions-edit-shop_order', array($this, 'elm_add_dpd_print_label_bulk_action'));
-        add_filter('bulk_actions-edit-shop_order', array($this, 'elm_add_overseas_print_label_bulk_action'));
+        add_action('woocommerce_admin_order_actions_end', array($this, 'explm_order_column_content'));
+        add_action('wp_ajax_explm_show_confirm_modal', array($this, 'explm_show_confirm_modal'));
+        add_action('wp_ajax_explm_show_collection_modal', array($this, 'explm_show_collection_modal'));
+        add_filter('manage_edit-shop_order_columns', array($this, 'explm_add_status_column_header'), 20);
+        add_filter('bulk_actions-edit-shop_order', array($this, 'explm_add_dpd_print_label_bulk_action'));
+        add_filter('bulk_actions-edit-shop_order', array($this, 'explm_add_overseas_print_label_bulk_action'));
         add_action('manage_shop_order_posts_custom_column', array($this, 'display_custom_order_meta_data'));
-        add_action('add_meta_boxes', array($this, 'elm_add_custom_meta_box'));
-        add_action('plugins_loaded', array($this, 'elm_plugin_load_textdomain'), 30);
-        add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'elm_add_plugin_settings_link'));
-        $this->couriers = new Couriers();
+        add_action('add_meta_boxes', array($this, 'explm_add_custom_meta_box'));
+        add_action('plugins_loaded', array($this, 'explm_plugin_load_textdomain'), 30);
+        add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'explm_add_plugin_settings_link'));
+        $this->couriers = new ExpmlCouriers();
     }
 
-    public function elm_enqueue_scripts($hook)
+    public function explm_enqueue_scripts($hook)
     {
-        wp_enqueue_style('elm_admin_css', plugin_dir_url(__FILE__) . 'css/elm.css', array(), '1.0.1');
-        wp_enqueue_script('elm_admin_js', plugin_dir_url(__FILE__) . 'js/elm.js', array('jquery'), '1.0.1', true);
+        wp_enqueue_style('explm_admin_css', plugin_dir_url(__FILE__) . 'css/elm.css', array(), '1.0.1');
+        wp_enqueue_script('explm_admin_js', plugin_dir_url(__FILE__) . 'js/elm.js', array('jquery'), '1.0.1', true);
     
-        $email = get_option('elm_email_option', '');
-        $licence = get_option('elm_licence_option', '');
-        $saved_service_type = get_option('elm_dpd_service_type_option', '');
+        $email = get_option('explm_email_option', '');
+        $licence = get_option('explm_licence_option', '');
+        $saved_service_type = get_option('explm_dpd_service_type_option', '');
     
         wp_localize_script(
-            'elm_admin_js',
-            'elm_ajax',
+            'explm_admin_js',
+            'explm_ajax',
             array(
                 'ajax_url' => admin_url('admin-ajax.php'),
-                'nonce' => wp_create_nonce('elm_nonce'),
+                'nonce' => wp_create_nonce('explm_nonce'),
                 'email' => $email,
                 'licence' => $licence,
                 'serviceType' => $saved_service_type
@@ -73,12 +73,12 @@ class ExpressLabelMaker
     }    
 
     // Translation
-    public function elm_plugin_load_textdomain() {
+    public function explm_plugin_load_textdomain() {
         load_plugin_textdomain('express-label-maker', false, plugin_basename(dirname(__FILE__)) . '/languages/');
     }    
 
     // Settings, Menu
-    public function elm_add_plugin_settings_link($links) {
+    public function explm_add_plugin_settings_link($links) {
         $settings_link = '<a href="' . admin_url('admin.php?page=express_label_maker&tab=licence') . '">' . esc_html__('Settings', 'express-label-maker') . '</a>';
         array_unshift($links, $settings_link);
         return $links;
@@ -109,60 +109,60 @@ class ExpressLabelMaker
         echo '</nav>';
 
         if ($tab == 'licence') {
-            licence_tab_content();
+            explm_licence_tab_content();
         } else if ($tab == 'settings') {
-            settings_tab_content();
+            explm_settings_tab_content();
         } elseif ($tab == 'dpd') {
-            dpd_tab_content();
+            explm_dpd_tab_content();
         } elseif ($tab == 'overseas') {
-            overseas_tab_content();
+            explm_overseas_tab_content();
         }
     
         echo '</div>';
     }
 
-    public function elm_add_custom_meta_box() {
+    public function explm_add_custom_meta_box() {
         add_meta_box(
-            'elm_custom_order_metabox',
+            'explm_custom_order_metabox',
             esc_html__('Express Label Maker', 'express-label-maker'),
-            array($this, 'elm_display_custom_meta_box_content'),
+            array($this, 'explm_display_custom_meta_box_content'),
             'shop_order',
             'side',
             'default'
         );
     }
 
-    public function elm_add_dpd_print_label_bulk_action($actions)
+    public function explm_add_dpd_print_label_bulk_action($actions)
     {
-        $saved_dpd_username = get_option('elm_dpd_username_option', '');
-        $saved_dpd_password = get_option('elm_dpd_password_option', '');
+        $saved_dpd_username = get_option('explm_dpd_username_option', '');
+        $saved_dpd_password = get_option('explm_dpd_password_option', '');
         if (!empty($saved_dpd_username) && !empty($saved_dpd_password)) {
-            $actions['elm_dpd_print_label'] = esc_html__('DPD Print Label', 'express-label-maker');
+            $actions['explm_dpd_print_label'] = esc_html__('DPD Print Label', 'express-label-maker');
         }
         return $actions;
     }
 
-    public function elm_add_overseas_print_label_bulk_action($actions)
+    public function explm_add_overseas_print_label_bulk_action($actions)
     {
-        $saved_api_key = get_option('elm_overseas_api_key_option', '');
+        $saved_api_key = get_option('explm_overseas_api_key_option', '');
         if (!empty($saved_api_key)) {
-            $actions['elm_overseas_print_label'] = esc_html__('Overseas Print Label', 'express-label-maker');
+            $actions['explm_overseas_print_label'] = esc_html__('Overseas Print Label', 'express-label-maker');
         }
         return $actions;
     }
 
-    public function elm_display_custom_meta_box_content($post) {
+    public function explm_display_custom_meta_box_content($post) {
         $order = wc_get_order($post->ID);
         $order_id = method_exists($order, 'get_id') ? $order->get_id() : $order->id;
         $courier_icons = $this->couriers->get_courier_icons();
 
-        $pdf_routes = get_post_meta($order_id, 'elm_route_labels', true);
+        $pdf_routes = get_post_meta($order_id, 'explm_route_labels', true);
         $pdf_urls = explode(',', $pdf_routes);
 
-        $saved_country = get_option("elm_country_option", '');
+        $saved_country = get_option("explm_country_option", '');
 
-        $saved_dpd_username = get_option('elm_dpd_username_option', '');
-        $saved_dpd_password = get_option('elm_dpd_password_option', '');
+        $saved_dpd_username = get_option('explm_dpd_username_option', '');
+        $saved_dpd_password = get_option('explm_dpd_password_option', '');
 
         $dpd_condition = !empty($saved_dpd_username) && !empty($saved_dpd_password);
 
@@ -175,7 +175,7 @@ class ExpressLabelMaker
             $dpd_parcel_link = 'https://www.dpdgroup.com/' . esc_attr($saved_country) . '/mydpd/my-parcels/incoming?parcelNumber=' . esc_attr($first_value);
         }
 
-        $saved_api_key = get_option('elm_overseas_api_key_option', '');
+        $saved_api_key = get_option('explm_overseas_api_key_option', '');
 
         $meta_key_overseas = $saved_country . '_overseas_parcels';
         $overseas_parcels_value = get_post_meta($order_id, $meta_key_overseas, true);
@@ -187,12 +187,12 @@ class ExpressLabelMaker
         }
         ?>
 
-        <div class="elm_custom_order_metabox_content">
-            <h4 class="elm_custom_order_metabox_title"><?php echo esc_html__('Print label', 'express-label-maker'); ?></h4>
-            <div class="elm_custom_order_wrapper">
+        <div class="explm_custom_order_metabox_content">
+            <h4 class="explm_custom_order_metabox_title"><?php echo esc_html__('Print label', 'express-label-maker'); ?></h4>
+            <div class="explm_custom_order_wrapper">
                 <?php foreach ($courier_icons as $courier => $icon): ?>
-                    <div class="elm_icon_container">
-                        <a href="#" class="elm_open_modal button button-primary elm_open_modal_order" data-order-id="<?php echo esc_attr($order_id); ?>" data-courier="<?php echo esc_attr($courier); ?>">
+                    <div class="explm_icon_container">
+                        <a href="#" class="explm_open_modal button button-primary explm_open_modal_order" data-order-id="<?php echo esc_attr($order_id); ?>" data-courier="<?php echo esc_attr($courier); ?>">
                             <?php echo esc_html($icon['button_text']); ?>
                         </a>
                     </div>
@@ -200,33 +200,33 @@ class ExpressLabelMaker
             </div>
 
             <?php if (!empty($pdf_urls) && !empty($pdf_urls[0])) : ?>
-                <div class="elm_custom_order_pdf_wrapper">
-                    <h4 class="elm_custom_order_metabox_title"><?php echo esc_html__('Labels', 'express-label-maker'); ?></h4>
+                <div class="explm_custom_order_pdf_wrapper">
+                    <h4 class="explm_custom_order_metabox_title"><?php echo esc_html__('Labels', 'express-label-maker'); ?></h4>
                     <?php foreach ($pdf_urls as $pdf_url): ?>
                         <?php if (!empty($pdf_url)) : ?>
-                            <a href="<?php echo esc_url($pdf_url); ?>" target="_blank" class="elm_pdf_link"><?php echo esc_html(basename($pdf_url)); ?></a>
+                            <a href="<?php echo esc_url($pdf_url); ?>" target="_blank" class="explm_pdf_link"><?php echo esc_html(basename($pdf_url)); ?></a>
                         <?php endif; ?>
                     <?php endforeach; ?>
                 </div>
             <?php endif; ?>
 
-            <div class="elm_custom_order_buttons">
+            <div class="explm_custom_order_buttons">
                 <?php if ($dpd_parcel_link || $overseas_parcel_link): ?>
-                    <h4 class="elm_custom_order_metabox_title"><?php echo esc_html__('Stack and trace', 'express-label-maker'); ?></h4>
+                    <h4 class="explm_custom_order_metabox_title"><?php echo esc_html__('Stack and trace', 'express-label-maker'); ?></h4>
                     <?php if ($dpd_parcel_link): ?>
-                        <div class="elm_stack_and_trace_button">
+                        <div class="explm_stack_and_trace_button">
                             <a href="<?php echo esc_url($dpd_parcel_link); ?>" target="_blank" class="button button-secondary"><?php echo esc_html__('DPD Stack and trace', 'express-label-maker'); ?></a>
                         </div>
                     <?php endif; ?>
                     <?php if ($overseas_parcel_link): ?>
-                        <div class="elm_stack_and_trace_button">
+                        <div class="explm_stack_and_trace_button">
                             <a href="<?php echo esc_url($overseas_parcel_link); ?>" target="_blank" class="button button-secondary"><?php echo esc_html__('Overseas Stack and Trace', 'express-label-maker'); ?></a>
                         </div>
                     <?php endif; ?>
                     <?php if ($dpd_condition): ?>
-                        <h4 class="elm_custom_order_metabox_title"><?php echo esc_html__('Collection request', 'express-label-maker'); ?></h4>
-                        <div class="elm_collection_request_button">
-                            <button data-order-id="<?php echo esc_attr($order_id); ?>" id="elm_collection_request" class="button button-primary"><?php echo esc_html__('DPD Collection request', 'express-label-maker'); ?></button>
+                        <h4 class="explm_custom_order_metabox_title"><?php echo esc_html__('Collection request', 'express-label-maker'); ?></h4>
+                        <div class="explm_collection_request_button">
+                            <button data-order-id="<?php echo esc_attr($order_id); ?>" id="explm_collection_request" class="button button-primary"><?php echo esc_html__('DPD Collection request', 'express-label-maker'); ?></button>
                         </div>
                     <?php endif; ?>
                 <?php endif; ?>
@@ -235,30 +235,30 @@ class ExpressLabelMaker
         <?php
     }
 
-    public function elm_add_status_column_header($columns) {
+    public function explm_add_status_column_header($columns) {
         $new_columns = array();
         foreach ($columns as $column_name => $column_info) {
             $new_columns[$column_name] = $column_info;
         }
-        $new_columns['elm_parcel_status'] = esc_html__('Package status', 'express-label-maker');
+        $new_columns['explm_parcel_status'] = esc_html__('Package status', 'express-label-maker');
         return $new_columns;
     }
 
-    public function elm_order_column_content($order) {
+    public function explm_order_column_content($order) {
         $order_id = method_exists($order, 'get_id') ? $order->get_id() : $order->id;
         $courier_icons = $this->couriers->get_courier_icons();
 
         foreach ($courier_icons as $courier => $icon) {
             $icon_url = plugin_dir_url(__FILE__) . $icon['url'];
-            echo '<a href="#" class="elm_open_modal button" data-order-id="' . esc_attr($order_id) . '" data-courier="' . esc_attr($courier) . '"><img src="' . esc_url($icon_url) . '" alt="' . esc_attr($icon['alt']) . '" class="' . esc_attr($courier) . '-action-icon" /></a>';
+            echo '<a href="#" class="explm_open_modal button" data-order-id="' . esc_attr($order_id) . '" data-courier="' . esc_attr($courier) . '"><img src="' . esc_url($icon_url) . '" alt="' . esc_attr($icon['alt']) . '" class="' . esc_attr($courier) . '-action-icon" /></a>';
         }
     }
 
     public function display_custom_order_meta_data($column) {
         global $post;
-        if ($column === 'elm_parcel_status') {
+        if ($column === 'explm_parcel_status') {
             $order = wc_get_order($post->ID);
-            $custom_meta_data = $order->get_meta('elm_parcel_status');
+            $custom_meta_data = $order->get_meta('explm_parcel_status');
             if (strlen($custom_meta_data) > 30) {
                 echo '<span title="' . esc_attr($custom_meta_data) . '">' . esc_html(substr($custom_meta_data, 0, 30)) . '...</span>';
             } else {
@@ -267,8 +267,8 @@ class ExpressLabelMaker
         }
     }
 
-    public function elm_show_confirm_modal() {
-        check_ajax_referer('elm_nonce', 'security');
+    public function explm_show_confirm_modal() {
+        check_ajax_referer('explm_nonce', 'security');
         $order_id = isset($_POST['order_id']) ? intval($_POST['order_id']) : 0;
         $courier = isset($_POST['courier']) ? sanitize_text_field(wp_unslash($_POST['courier'])) : '';
 
@@ -298,8 +298,8 @@ class ExpressLabelMaker
         wp_die();
     }
 
-    public function elm_show_collection_modal() {
-        check_ajax_referer('elm_nonce', 'security');
+    public function explm_show_collection_modal() {
+        check_ajax_referer('explm_nonce', 'security');
         $order_id = isset($_POST['order_id']) ? intval($_POST['order_id']) : 0;
 
         if ($order_id > 0) {
@@ -329,7 +329,7 @@ class ExpressLabelMaker
     }
 }
 
-function elm_initialize_express_label_maker() {
-    new ExpressLabelMaker();
+function explm_initialize_express_label_maker() {
+    new ExplmLabelMaker();
 }
-add_action('plugins_loaded', 'elm_initialize_express_label_maker');
+add_action('plugins_loaded', 'explm_initialize_express_label_maker');

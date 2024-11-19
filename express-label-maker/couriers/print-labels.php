@@ -1,26 +1,30 @@
 <?php
 
-class ElmPrintLabels {
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly.
+}
+
+class ExplmPrintLabels {
 
     public function __construct() {
-        add_action('wp_ajax_elm_print_labels', array($this, 'elm_print_labels'));
+        add_action('wp_ajax_explm_print_labels', array($this, 'explm_print_labels'));
     }  
 
-    public function elm_print_labels() {
-        check_ajax_referer('elm_nonce', 'security');
+    public function explm_print_labels() {
+        check_ajax_referer('explm_nonce', 'security');
 
         $actionValue = isset($_POST['actionValue']) ? sanitize_text_field(wp_unslash($_POST['actionValue'])) : '';
         $post_ids = isset($_POST['post_ids']) ? array_map('intval', wp_unslash($_POST['post_ids'])) : array();
 
-        $saved_country = get_option("elm_country_option", '');
-        $saved_service_type = get_option("elm_dpd_service_type_option", '');
+        $saved_country = get_option("explm_country_option", '');
+        $saved_service_type = get_option("explm_dpd_service_type_option", '');
         $courier = '';
 
-        if (preg_match('/elm_(.*?)_print_label/', $actionValue, $match) === 1) {
+        if (preg_match('/explm_(.*?)_print_label/', $actionValue, $match) === 1) {
             $courier = $match[1];
         }
     
-        $userObj = new user();
+        $userObj = new ExplmUser();
         $user_data = $userObj->getData($saved_country . $courier);
     
         $parcels_array = array();
@@ -78,7 +82,7 @@ class ElmPrintLabels {
             wp_send_json_error(array('error_id' => $error_id, 'error_message' => $error_message));
         }
 
-        $save_pdf_on_server = get_option('elm_save_pdf_on_server_option', 'false');
+        $save_pdf_on_server = get_option('explm_save_pdf_on_server_option', 'false');
         $upload_dir = wp_upload_dir();
         $labels_dir = $upload_dir['basedir'] . '/elm-labels';
 
@@ -117,7 +121,7 @@ class ElmPrintLabels {
             update_post_meta($order_id, $meta_key_timestamp, $timestamp);
 
             if ($save_pdf_on_server == 'true') {
-                $existing_pdf_url_route = get_post_meta($order_id, 'elm_route_labels', true);
+                $existing_pdf_url_route = get_post_meta($order_id, 'explm_route_labels', true);
 
                 if (!empty($existing_pdf_url_route)) {
                     $pdf_url_route_to_store = $existing_pdf_url_route . ',' . $pdf_url_route;
@@ -125,7 +129,7 @@ class ElmPrintLabels {
                     $pdf_url_route_to_store = $pdf_url_route;
                 }
 
-                update_post_meta($order_id, 'elm_route_labels', $pdf_url_route_to_store);
+                update_post_meta($order_id, 'explm_route_labels', $pdf_url_route_to_store);
             }
         }
 
@@ -180,8 +184,8 @@ class ElmPrintLabels {
     }
 }
 
-function initialize_elm_print_labels() {
-    new ElmPrintLabels();
+function explm_initialize_print_labels() {
+    new ExplmPrintLabels();
 }
 
-add_action('plugins_loaded', 'initialize_elm_print_labels');
+add_action('plugins_loaded', 'explm_initialize_print_labels');

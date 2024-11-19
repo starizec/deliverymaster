@@ -1,15 +1,19 @@
 <?php
 
-class ElmCollectionRequest
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly.
+}
+
+class ExplmCollectionRequest
 {
     public function __construct()
     {
-        add_action('wp_ajax_elm_collection_request', array($this, 'elm_collection_request'));
+        add_action('wp_ajax_explm_collection_request', array($this, 'explm_collection_request'));
     }
 
-    function elm_collection_request() {
+    function explm_collection_request() {
         
-        check_ajax_referer('elm_nonce', 'security');
+        check_ajax_referer('explm_nonce', 'security');
 
         $courier = isset($_POST['chosenCourier']) ? sanitize_text_field(wp_unslash($_POST['chosenCourier'])) : '';
         $saved_country = isset($_POST['country']) ? sanitize_text_field(wp_unslash($_POST['country'])) : '';
@@ -19,7 +23,7 @@ class ElmCollectionRequest
             wp_send_json_error(array('error_message' => __('Invalid input provided.', 'express-label-maker')));
         }
 
-        $userObj = new user();
+        $userObj = new ExplmUser();
         $user_data = $userObj->getData($saved_country . $courier);
 
         $parcel_data = isset($_POST['parcel']) ? array_map('sanitize_text_field', wp_unslash($_POST['parcel'])) : array();
@@ -70,8 +74,8 @@ class ElmCollectionRequest
     }
 }
 
-function initialize_elm_collection_request()
+function explm_initialize_collection_request()
 {
-    new ElmCollectionRequest();
+    new ExplmCollectionRequest();
 }
-add_action('plugins_loaded', 'initialize_elm_collection_request');
+add_action('plugins_loaded', 'explm_initialize_collection_request');

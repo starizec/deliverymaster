@@ -1,6 +1,10 @@
 <?php
 
-class user 
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly.
+}
+
+class ExplmUser 
 {
     public function getData($funcName) {
         if (method_exists($this, $funcName)) {
@@ -16,10 +20,10 @@ class user
         $server_name = isset($_SERVER['SERVER_NAME']) ? sanitize_text_field(wp_unslash($_SERVER['SERVER_NAME'])) : '';
         return [
             'domain' => $server_name, //DODATI EVENTUALNO ZA TEST
-            'licence' => get_option('elm_licence_option', ''),
-            'email' => get_option('elm_email_option', ''),
-            'username' => get_option("elm_dpd_username_option", ''),
-            'password' => get_option("elm_dpd_password_option", ''),
+            'licence' => get_option('explm_licence_option', ''),
+            'email' => get_option('explm_email_option', ''),
+            'username' => get_option("explm_dpd_username_option", ''),
+            'password' => get_option("explm_dpd_password_option", ''),
             'platform' => 'wordpress'
         ];
     }
@@ -28,16 +32,16 @@ class user
         $server_name = isset($_SERVER['SERVER_NAME']) ? sanitize_text_field(wp_unslash($_SERVER['SERVER_NAME'])) : '';
         return [
             'domain' => $server_name, //DODATI EVENTUALNO ZA TEST
-            'licence' => get_option('elm_licence_option', ''),
-            'email' => get_option('elm_email_option', ''),
-            'apiKey' => get_option("elm_overseas_api_key_option", ''),
+            'licence' => get_option('explm_licence_option', ''),
+            'email' => get_option('explm_email_option', ''),
+            'apiKey' => get_option("explm_overseas_api_key_option", ''),
             'platform' => 'wordpress'
         ];
     }
 }
 
-function initialize_elm_user_data()
+function explm_initialize_user_data()
 {
-    return new user();
+    return new ExplmUser();
 }
-add_action('plugins_loaded', 'initialize_elm_user_data');
+add_action('plugins_loaded', 'explm_initialize_user_data');

@@ -1,32 +1,32 @@
 //ADRESNICA
 jQuery(document).ready(function ($) {
   $("body").append(
-    '<div class="elm_loading_panel"><div class="elm_spinner"></div></div>'
+    '<div class="explm_loading_panel"><div class="explm_spinner"></div></div>'
   );
 
-  $("body").on("click", ".elm_open_modal", function (e) {
+  $("body").on("click", ".explm_open_modal", function (e) {
     e.preventDefault();
 
     var order_id = $(this).data("order-id");
     let courier = $(this).data("courier");
 
-    $(".elm_loading_panel").fadeIn(300);
-    $(".elm_loading_panel").css("display", "flex");
+    $(".explm_loading_panel").fadeIn(300);
+    $(".explm_loading_panel").css("display", "flex");
 
     $.ajax({
-      url: elm_ajax.ajax_url,
+      url: explm_ajax.ajax_url,
       type: "POST",
       data: {
-        action: "elm_show_confirm_modal",
-        security: elm_ajax.nonce,
+        action: "explm_show_confirm_modal",
+        security: explm_ajax.nonce,
         order_id: order_id,
         courier: courier
       },
       success: function (response) {
         if (response.success) {
           $("body").append(response.data);
-          $(".elm_modal_wrapper").fadeIn(300);
-          $(".elm_modal_wrapper").css("display", "flex");
+          $(".explm_modal_wrapper").fadeIn(300);
+          $(".explm_modal_wrapper").css("display", "flex");
           $("#hiddenCourier").val(courier);
         } else {
           alert(
@@ -36,41 +36,41 @@ jQuery(document).ready(function ($) {
               (response.data.error_message ? response.data.error_message : "null")
           );
         }
-        $(".elm_loading_panel").fadeOut(300);
+        $(".explm_loading_panel").fadeOut(300);
       },
       error: function () {
-        $(".elm_loading_panel").fadeOut(300);
+        $(".explm_loading_panel").fadeOut(300);
       },
     });
   });
 });
 
-jQuery("body").on("click", ".elm_cancel_action", function () {
-  jQuery(".elm_modal_wrapper").fadeOut(300, function () {
+jQuery("body").on("click", ".explm_cancel_action", function () {
+  jQuery(".explm_modal_wrapper").fadeOut(300, function () {
     jQuery(this).remove();
   });
 });
 
-jQuery("body").on("click", ".elm_cancel_action", function (e) {
+jQuery("body").on("click", ".explm_cancel_action", function (e) {
   e.preventDefault();
 });
 
 //PRINT LABEL
 jQuery(document).ready(function ($) {
   $("body").append(
-    '<div class="elm_loading_panel"><div class="elm_spinner"></div></div>'
+    '<div class="explm_loading_panel"><div class="explm_spinner"></div></div>'
   );
-  $(document).on("click", ".elm_confirm_action", function (e) {
+  $(document).on("click", ".explm_confirm_action", function (e) {
     e.preventDefault();
 
-    $(".elm_loading_panel").fadeIn(300);
-    $(".elm_loading_panel").css({
+    $(".explm_loading_panel").fadeIn(300);
+    $(".explm_loading_panel").css({
       display: "flex",
       "z-index": "9999999",
     });
 
     var courier = $("#hiddenCourier").val();
-    var form = $("#elm_order_details_form");
+    var form = $("#explm_order_details_form");
     var orderId = $("#hiddenOrderId").val();
 
     switch (courier) {
@@ -83,18 +83,18 @@ jQuery(document).ready(function ($) {
     }
 
     $.ajax({
-      url: elm_ajax.ajax_url,
+      url: explm_ajax.ajax_url,
       method: "POST",
       data: {
-        action: "elm_print_label",
+        action: "explm_print_label",
         parcel: parcelData,
-        security: elm_ajax.nonce,
+        security: explm_ajax.nonce,
         chosenCourier: courier,
         orderId: orderId,
       },
       success: function (response) {
         if (response.success) {
-          $(".elm_loading_panel").fadeOut(300);
+          $(".explm_loading_panel").fadeOut(300);
           if (response.data.file_path) {
             window.open(response.data.file_path, "_blank");
           } else if (response.data.pdf_data) {
@@ -119,7 +119,7 @@ jQuery(document).ready(function ($) {
           }
           
 
-          jQuery(".elm_modal_wrapper").fadeOut(300, function () {
+          jQuery(".explm_modal_wrapper").fadeOut(300, function () {
             jQuery(this).remove();
           });
           location.reload();
@@ -130,7 +130,7 @@ jQuery(document).ready(function ($) {
               "\nMessage: " +
               response.data.error_message
           );
-          $(".elm_loading_panel").fadeOut(300);
+          $(".explm_loading_panel").fadeOut(300);
         }
       },
     });
@@ -141,9 +141,9 @@ jQuery(document).ready(function ($) {
     var parcelType;
   
     // Određivanje tipa paketa na temelju vrste usluge
-    if (elm_ajax.serviceType === 'DPD Classic') {
+    if (explm_ajax.serviceType === 'DPD Classic') {
       parcelType = isCod ? "D-COD" : "D";
-    } else if (elm_ajax.serviceType === 'DPD Home') {
+    } else if (explm_ajax.serviceType === 'DPD Home') {
       parcelType = isCod ? "D-COD-B2C" : "D-B2C";
     }
     return {
@@ -171,9 +171,9 @@ jQuery(document).ready(function ($) {
     /* var parcelType; */
   
     // Određivanje tipa paketa na temelju vrste usluge
-/*     if (elm_ajax.serviceType === 'DPD Classic') {
+/*     if (explm_ajax.serviceType === 'DPD Classic') {
       parcelType = isCod ? "D-COD" : "D";
-    } else if (elm_ajax.serviceType === 'DPD Home') {
+    } else if (explm_ajax.serviceType === 'DPD Home') {
       parcelType = isCod ? "D-COD-B2C" : "D-B2C";
     } */
     return {
@@ -200,18 +200,18 @@ jQuery(document).ready(function ($) {
 
 //PRINT LABELS
 jQuery(document).ready(function ($) {
-  $("body").append('<div class="elm_loading_panel"><div class="elm_spinner"></div></div>');
+  $("body").append('<div class="explm_loading_panel"><div class="explm_spinner"></div></div>');
 
   $('#posts-filter').on('submit', function (e) {
       const actionValue = $(this).find('select[name="action"]').val();
 
-      const supportedActionValues = ['elm_dpd_print_label', 'elm_gls_print_label', 'elm_overseas_print_label', 'elm_hp_print_label'];
+      const supportedActionValues = ['explm_dpd_print_label', 'explm_gls_print_label', 'explm_overseas_print_label', 'explm_hp_print_label'];
 
       if (supportedActionValues.includes(actionValue)) {
         e.preventDefault();
         
-          $(".elm_loading_panel").fadeIn(300);
-          $(".elm_loading_panel").css({
+          $(".explm_loading_panel").fadeIn(300);
+          $(".explm_loading_panel").css({
               display: "flex",
               "z-index": "9999999",
           });
@@ -222,17 +222,17 @@ jQuery(document).ready(function ($) {
 
 
           $.ajax({
-            url: elm_ajax.ajax_url,
+            url: explm_ajax.ajax_url,
             method: "POST",
             data: {
-              action: "elm_print_labels",
-              security: elm_ajax.nonce,
+              action: "explm_print_labels",
+              security: explm_ajax.nonce,
               post_ids: checkedPostIds,
               actionValue: actionValue
             },
               success: function (response) {
                   if (response.success) {
-                      $(".elm_loading_panel").fadeOut(300);
+                      $(".explm_loading_panel").fadeOut(300);
 
                       if (response.data.file_path) {
                           window.open(response.data.file_path, "_blank");
@@ -256,7 +256,7 @@ jQuery(document).ready(function ($) {
                           document.body.removeChild(a);
                       }
 
-                      jQuery(".elm_modal_wrapper").fadeOut(300, function () {
+                      jQuery(".explm_modal_wrapper").fadeOut(300, function () {
                           jQuery(this).remove();
                       });
                       location.reload();
@@ -267,7 +267,7 @@ jQuery(document).ready(function ($) {
                           "\nMessage: " +
                           response.data.error_message
                       );
-                      $(".elm_loading_panel").fadeOut(300);
+                      $(".explm_loading_panel").fadeOut(300);
                   }
               },
           });
@@ -278,11 +278,11 @@ jQuery(document).ready(function ($) {
 //STATUS
 function update_parcel_status(order_id, pl_status) {
   jQuery.ajax({
-    url: elm_ajax.ajax_url,
+    url: explm_ajax.ajax_url,
     type: "POST",
     data: {
-      action: "elm_parcel_statuses",
-      security: elm_ajax.nonce,
+      action: "explm_parcel_statuses",
+      security: explm_ajax.nonce,
       order_id: order_id,
       pl_status: pl_status,
     },
@@ -338,11 +338,11 @@ jQuery(document).ready(function ($) {
   const offset = +pagination_page * limit - limit;
 
   $.ajax({
-    url: elm_ajax.ajax_url,
+    url: explm_ajax.ajax_url,
     type: "POST",
     data: {
       action: "get_orders",
-      security: elm_ajax.nonce,
+      security: explm_ajax.nonce,
       limit: limit,
       offset: offset,
     },
@@ -355,7 +355,7 @@ jQuery(document).ready(function ($) {
 
           if (order.pl_number != "") {
             const parcel_status_element = $(`tr#post-${order.order_id}`).find(
-              "td.elm_parcel_status"
+              "td.explm_parcel_status"
             );
             parcel_status_element.html('<img src="/wp-content/plugins/express-label-maker/assets/statusloading.gif" alt="loading">');
 
@@ -435,7 +435,7 @@ if (status) {
 }
 
 jQuery(document).ready(function($) {
-$('td.elm_parcel_status span').each(function() {
+$('td.explm_parcel_status span').each(function() {
   var status = $(this).text();
   applyStatusClass($(this), status);
 });
@@ -445,36 +445,36 @@ $('td.elm_parcel_status span').each(function() {
 
 jQuery(document).ready(function ($) {
   $("body").append(
-    '<div class="elm_loading_panel"><div class="elm_spinner"></div></div>'
+    '<div class="explm_loading_panel"><div class="explm_spinner"></div></div>'
   );
   $(document).on("click", ".elm-start-trial-btn", function (e) {
     e.preventDefault();
 
-    $(".elm_loading_panel").fadeIn(300);
-    $(".elm_loading_panel").css({
+    $(".explm_loading_panel").fadeIn(300);
+    $(".explm_loading_panel").css({
       display: "flex",
       "z-index": "9999999",
     });
 
     $.ajax({
-      url: elm_ajax.ajax_url,
+      url: explm_ajax.ajax_url,
       type: "POST",
       data: {
-        action: "elm_start_trial",
-        security: elm_ajax.nonce,
-        email: $('#elm_email').val(),
+        action: "explm_start_trial",
+        security: explm_ajax.nonce,
+        email: $('#explm_email').val(),
         domain: window.location.hostname,
         licence: 'trial'
     },
       success: function (response) {
         if (response.success) {
-          $(".elm_loading_panel").fadeOut(300);
-          $('#elm_email').val(response.data.email);
-          $('#elm_licence_key').val(response.data.licence);
+          $(".explm_loading_panel").fadeOut(300);
+          $('#explm_email').val(response.data.email);
+          $('#explm_licence_key').val(response.data.licence);
           $(".elm-start-trial-btn").hide();
-          $("#elm_submit_btn").prop("disabled", false);
+          $("#explm_submit_btn").prop("disabled", false);
           alert("Your license has been generated and your trial has started.");
-          jQuery(".elm_modal_wrapper").fadeOut(300, function () {
+          jQuery(".explm_modal_wrapper").fadeOut(300, function () {
             jQuery(this).remove();
           });
         } else {
@@ -484,7 +484,7 @@ jQuery(document).ready(function ($) {
               "\nMessage: " +
               response.data.error_message
           );
-          $(".elm_loading_panel").fadeOut(300);
+          $(".explm_loading_panel").fadeOut(300);
         }
       },
     });
@@ -503,23 +503,23 @@ jQuery(document).ready(function ($) {
       return;
   }
 
-  if (!elm_ajax.email || !elm_ajax.licence) {
+  if (!explm_ajax.email || !explm_ajax.licence) {
     return;
   }
     $.ajax({
-      url: elm_ajax.ajax_url,
+      url: explm_ajax.ajax_url,
       type: "POST",
       data: {
-        action: "elm_licence_check",
-        security: elm_ajax.nonce,
+        action: "explm_licence_check",
+        security: explm_ajax.nonce,
         domain: window.location.hostname,
     },
       success: function (response) {
         if (response.success) {
-          $('#elm_valid_from').val(response.data.valid_from);
-          $('#elm_valid_until').val(response.data.valid_until);
-          $('#elm_usage_limit').val(response.data.usage_limit);
-          $('#elm_usage').val(response.data.usage);
+          $('#explm_valid_from').val(response.data.valid_from);
+          $('#explm_valid_until').val(response.data.valid_until);
+          $('#explm_usage_limit').val(response.data.usage_limit);
+          $('#explm_usage').val(response.data.usage);
 
           if ((response.data.usage_limit - response.data.usage) <= 2) {
             alert("Only " + (response.data.usage_limit - response.data.usage) + "label(s) to the limit!");
@@ -553,30 +553,30 @@ jQuery(document).ready(function ($) {
 
 jQuery(document).ready(function ($) {
   $("body").append(
-    '<div class="elm_loading_panel"><div class="elm_spinner"></div></div>'
+    '<div class="explm_loading_panel"><div class="explm_spinner"></div></div>'
   );
 
-  $("body").on("click", "#elm_collection_request", function (e) {
+  $("body").on("click", "#explm_collection_request", function (e) {
     e.preventDefault();
 
     var order_id = $(this).data("order-id");
 
-    $(".elm_loading_panel").fadeIn(300);
-    $(".elm_loading_panel").css("display", "flex");
+    $(".explm_loading_panel").fadeIn(300);
+    $(".explm_loading_panel").css("display", "flex");
 
     $.ajax({
-      url: elm_ajax.ajax_url,
+      url: explm_ajax.ajax_url,
       type: "POST",
       data: {
-        action: "elm_show_collection_modal",
-        security: elm_ajax.nonce,
+        action: "explm_show_collection_modal",
+        security: explm_ajax.nonce,
         order_id: order_id,
       },
       success: function (response) {
         if (response.success) {
           $("body").append(response.data);
-          $(".elm_modal_wrapper").fadeIn(300);
-          $(".elm_modal_wrapper").css("display", "flex");
+          $(".explm_modal_wrapper").fadeIn(300);
+          $(".explm_modal_wrapper").css("display", "flex");
         } else {
           alert(
             "Error ID: " +
@@ -585,41 +585,41 @@ jQuery(document).ready(function ($) {
               (response.data.error_message ? response.data.error_message : "null")
           );
         }
-        $(".elm_loading_panel").fadeOut(300);
+        $(".explm_loading_panel").fadeOut(300);
       },
       error: function () {
-        $(".elm_loading_panel").fadeOut(300);
+        $(".explm_loading_panel").fadeOut(300);
       },
     });
   });
 });
 
-jQuery("body").on("click", ".elm_cancel_action", function () {
-  jQuery(".elm_modal_wrapper").fadeOut(300, function () {
+jQuery("body").on("click", ".explm_cancel_action", function () {
+  jQuery(".explm_modal_wrapper").fadeOut(300, function () {
     jQuery(this).remove();
   });
 });
 
-jQuery("body").on("click", ".elm_cancel_action", function (e) {
+jQuery("body").on("click", ".explm_cancel_action", function (e) {
   e.preventDefault();
 });
 
 //SEND COLLECTION REQUEST
 jQuery(document).ready(function ($) {
   $("body").append(
-    '<div class="elm_loading_panel"><div class="elm_spinner"></div></div>'
+    '<div class="explm_loading_panel"><div class="explm_spinner"></div></div>'
   );
-  $(document).on("click", ".elm_confirm_collection_action", function (e) {
+  $(document).on("click", ".explm_confirm_collection_action", function (e) {
     e.preventDefault();
 
-    $(".elm_loading_panel").fadeIn(300);
-    $(".elm_loading_panel").css({
+    $(".explm_loading_panel").fadeIn(300);
+    $(".explm_loading_panel").css({
       display: "flex",
       "z-index": "9999999",
     });
 
     var courier = $("#collection_courier").val();
-    var form = $("#elm_collection_order_details_form");
+    var form = $("#explm_collection_order_details_form");
     var orderId = $("#hiddenOrderId").val();
     var country = $("#hiddenCountry").val();
 
@@ -631,19 +631,19 @@ jQuery(document).ready(function ($) {
     }
 
     $.ajax({
-      url: elm_ajax.ajax_url,
+      url: explm_ajax.ajax_url,
       method: "POST",
       data: {
-        action: "elm_collection_request",
+        action: "explm_collection_request",
         parcel: parcelData,
-        security: elm_ajax.nonce,
+        security: explm_ajax.nonce,
         chosenCourier: courier,
         orderId: orderId,
         country: country
       },
       success: function (response) {
         if (response.success) {
-          $(".elm_loading_panel").fadeOut(300);
+          $(".explm_loading_panel").fadeOut(300);
           alert(
             "Collection request successfully sent.\n" +
             "Code: " +
@@ -652,7 +652,7 @@ jQuery(document).ready(function ($) {
               response.data.reference
           );
 
-          jQuery(".elm_modal_wrapper").fadeOut(300, function () {
+          jQuery(".explm_modal_wrapper").fadeOut(300, function () {
             jQuery(this).remove();
           });
         } else {
@@ -662,7 +662,7 @@ jQuery(document).ready(function ($) {
               "\nMessage: " +
               response.data.error_message
           );
-          $(".elm_loading_panel").fadeOut(300);
+          $(".explm_loading_panel").fadeOut(300);
         }
       },
     });
