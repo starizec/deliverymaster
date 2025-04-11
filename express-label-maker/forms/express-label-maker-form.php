@@ -69,9 +69,9 @@ if (!defined('ABSPATH')) {
 
             <?php //DODATI KURIRE
                 switch ($courier) {
-                    case 'dpd': 
+                    case 'dpd':
+                    $dpd_parcel_locker_id = get_post_meta($order_data['id'], 'dpd_parcel_locker_id', true); 
             ?>
-
                 <!-- Reference -->
                 <label class="labels">
                     <?php esc_html_e('Reference:', 'express-label-maker'); ?>
@@ -126,7 +126,8 @@ if (!defined('ABSPATH')) {
                 <?php 
                     break;
 
-                    case 'overseas': 
+                    case 'overseas':
+                    $overseas_parcel_locker_id = get_post_meta($order_data['id'], 'overseas_parcel_locker_id', true); 
                 ?>
                 <!-- Reference -->
                 <label class="labels">
@@ -188,6 +189,8 @@ if (!defined('ABSPATH')) {
                 <!-- Hidden courier for api -->
                 <input type="hidden" id="hiddenCourier" value="" />
                 <input type="hidden" id="hiddenOrderId" value="<?php echo esc_attr($order_data['id']); ?>" />
+                <input type="hidden" id="dpdParcelLockerId" value="<?php echo esc_attr($dpd_parcel_locker_id); ?>">
+                <input type="hidden" id="overseasParcelLockerId" value="<?php echo esc_attr($overseas_parcel_locker_id); ?>">
         </form>
         <div class="explm_modal_actions">
             <button class="button button-primary explm_confirm_action">

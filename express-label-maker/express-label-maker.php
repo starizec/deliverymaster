@@ -22,12 +22,14 @@ require_once 'settings/dpd-settings.php';
 require_once 'settings/overseas-settings.php';
 require_once 'settings/user-data.php';
 require_once 'settings/licence.php';
+require_once 'settings/cron.php';
 require_once 'couriers/print-label.php';
 require_once 'couriers/print-labels.php';
 require_once 'couriers/all-couriers.php';
 require_once 'couriers/user-status-data.php';
 require_once 'couriers/parcel-statuses.php';
 require_once 'couriers/collection-request.php';
+require_once 'couriers/parcel-lockers.php';
 
 class ExplmLabelMaker
 {

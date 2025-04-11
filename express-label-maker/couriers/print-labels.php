@@ -148,25 +148,36 @@ class ExplmPrintLabels {
     }
 
     public function setDPDParcelsData($shipping, $billing, $order_data, $order_total, $address_without_house_number, $house_number, $weight, $order_id, $parcel_type, $package_number) {
-        return array(
-            'cod_amount' => $order_total,
-            'name1' => $shipping['first_name'] . ' ' . $shipping['last_name'],
-            'street' => $address_without_house_number,
-            'rPropNum' => $house_number,
-            'city' => $shipping['city'],
-            'country' => $shipping['country'],
-            'pcode' => $shipping['postcode'],
-            'email' => $billing['email'],
+        $data = array(
+            'cod_amount'    => $order_total,
+            'name1'         => $shipping['first_name'] . ' ' . $shipping['last_name'],
+            'street'        => $address_without_house_number,
+            'rPropNum'      => $house_number,
+            'city'          => $shipping['city'],
+            'country'       => $shipping['country'],
+            'pcode'         => $shipping['postcode'],
+            'email'         => $billing['email'],
             'sender_remark' => $order_data['customer_note'],
-            'weight' => $weight,
-            'order_number' => $order_id,
-            'cod_purpose' => $order_id,
-            'parcel_type' => $parcel_type,
+            'weight'        => $weight,
+            'order_number'  => $order_id,
+            'cod_purpose'   => $order_id,
+            'parcel_type'   => $parcel_type,
             'num_of_parcel' => $package_number,
-            'phone' => $billing['phone'],
-            'contact' => $shipping['first_name'] . ' ' . $shipping['last_name']
+            'phone'         => $billing['phone'],
+            'contact'       => $shipping['first_name'] . ' ' . $shipping['last_name']
         );
-    }
+    
+        $locker_id = get_post_meta($order_id, 'parcel_locker_id', true);
+        if (!empty($locker_id)) {
+            $data['pudo_id'] = $locker_id;
+            $data['parcel_type'] = 'D-B2C-PSD';
+        } elseif (isset($_POST['parcel_locker_id']) && !empty($_POST['parcel_locker_id'])) {
+            $data['pudo_id'] = sanitize_text_field($_POST['parcel_locker_id']);
+            $data['parcel_type'] = 'D-B2C-PSD';
+        }
+    
+        return $data;
+    }    
     
     public function setOVERSEASParcelsData($shipping, $billing, $order_data, $order_total, $address_without_house_number, $house_number, $weight, $order_id, $parcel_type, $package_number) {
         return array(

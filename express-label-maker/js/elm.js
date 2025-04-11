@@ -139,13 +139,16 @@ jQuery(document).ready(function ($) {
   function setDPDParcelData(form) {
     var isCod = form.find('input[name="parcel_type"]:checked').val() === "cod";
     var parcelType;
+    var dpdParcelLockerId = $("#dpdParcelLockerId").val();
   
-    // Određivanje tipa paketa na temelju vrste usluge
-    if (explm_ajax.serviceType === 'DPD Classic') {
+    if (dpdParcelLockerId) {
+      parcelType = "D-B2C-PSD";
+    } else if (explm_ajax.serviceType === 'DPD Classic') {
       parcelType = isCod ? "D-COD" : "D";
     } else if (explm_ajax.serviceType === 'DPD Home') {
       parcelType = isCod ? "D-COD-B2C" : "D-B2C";
     }
+  
     return {
       cod_amount: form.find('input[name="cod_amount"]').val(),
       name1: form.find('input[name="customer_name"]').val(),
@@ -163,36 +166,26 @@ jQuery(document).ready(function ($) {
       num_of_parcel: form.find('input[name="package_number"]').val(),
       phone: form.find('input[name="phone"]').val(),
       contact: form.find('input[name="contact_person"]').val(),
+      pudo_id: dpdParcelLockerId
     };
   }
 
   function setOverseasParcelData(form) {
     var isCod = form.find('input[name="parcel_type"]:checked').val() === "cod";
-    /* var parcelType; */
+    var overseasParcelLockerId = $("#overseasParcelLockerId").val();
   
-    // Određivanje tipa paketa na temelju vrste usluge
-/*     if (explm_ajax.serviceType === 'DPD Classic') {
-      parcelType = isCod ? "D-COD" : "D";
-    } else if (explm_ajax.serviceType === 'DPD Home') {
-      parcelType = isCod ? "D-COD-B2C" : "D-B2C";
-    } */
     return {
       cod_amount: isCod ? form.find('input[name="cod_amount"]').val() : null,
       name1: form.find('input[name="customer_name"]').val(),
-      /* street: form.find('input[name="customer_address"]').val(), */
       rPropNum: form.find('input[name="customer_address"]').val() + ' ' + form.find('input[name="house_number"]').val(),
       city: form.find('input[name="city"]').val(),
-      /* country: form.find('input[name="country"]').val(), */
       pcode: form.find('input[name="zip_code"]').val(),
       email: form.find('input[name="email"]').val(),
       sender_remark: form.find('textarea[name="note"]').val(),
-      /* weight: form.find('input[name="weight"]').val(), */
       order_number: form.find('input[name="reference"]').val(),
-      /* cod_purpose: form.find('input[name="reference"]').val(), */
-      /* parcel_type: parcelType, */
       num_of_parcel: form.find('input[name="package_number"]').val(),
       phone: form.find('input[name="phone"]').val(),
-      /* contact: form.find('input[name="contact_person"]').val(), */
+      pudo_id: overseasParcelLockerId
     };
   }
 
@@ -548,6 +541,41 @@ jQuery(document).ready(function ($) {
     });
   });
 
+//LICENCE JS
+
+document.addEventListener('DOMContentLoaded', function() {
+  const url = window.location.search;
+
+  if (url !== "?page=express_label_maker&tab=licence") {
+      return;
+  }
+  var emailInput = document.getElementById('explm_email');
+  var licenceKeyInput = document.getElementById('explm_licence_key');
+  var countrySelect = document.getElementById('explm_country');
+  var startTrialButton = document.getElementById('start-trial-btn');
+  var submitButton = document.getElementById('explm_submit_btn');
+
+  function toggleStartTrialButton() {
+    console.log('RADIII')
+      startTrialButton.style.display = licenceKeyInput.value.trim() === '' ? 'inline-block' : 'none';
+  }
+
+  function toggleSubmitButton() {
+      submitButton.disabled = emailInput.value.trim() === '' || licenceKeyInput.value.trim() === '' || countrySelect.value.trim() === '';
+  }
+
+  toggleStartTrialButton();
+  toggleSubmitButton();
+
+  licenceKeyInput.addEventListener('input', function() {
+      toggleStartTrialButton();
+      toggleSubmitButton();
+  });
+
+  emailInput.addEventListener('input', toggleSubmitButton);
+  countrySelect.addEventListener('change', toggleSubmitButton);
+});
+
 
 //COLLECTION REQUEST
 
@@ -696,4 +724,17 @@ jQuery(document).ready(function ($) {
       pickup_date: formattedDate,
     };
   }
+});
+
+jQuery(document).ready(function($) {
+  function togglePaketomatSelect() {
+      if ($('#enable_paketomat').is(':checked')) {
+          $('#paketomat_shipping_method_row').show();
+      } else {
+          $('#paketomat_shipping_method_row').hide();
+      }
+  }
+  togglePaketomatSelect();
+
+  $('#enable_paketomat').on('change', togglePaketomatSelect);
 });

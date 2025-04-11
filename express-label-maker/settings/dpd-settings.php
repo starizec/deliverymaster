@@ -10,15 +10,23 @@ function explm_dpd_tab_content() {
         delete_option('explm_dpd_password_option');
         echo '<div class="updated"><p>' . esc_html__('DPD account deleted.', 'express-label-maker') . '</p></div>';
     }
-    elseif (isset($_POST['explm_dpd_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['explm_dpd_nonce'])), 'explm_save_dpd_settings')) {
-        $username = isset($_POST['explm_dpd_username']) ? sanitize_text_field(wp_unslash($_POST['explm_dpd_username'])) : '';
-        $password = isset($_POST['explm_dpd_password']) ? sanitize_text_field(wp_unslash($_POST['explm_dpd_password'])) : '';
-        $service_type = isset($_POST['explm_dpd_service_type']) ? sanitize_text_field(wp_unslash($_POST['explm_dpd_service_type'])) : '';
-
-        if (!empty($username) && !empty($password) && !empty($service_type)) {
+    elseif ( isset($_POST['explm_dpd_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['explm_dpd_nonce'])), 'explm_save_dpd_settings') ) {
+        $username         = isset($_POST['explm_dpd_username']) ? sanitize_text_field(wp_unslash($_POST['explm_dpd_username'])) : '';
+        $password         = isset($_POST['explm_dpd_password']) ? sanitize_text_field(wp_unslash($_POST['explm_dpd_password'])) : '';
+        $service_type     = isset($_POST['explm_dpd_service_type']) ? sanitize_text_field(wp_unslash($_POST['explm_dpd_service_type'])) : '';
+        $enable_paketomat = isset($_POST['enable_paketomat']) ? sanitize_text_field(wp_unslash($_POST['enable_paketomat'])) : '';
+        $shipping_method  = isset($_POST['explm_dpd_shipping_method']) ? sanitize_text_field(wp_unslash($_POST['explm_dpd_shipping_method'])) : '';
+    
+        if ( $enable_paketomat !== '1' ) {
+            $shipping_method = '';
+        }
+    
+        if ( !empty($username) && !empty($password) && !empty($service_type) ) {
             update_option('explm_dpd_username_option', $username);
             update_option('explm_dpd_password_option', $password);
             update_option('explm_dpd_service_type_option', $service_type);
+            update_option('explm_dpd_enable_pickup', $enable_paketomat);
+            update_option('explm_dpd_pickup_shipping_method', $shipping_method);
             echo '<div class="updated"><p>' . esc_html__('DPD settings saved.', 'express-label-maker') . '</p></div>';
         } else {
             echo '<div class="error"><p>' . esc_html__('Username, Password, and Service Type are required.', 'express-label-maker') . '</p></div>';
@@ -42,6 +50,33 @@ function explm_dpd_tab_content() {
     echo '<option value="DPD Classic"' . selected(get_option('explm_dpd_service_type_option', ''), 'DPD Classic', false) . '>DPD Classic</option>';
     echo '<option value="DPD Home"' . selected(get_option('explm_dpd_service_type_option', ''), 'DPD Home', false) . '>DPD Home</option>';
     echo '</select></td></tr>';
+
+    $saved_enable = get_option('explm_dpd_enable_pickup', '');
+    echo '<tr>';
+    echo '<th scope="row"><label for="enable_paketomat">' . esc_html__('Pickup station', 'express-label-maker') . '</label></th>';
+    echo '<td><input type="checkbox" name="enable_paketomat" id="enable_paketomat" value="1" ' . checked($saved_enable, '1', false) . '></td>';
+    echo '</tr>';
+
+    $saved_method = get_option('explm_dpd_pickup_shipping_method', '');
+
+    $shipping_methods = explm_get_active_shipping_methods();
+
+    echo '<tr id="paketomat_shipping_method_row">';
+    echo '<th scope="row"><label for="explm_dpd_shipping_method">' . esc_html__('Pickup station delivery method', 'express-label-maker') . '</label></th>';
+    echo '<td><select name="explm_dpd_shipping_method" id="explm_dpd_shipping_method" required>';
+
+    if ( !empty($shipping_methods) ) {
+        foreach ( $shipping_methods as $key => $method_obj ) {
+            $title = !empty($method_obj->settings['title'])
+                ? $method_obj->settings['title']
+                : $method_obj->get_title();
+            echo '<option value="' . esc_attr($key) . '" ' . selected($saved_method, $key, false) . '>' . esc_html($title) . '</option>';
+        }
+    }
+
+    echo '</select></td>';
+    echo '</tr>';
+    
     echo '</table>';
 
     echo '<p class="submit">';
@@ -157,4 +192,36 @@ function explm_dpd_tab_content() {
     echo '</form>';
     echo '</div>';
     echo '</div>';
+}
+
+/**
+ * Aktivne shipping metode
+ *
+ * @return array
+ */
+function explm_get_active_shipping_methods() {
+    $active_methods = array();
+
+    $global_zone = WC_Shipping_Zones::get_zone_by('zone_id', 0);
+    if ( $global_zone ) {
+        foreach ( $global_zone->get_shipping_methods() as $method ) {
+            if ( 'yes' === $method->enabled ) {
+                $key = $method->id . '-' . $method->instance_id;
+                $active_methods[ $key ] = $method;
+            }
+        }
+    }
+
+    $zones = WC_Shipping_Zones::get_zones();
+    foreach ( $zones as $zone_data ) {
+        $zone = new WC_Shipping_Zone($zone_data['id']);
+        foreach ( $zone->get_shipping_methods() as $method ) {
+            if ( 'yes' === $method->enabled ) {
+                $key = $method->id . '-' . $method->instance_id;
+                $active_methods[ $key ] = $method;
+            }
+        }
+    }
+
+    return $active_methods;
 }

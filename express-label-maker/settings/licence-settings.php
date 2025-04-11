@@ -79,35 +79,4 @@ function explm_licence_tab_content()
     echo '</div>';
 
     echo '</div>';
-
-    $inline_script = <<<EOD
-    document.addEventListener("DOMContentLoaded", function() {
-    var emailInput = document.getElementById("explm_email");
-    var licenceKeyInput = document.getElementById("explm_licence_key");
-    var countrySelect = document.getElementById("explm_country");
-    var startTrialButton = document.getElementById("start-trial-btn");
-    var submitButton = document.getElementById("explm_submit_btn");
-
-    function toggleStartTrialButton() {
-        startTrialButton.style.display = licenceKeyInput.value.trim() === "" ? "inline-block" : "none";
-    }
-
-    function toggleSubmitButton() {
-        submitButton.disabled = emailInput.value.trim() === "" || licenceKeyInput.value.trim() === "" || countrySelect.value.trim() === "";
-    }
-
-    toggleStartTrialButton();
-    toggleSubmitButton();
-
-    licenceKeyInput.addEventListener("input", function() {
-        toggleStartTrialButton();
-        toggleSubmitButton();
-    });
-
-    emailInput.addEventListener("input", toggleSubmitButton);
-    countrySelect.addEventListener("change", toggleSubmitButton);
-    });
-    EOD;
-    
-    wp_add_inline_script('explm_admin_js', $inline_script);
 }

@@ -11,8 +11,16 @@ function explm_overseas_tab_content() {
     }
     elseif (isset($_POST['explm_overseas_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['explm_overseas_nonce'])), 'explm_save_overseas_settings')) {
         $api_key = isset($_POST['explm_overseas_api_key']) ? sanitize_text_field(wp_unslash($_POST['explm_overseas_api_key'])) : '';
+        $enable_paketomat = isset($_POST['enable_paketomat']) ? sanitize_text_field(wp_unslash($_POST['enable_paketomat'])) : '';
+        $shipping_method  = isset($_POST['explm_overseas_shipping_method']) ? sanitize_text_field(wp_unslash($_POST['explm_overseas_shipping_method'])) : '';
+    
+        if ( $enable_paketomat !== '1' ) {
+            $shipping_method = '';
+        }
         if (!empty($api_key)) {
             update_option('explm_overseas_api_key_option', $api_key);
+            update_option('explm_overseas_enable_pickup', $enable_paketomat);
+            update_option('explm_overseas_pickup_shipping_method', $shipping_method);
             echo '<div class="updated"><p>' . esc_html__('API key saved.', 'express-label-maker') . '</p></div>';
         } else {
             echo '<div class="error"><p>' . esc_html__('API key is required.', 'express-label-maker') . '</p></div>';
@@ -30,6 +38,31 @@ function explm_overseas_tab_content() {
     echo '<tr>';
     echo '<th scope="row"><label for="explm_overseas_api_key">' . esc_html__('API Key', 'express-label-maker') . '</label></th>';
     echo '<td><input name="explm_overseas_api_key" type="text" id="explm_overseas_api_key" value="' . esc_attr($saved_api_key) . '" class="regular-text" required></td>';
+    echo '</tr>';
+    $saved_enable = get_option('explm_overseas_enable_pickup', '');
+    echo '<tr>';
+    echo '<th scope="row"><label for="enable_paketomat">' . esc_html__('Pickup station', 'express-label-maker') . '</label></th>';
+    echo '<td><input type="checkbox" name="enable_paketomat" id="enable_paketomat" value="1" ' . checked($saved_enable, '1', false) . '></td>';
+    echo '</tr>';
+
+    $saved_method = get_option('explm_overseas_pickup_shipping_method', '');
+
+    $shipping_methods = explm_get_active_shipping_methods();
+
+    echo '<tr id="paketomat_shipping_method_row">';
+    echo '<th scope="row"><label for="explm_overseas_shipping_method">' . esc_html__('Pickup station delivery method', 'express-label-maker') . '</label></th>';
+    echo '<td><select name="explm_overseas_shipping_method" id="explm_overseas_shipping_method" required>';
+
+    if ( !empty($shipping_methods) ) {
+        foreach ( $shipping_methods as $key => $method_obj ) {
+            $title = !empty($method_obj->settings['title'])
+                ? $method_obj->settings['title']
+                : $method_obj->get_title();
+            echo '<option value="' . esc_attr($key) . '" ' . selected($saved_method, $key, false) . '>' . esc_html($title) . '</option>';
+        }
+    }
+
+    echo '</select></td>';
     echo '</tr>';
     echo '</table>';
     echo '<p class="submit">';
