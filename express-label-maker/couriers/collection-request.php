@@ -12,7 +12,6 @@ class ExplmCollectionRequest
     }
 
     function explm_collection_request() {
-        
         check_ajax_referer('explm_nonce', 'security');
 
         $courier = isset($_POST['chosenCourier']) ? sanitize_text_field(wp_unslash($_POST['chosenCourier'])) : '';
@@ -21,6 +20,11 @@ class ExplmCollectionRequest
 
         if (empty($courier) || empty($saved_country) || empty($order_id)) {
             wp_send_json_error(array('error_message' => __('Invalid input provided.', 'express-label-maker')));
+        }
+        
+        $order = ExplmLabelMaker::get_order($order_id);
+        if (!$order) {
+            wp_send_json_error(array('error_message' => __('Order not found.', 'express-label-maker')));
         }
 
         $userObj = new ExplmUser();
@@ -55,9 +59,10 @@ class ExplmCollectionRequest
         }
 
         $meta_key = $saved_country . "_" . $courier . "_collection_request";
-        $existing_meta_value = get_post_meta($order_id, $meta_key, true);
-        $reference = isset($body_response['data']['reference']) ? $body_response['data']['reference'] : 'unknown';
-        $code = isset($body_response['data']['code']) ? $body_response['data']['code'] : 'unknown';
+        
+        $existing_meta_value = ExplmLabelMaker::get_order_meta($order_id, $meta_key);
+        $reference = $body_response['data']['reference'] ?? 'unknown';
+        $code = $body_response['data']['code'] ?? 'unknown';
 
         if (!empty($existing_meta_value)) {
             $new_meta_value = $existing_meta_value . "," . $reference;
@@ -65,7 +70,11 @@ class ExplmCollectionRequest
             $new_meta_value = $reference;
         }
 
-        update_post_meta($order_id, $meta_key, $new_meta_value);
+        $success = ExplmLabelMaker::update_order_meta($order_id, $meta_key, $new_meta_value);
+        
+        if (!$success) {
+            wp_send_json_error(array('error_message' => __('Failed to update order meta.', 'express-label-maker')));
+        }
 
         wp_send_json_success(array(
             'reference' => $reference,

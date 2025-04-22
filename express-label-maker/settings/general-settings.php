@@ -20,14 +20,17 @@ function explm_settings_tab_content()
             }
         }
     
-        $orders = wc_get_orders(['status' => 'any']);
+        $orders = wc_get_orders([
+            'status' => 'any',
+            'limit' => -1, // Get all orders
+            'return' => 'ids', // Only get order IDs for better performance
+        ]);
     
-        foreach ($orders as $order) {
-            $order_id = $order->get_id();
-            $existing_pdf_url_route = get_post_meta($order_id, 'explm_route_labels', true);
+        foreach ($orders as $order_id) {
+            $existing_pdf_url_route = ExplmLabelMaker::get_order_meta($order_id, 'explm_route_labels');
     
             if (!empty($existing_pdf_url_route)) {
-                delete_post_meta($order_id, 'explm_route_labels');
+                ExplmLabelMaker::update_order_meta($order_id, 'explm_route_labels', '');
             }
         }
     
@@ -41,7 +44,7 @@ function explm_settings_tab_content()
         echo '<div class="updated"><p>' . esc_html__('Settings saved.', 'express-label-maker') . '</p></div>';
     }
 
-    $save_pdf_on_server = get_option('explm_save_pdf_on_server_option', 'false');
+    $save_pdf_on_server = get_option('explm_save_pdf_on_server_option', 'true');
 
     echo '<div style="display:block;">';
     echo '<div style="float: left; width: 48%; padding-right: 2%;">';

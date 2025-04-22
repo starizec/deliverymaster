@@ -70,7 +70,7 @@ if (!defined('ABSPATH')) {
             <?php //DODATI KURIRE
                 switch ($courier) {
                     case 'dpd':
-                    $dpd_parcel_locker_id = get_post_meta($order_data['id'], 'dpd_parcel_locker_id', true); 
+                    $dpd_parcel_locker_id = ExplmLabelMaker::get_order_meta($order_data['id'], 'dpd_parcel_locker_id', true);
             ?>
                 <!-- Reference -->
                 <label class="labels">
@@ -127,7 +127,7 @@ if (!defined('ABSPATH')) {
                     break;
 
                     case 'overseas':
-                    $overseas_parcel_locker_id = get_post_meta($order_data['id'], 'overseas_parcel_locker_id', true); 
+                    $overseas_parcel_locker_id = ExplmLabelMaker::get_order_meta($order_data['id'], 'overseas_parcel_locker_id', true); 
                 ?>
                 <!-- Reference -->
                 <label class="labels">

@@ -1,5 +1,4 @@
 <?php
-
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
@@ -52,7 +51,7 @@ class ExplmPrintLabel
         $decoded_data = base64_decode($body_response['data']['label'], true);
 
         $meta_key = $saved_country . "_" . $courier . "_parcels";
-        $existing_meta_value = get_post_meta($order_id, $meta_key, true);
+        $existing_meta_value = ExplmLabelMaker::get_order_meta($order_id, $meta_key);
         $parcel_value = isset($body_response['data']['parcels']) ? $body_response['data']['parcels'] : 'unknown';
 
         if (!empty($existing_meta_value)) {
@@ -61,11 +60,11 @@ class ExplmPrintLabel
             $new_meta_value = $parcel_value;
         }
 
-        update_post_meta($order_id, $meta_key, $new_meta_value);
+        ExplmLabelMaker::update_order_meta($order_id, $meta_key, $new_meta_value);
 
         $meta_key_timestamp = $meta_key . '_last_updated';
         $timestamp = current_time('mysql');
-        update_post_meta($order_id, $meta_key_timestamp, $timestamp);
+        ExplmLabelMaker::update_order_meta($order_id, $meta_key_timestamp, $timestamp);
 
         $timestamp = gmdate('dmy');
         $file_name_new = uniqid('', true) . "-$courier-$timestamp.pdf";
@@ -84,12 +83,12 @@ class ExplmPrintLabel
             $wp_filesystem->mkdir($labels_dir, FS_CHMOD_DIR);
         }
 
-        if (get_option('explm_save_pdf_on_server_option', 'false') == 'true') {
+        if (get_option('explm_save_pdf_on_server_option', 'true') == 'true') {
             $wp_filesystem->put_contents($file_path, $decoded_data, FS_CHMOD_FILE);
 
             $pdf_url_route = $upload_dir['baseurl'] . '/elm-labels/' . $file_name_new;
 
-            $existing_pdf_url_route = get_post_meta($order_id, 'explm_route_labels', true);
+            $existing_pdf_url_route = ExplmLabelMaker::get_order_meta($order_id, 'explm_route_labels');
 
             if (!empty($existing_pdf_url_route)) {
                 $pdf_url_route_to_store = $existing_pdf_url_route . ',' . $pdf_url_route;
@@ -97,7 +96,7 @@ class ExplmPrintLabel
                 $pdf_url_route_to_store = $pdf_url_route;
             }
 
-            update_post_meta($order_id, 'explm_route_labels', $pdf_url_route_to_store);
+            ExplmLabelMaker::update_order_meta($order_id, 'explm_route_labels', $pdf_url_route_to_store);
 
             wp_send_json_success(array(
                 'file_path' => $pdf_url_route,

@@ -29,7 +29,9 @@ class ExplmPrintLabels {
     
         $parcels_array = array();
         foreach ($post_ids as $order_id) {
-            $order = wc_get_order($order_id);
+            $order = ExplmLabelMaker::get_order($order_id);
+            if (!$order) continue;
+
             $order_data = $order->get_data();
             $billing = $order_data['billing'];
             $shipping = $order_data['shipping'];
@@ -61,6 +63,8 @@ class ExplmPrintLabels {
             "parcels" => $parcels_array
         );
 
+        error_log('Body: ' . print_r($body, true));
+
         $args = array(
             'method' => 'POST',
             'headers' => array('Content-Type' => 'application/json'),
@@ -82,7 +86,7 @@ class ExplmPrintLabels {
             wp_send_json_error(array('error_id' => $error_id, 'error_message' => $error_message));
         }
 
-        $save_pdf_on_server = get_option('explm_save_pdf_on_server_option', 'false');
+        $save_pdf_on_server = get_option('explm_save_pdf_on_server_option', 'true');
         $upload_dir = wp_upload_dir();
         $labels_dir = $upload_dir['basedir'] . '/elm-labels';
 
@@ -105,7 +109,7 @@ class ExplmPrintLabels {
         foreach ($body_response['data']['parcels'] as $parcel_response) {
             $order_id = $parcel_response['order_number'];
             $meta_key = $saved_country . "_" . $courier . "_parcels";
-            $existing_meta_value = get_post_meta($order_id, $meta_key, true);
+            $existing_meta_value = ExplmLabelMaker::get_order_meta($order_id, $meta_key);
             $parcel_value = isset($parcel_response['parcel_number']) ? $parcel_response['parcel_number'] : 'unknown';
 
             if (!empty($existing_meta_value)) {
@@ -114,14 +118,14 @@ class ExplmPrintLabels {
                 $new_meta_value = $parcel_value;
             }
 
-            update_post_meta($order_id, $meta_key, $new_meta_value);
+            ExplmLabelMaker::update_order_meta($order_id, $meta_key, $new_meta_value);
 
             $meta_key_timestamp = $meta_key . '_last_updated';
             $timestamp = current_time('mysql');
-            update_post_meta($order_id, $meta_key_timestamp, $timestamp);
+            ExplmLabelMaker::update_order_meta($order_id, $meta_key_timestamp, $timestamp);
 
             if ($save_pdf_on_server == 'true') {
-                $existing_pdf_url_route = get_post_meta($order_id, 'explm_route_labels', true);
+                $existing_pdf_url_route = ExplmLabelMaker::get_order_meta($order_id, 'explm_route_labels');
 
                 if (!empty($existing_pdf_url_route)) {
                     $pdf_url_route_to_store = $existing_pdf_url_route . ',' . $pdf_url_route;
@@ -129,7 +133,7 @@ class ExplmPrintLabels {
                     $pdf_url_route_to_store = $pdf_url_route;
                 }
 
-                update_post_meta($order_id, 'explm_route_labels', $pdf_url_route_to_store);
+                ExplmLabelMaker::update_order_meta($order_id, 'explm_route_labels', $pdf_url_route_to_store);
             }
         }
 
@@ -167,7 +171,7 @@ class ExplmPrintLabels {
             'contact'       => $shipping['first_name'] . ' ' . $shipping['last_name']
         );
     
-        $locker_id = get_post_meta($order_id, 'parcel_locker_id', true);
+        $locker_id = ExplmLabelMaker::get_order_meta($order_id, 'parcel_locker_id', true);
         if (!empty($locker_id)) {
             $data['pudo_id'] = $locker_id;
             $data['parcel_type'] = 'D-B2C-PSD';

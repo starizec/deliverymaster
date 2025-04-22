@@ -194,9 +194,11 @@ jQuery(document).ready(function ($) {
 //PRINT LABELS
 jQuery(document).ready(function ($) {
   $("body").append('<div class="explm_loading_panel"><div class="explm_spinner"></div></div>');
-
-  $('#posts-filter').on('submit', function (e) {
+  var orderFilterForm = $('#posts-filter, #wc-orders-filter');
+  orderFilterForm.on('submit', function(e) {
       const actionValue = $(this).find('select[name="action"]').val();
+
+      console.log(actionValue, 'action')
 
       const supportedActionValues = ['explm_dpd_print_label', 'explm_gls_print_label', 'explm_overseas_print_label', 'explm_hp_print_label'];
 
@@ -209,9 +211,15 @@ jQuery(document).ready(function ($) {
               "z-index": "9999999",
           });
 
-          var checkedPostIds = $('input[name="post[]"]:checked').map(function () {
+          var checkedPostIds = $('input[name="post[]"]:checked, input[name="id[]"]:checked').map(function() {
             return $(this).val();
-        }).get();
+          }).get();
+
+          if (checkedPostIds.length === 0) {
+            alert('No orders selected!');
+            $(".explm_loading_panel").fadeOut(300);
+            return;
+          }
 
 
           $.ajax({
@@ -224,6 +232,7 @@ jQuery(document).ready(function ($) {
               actionValue: actionValue
             },
               success: function (response) {
+                console.log(response, 'resp')
                   if (response.success) {
                       $(".explm_loading_panel").fadeOut(300);
 
@@ -319,13 +328,14 @@ function getStatusText(r, meta) {
 jQuery(document).ready(function ($) {
   const urlParams = new URLSearchParams(window.location.search);
 
-  const orders_page = urlParams.get("post_type");
+  const isOrdersPage = urlParams.get("post_type") === 'shop_order' || 
+                    window.location.href.includes('wc-orders');
+
+  if (!isOrdersPage) {
+      return;
+  }
   const pagination_page =
     urlParams.get("paged") != undefined ? urlParams.get("paged") : "1";
-
-  if (orders_page != "shop_order") {
-    return;
-  }
 
   const limit = 20;
   const offset = +pagination_page * limit - limit;
@@ -347,7 +357,7 @@ jQuery(document).ready(function ($) {
           const pl_number = order.pl_number.split("-").pop();
 
           if (order.pl_number != "") {
-            const parcel_status_element = $(`tr#post-${order.order_id}`).find(
+            const parcel_status_element = $(`tr#post-${order.order_id}, tr#order-${order.order_id}`).find(
               "td.explm_parcel_status"
             );
             parcel_status_element.html('<img src="/wp-content/plugins/express-label-maker/assets/statusloading.gif" alt="loading">');
@@ -514,6 +524,23 @@ jQuery(document).ready(function ($) {
           $('#explm_usage_limit').val(response.data.usage_limit);
           $('#explm_usage').val(response.data.usage);
 
+          const usage = parseInt(response.data.usage, 10);
+          if (!isNaN(usage) && usage >= 1) {
+            const totalMinutes = usage * 5;
+            const days = Math.floor(totalMinutes / 1440);
+            const hours = Math.floor((totalMinutes % 1440) / 60);
+            const minutes = totalMinutes % 60;
+          
+            const message = explm_ajax.savedLabelTime
+              .replace('%1$d', totalMinutes)
+              .replace('%2$d', hours)
+              .replace('%3$d', minutes)
+              .replace('%4$d', days);
+          
+            const output = $('<p style="margin-top:20px; font-weight:bold;">' + message + '</p>');
+            $('#explm_usage').closest('table').after(output);
+          }
+
           if ((response.data.usage_limit - response.data.usage) <= 2) {
             alert("Only " + (response.data.usage_limit - response.data.usage) + "label(s) to the limit!");
           }
@@ -546,7 +573,7 @@ jQuery(document).ready(function ($) {
 document.addEventListener('DOMContentLoaded', function() {
   const url = window.location.search;
 
-  if (url !== "?page=express_label_maker&tab=licence") {
+  if (url !== "?page=express_label_maker&tab=licence" && (url !== "?page=express_label_maker")) {
       return;
   }
   var emailInput = document.getElementById('explm_email');
@@ -737,4 +764,26 @@ jQuery(document).ready(function($) {
   togglePaketomatSelect();
 
   $('#enable_paketomat').on('change', togglePaketomatSelect);
+});
+
+jQuery(document).ready(function($) {
+  const usageField = $('#explm_usage');
+  console.log(usageField, 'usageField')
+  const outputContainer = $('<p id="explm_saving_summary" style="font-weight:bold; margin-top: 20px;"></p>');
+
+  if (usageField.length) {
+    const usage = parseInt(usageField.val(), 10);
+    if (!isNaN(usage)) {
+      const totalMinutes = usage * 5;
+      const days = Math.floor(totalMinutes / 1440);
+      const hours = Math.floor((totalMinutes % 1440) / 60);
+      const minutes = totalMinutes % 60;
+
+      const message = `Uštedili ste ${minutes} minuta, ${hours} sati i ${days} dana na ispisu naljepnica.`;
+      outputContainer.text(message);
+
+      // Dodaj ispod .form-table gdje su inputi
+      usageField.closest('table').after(outputContainer);
+    }
+  }
 });
