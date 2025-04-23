@@ -337,8 +337,9 @@ jQuery(document).ready(function ($) {
   const pagination_page =
     urlParams.get("paged") != undefined ? urlParams.get("paged") : "1";
 
-  const limit = 20;
-  const offset = +pagination_page * limit - limit;
+    const order_rows = $('tr.type-shop_order').length;
+    const limit = order_rows > 0 ? order_rows : 20;
+    const offset = (pagination_page - 1) * limit;
 
   $.ajax({
     url: explm_ajax.ajax_url,

@@ -50,7 +50,7 @@ class ExplmPrintLabels {
             $house_number = isset($house_number[0]) ? $house_number[0] : '';
             $address_without_house_number = preg_replace('/\d[\w\s-]*$/', '', $shipping['address_1']);
             $courierUpper = strtoupper($courier);
-            $parcel_data = $this->{"set{$courierUpper}ParcelsData"}($shipping, $billing, $order_data, $order_total, $address_without_house_number, $house_number, $weight, $order_id, $parcel_type, 1);
+            $parcel_data = $this->{"set{$courierUpper}ParcelsData"}($shipping, $billing, $order_data, $order_total, $address_without_house_number, $house_number, $weight, $order_id, $parcel_type, 1, $payment_method);
 
             $parcels_array[] = array(
                 "order_number" => (string)$order_id,
@@ -151,7 +151,7 @@ class ExplmPrintLabels {
         ));
     }
 
-    public function setDPDParcelsData($shipping, $billing, $order_data, $order_total, $address_without_house_number, $house_number, $weight, $order_id, $parcel_type, $package_number) {
+    public function setDPDParcelsData($shipping, $billing, $order_data, $order_total, $address_without_house_number, $house_number, $weight, $order_id, $parcel_type, $package_number, $payment_method = null) {
         $data = array(
             'cod_amount'    => $order_total,
             'name1'         => $shipping['first_name'] . ' ' . $shipping['last_name'],
@@ -183,7 +183,7 @@ class ExplmPrintLabels {
         return $data;
     }    
     
-    public function setOVERSEASParcelsData($shipping, $billing, $order_data, $order_total, $address_without_house_number, $house_number, $weight, $order_id, $parcel_type, $package_number) {
+    public function setOVERSEASParcelsData($shipping, $billing, $order_data, $order_total, $address_without_house_number, $house_number, $weight, $order_id, $parcel_type, $package_number, $payment_method) {
         return array(
             'cod_amount' => $payment_method === 'cod' ? $order_total : null,
             'name1' => $shipping['first_name'] . ' ' . $shipping['last_name'],
