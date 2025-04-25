@@ -131,7 +131,7 @@ jQuery(document).ready(function ($) {
   
     lockers.forEach(function (locker) {
       var item = $(`
-        <div class="dpd-parcel-locker-item parcel-locker-item" data-locker-id="${locker.id}">
+        <div class="dpd-parcel-locker-item parcel-locker-item" data-locker-id="${locker.location_id}">
           <h4>${locker.name}</h4>
           <p>${locker.address}</p>
         </div>
@@ -151,7 +151,7 @@ jQuery(document).ready(function ($) {
 
   // Odabir DPD paketomata
   function selectDpdLocker(locker) {
-    $("#dpd_parcel_locker").val(locker.id);
+    $("#dpd_parcel_locker_location_id").val(locker.location_id);
     $("#dpd_parcel_locker_name").val(locker.name);
     $("#dpd_parcel_locker_address").val(locker.address);
     $("#dpd_parcel_locker_street").val(locker.street);
@@ -167,7 +167,7 @@ jQuery(document).ready(function ($) {
   }
 
   function clearDpdLockerSelection() {
-    $("#dpd_parcel_locker").val("");
+    $("#dpd_parcel_locker_location_id").val("");
     $("#dpd_parcel_locker_name").val("");
     $("#dpd_parcel_locker_address").val("");
     $("#dpd_parcel_locker_street").val("");
@@ -234,6 +234,7 @@ jQuery(document).ready(function ($) {
                 $(".overseas-parcel-locker-item").filter(function () {
                   $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
                 });
+              
                 if (overseasLockers && overseasMap) {
                   var matchingLockers = overseasLockers.filter(function (locker) {
                     return (
@@ -241,11 +242,13 @@ jQuery(document).ready(function ($) {
                       locker.address.toLowerCase().indexOf(value) > -1
                     );
                   });
+              
                   if (matchingLockers.length > 0) {
                     var bounds = L.latLngBounds([]);
                     matchingLockers.forEach(function (locker) {
                       bounds.extend([locker.lat, locker.lng]);
                     });
+              
                     var computedZoom = overseasMap.getBoundsZoom(bounds);
                     if (computedZoom > 16) {
                       overseasMap.setView(bounds.getCenter(), 16);
@@ -254,7 +257,7 @@ jQuery(document).ready(function ($) {
                     }
                   }
                 }
-              });
+              });              
             }
           },
           complete: function () {
@@ -283,40 +286,20 @@ jQuery(document).ready(function ($) {
     var markers = L.markerClusterGroup();
   
     lockers.forEach(function (locker) {
-      const lat = fixCoordinate(locker.lat);
-      const lng = fixCoordinate(locker.lng);
-  
-      if (isNaN(lat) || isNaN(lng) || lat < -90 || lat > 90 || lng < -180 || lng > 180) {
-        return;
-      }
-  
-      const marker = L.marker([lat, lng]).bindPopup(
+      var marker = L.marker([locker.lat, locker.lng]).bindPopup(
         `<strong>${locker.name}</strong><br>${locker.address}`
       );
-  
       marker.on("mouseover", function () { this.openPopup(); });
       marker.on("mouseout", function () { this.closePopup(); });
       marker.on("click", function () { selectOverseasLocker(locker); });
-  
       markers.addLayer(marker);
     });
   
     overseasMap.addLayer(markers);
   
-    if (markers.getLayers().length > 0) {
-      const bounds = markers.getBounds();
-      if (bounds.isValid()) {
-        overseasMap.fitBounds(bounds, { padding: [50, 50], maxZoom: 16 });
-      } else {
-        overseasMap.setView([45.1, 15.2], 8);
-      }
-    } else {
-      overseasMap.setView([45.1, 15.2], 8);
+    if (lockers.length > 0) {
+      overseasMap.fitBounds(markers.getBounds());
     }
-  
-    setTimeout(() => {
-      overseasMap.invalidateSize();
-    }, 200);
   
     $("#map-loading").fadeOut();
   }  
@@ -333,7 +316,7 @@ jQuery(document).ready(function ($) {
     }
     lockers.forEach(function (locker) {
       var item = $(`
-        <div class="overseas-parcel-locker-item parcel-locker-item" data-locker-id="${locker.id}">
+        <div class="overseas-parcel-locker-item parcel-locker-item" data-locker-id="${locker.location_id}">
           <h4>${locker.name}</h4>
           <p>${locker.address}</p>
         </div>
@@ -351,7 +334,7 @@ jQuery(document).ready(function ($) {
   }
 
   function selectOverseasLocker(locker) {
-    $("#overseas_parcel_locker").val(locker.id);
+    $("#overseas_parcel_locker_location_id").val(locker.location_id);
     $("#overseas_parcel_locker_name").val(locker.name);
     $("#overseas_parcel_locker_address").val(locker.address);
     $("#overseas_parcel_locker_street").val(locker.street);
@@ -367,7 +350,7 @@ jQuery(document).ready(function ($) {
   }
 
   function clearOverseasLockerSelection() {
-    $("#overseas_parcel_locker").val("");
+    $("#overseas_parcel_locker_location_id").val("");
     $("#overseas_parcel_locker_name").val("");
     $("#overseas_parcel_locker_address").val("");
     $("#overseas_parcel_locker_street").val("");
@@ -383,17 +366,4 @@ jQuery(document).ready(function ($) {
     e.preventDefault();
     clearOverseasLockerSelection();
   });
-
-  function fixCoordinate(coord) {
-    coord = String(coord).trim();
-  
-    if (coord.includes(".")) return parseFloat(coord);
-  
-    if (/^\d{6,}$/.test(coord)) {
-      const fixed = parseFloat(coord.slice(0, 2) + '.' + coord.slice(2));
-      return fixed;
-    }
-  
-    return parseFloat(coord);
-  }  
 });

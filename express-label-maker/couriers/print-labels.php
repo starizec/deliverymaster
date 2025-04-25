@@ -171,12 +171,12 @@ class ExplmPrintLabels {
             'contact'       => $shipping['first_name'] . ' ' . $shipping['last_name']
         );
     
-        $locker_id = ExplmLabelMaker::get_order_meta($order_id, 'parcel_locker_id', true);
+        $locker_id = ExplmLabelMaker::get_order_meta($order_id, 'dpd_parcel_locker_location_id', true);
         if (!empty($locker_id)) {
             $data['pudo_id'] = $locker_id;
             $data['parcel_type'] = 'D-B2C-PSD';
-        } elseif (isset($_POST['parcel_locker_id']) && !empty($_POST['parcel_locker_id'])) {
-            $data['pudo_id'] = sanitize_text_field($_POST['parcel_locker_id']);
+        } elseif (isset($_POST['dpd_parcel_locker_location_id']) && !empty($_POST['dpd_parcel_locker_location_id'])) {
+            $data['pudo_id'] = sanitize_text_field($_POST['dpd_parcel_locker_location_id']);
             $data['parcel_type'] = 'D-B2C-PSD';
         }
     
@@ -184,19 +184,28 @@ class ExplmPrintLabels {
     }    
     
     public function setOVERSEASParcelsData($shipping, $billing, $order_data, $order_total, $address_without_house_number, $house_number, $weight, $order_id, $parcel_type, $package_number, $payment_method) {
-        return array(
-            'cod_amount' => $payment_method === 'cod' ? $order_total : null,
-            'name1' => $shipping['first_name'] . ' ' . $shipping['last_name'],
-            'rPropNum' => $address_without_house_number . $house_number,
-            'city' => $shipping['city'],
-            'pcode' => $shipping['postcode'],
-            'email' => $billing['email'],
-            'sender_remark' => $order_data['customer_note'],
-            'order_number' => $order_id,
-            'num_of_parcel' => $package_number,
-            'phone' => $billing['phone']
+        $data = array(
+            'cod_amount'     => $payment_method === 'cod' ? $order_total : null,
+            'name1'          => $shipping['first_name'] . ' ' . $shipping['last_name'],
+            'rPropNum'       => $address_without_house_number . $house_number,
+            'city'           => $shipping['city'],
+            'pcode'          => $shipping['postcode'],
+            'email'          => $billing['email'],
+            'sender_remark'  => $order_data['customer_note'],
+            'order_number'   => $order_id,
+            'num_of_parcel'  => $package_number,
+            'phone'          => $billing['phone']
         );
-    }
+    
+        $overseas_locker_id = ExplmLabelMaker::get_order_meta($order_id, 'overseas_parcel_locker_location_id', true);
+        if (!empty($overseas_locker_id)) {
+            $data['pudo_id'] = $overseas_locker_id;
+        } elseif (isset($_POST['overseas_parcel_locker_location_id']) && !empty($_POST['overseas_parcel_locker_location_id'])) {
+            $data['pudo_id'] = sanitize_text_field($_POST['overseas_parcel_locker_location_id']);
+        }
+    
+        return $data;
+    }    
 }
 
 function explm_initialize_print_labels() {

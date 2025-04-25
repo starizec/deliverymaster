@@ -4,7 +4,7 @@ if (!defined('ABSPATH')) {
 }
 
 class ExplmParcelLockers {
-    private $lockers = array();          // DPD
+    private $dpd_lockers = array();          // DPD
     private $overseas_lockers = array();   // Overseas
 
     public function __construct() {
@@ -14,69 +14,60 @@ class ExplmParcelLockers {
         add_action('wp_ajax_nopriv_get_dpd_parcel_lockers', array($this, 'get_parcel_lockers'));
         add_action('wp_ajax_get_overseas_parcel_lockers', array($this, 'get_overseas_parcel_lockers'));
         add_action('wp_ajax_nopriv_get_overseas_parcel_lockers', array($this, 'get_overseas_parcel_lockers'));
-        add_action('woocommerce_checkout_update_order_meta', array($this, 'save_parcel_locker_to_order'));
+        add_action('woocommerce_checkout_create_order', array($this, 'save_parcel_locker_to_order'), 20, 2);
         add_filter('woocommerce_checkout_posted_data', array($this, 'include_parcel_locker_data'));
         add_action('woocommerce_checkout_process', array($this, 'validate_parcel_locker_selection'));
         
-        $this->load_parcel_lockers();
+        $this->load_dpd_parcel_lockers();
         $this->load_overseas_lockers_file();
 
-        if ( ! wp_next_scheduled( 'update_overseas_parcelshops_cron' ) ) {
-            wp_schedule_event( time(), 'every_four_hours', 'update_overseas_parcelshops_cron' );
+        // Overseas Cron
+
+        if (!wp_next_scheduled('update_overseas_parcelshops_cron')) {
+            do_action('update_overseas_parcelshops_cron');
+            wp_schedule_event(time(), 'daily', 'update_overseas_parcelshops_cron');
         }
-        add_action( 'update_overseas_parcelshops_cron', array( $this, 'update_overseas_parcelshops_cron_callback' ) );
+        add_action('update_overseas_parcelshops_cron', array($this, 'update_overseas_parcelshops_cron_callback'));
+
+         // DPD Cron
+
+         if (!wp_next_scheduled('update_dpd_parcelshops_cron')) {
+            do_action('update_dpd_parcelshops_cron');
+            wp_schedule_event(time(), 'daily', 'update_dpd_parcelshops_cron');
+        }
+        add_action('update_dpd_parcelshops_cron', array($this, 'update_dpd_parcelshops_cron_callback'));    
     }
     
+        // Overseas
     public function update_overseas_parcelshops_cron_callback() {
         $api_key = get_option('explm_overseas_api_key_option', '');
         $enable_paketomat = get_option('explm_overseas_enable_pickup', '');
         $shipping_method = get_option('explm_overseas_pickup_shipping_method', '');
-        
+    
         if ( empty($api_key) || empty($enable_paketomat) || empty($shipping_method) ) {
             error_log('Overseas ParcelShops update skipped: required settings missing.');
             return;
         }
-        
-        $this->fetch_overseas_parcelshops();
-        
-        $features = array();
-        foreach ( $this->overseas_lockers as $locker ) {
-            $features[] = array(
-                'type' => 'Feature',
-                'geometry' => array(
-                    'type' => 'Point',
-                    'coordinates' => array(
-                        floatval($locker['lng']),
-                        floatval($locker['lat'])
-                    )
-                ),
-                'properties' => array(
-                    'id' => $locker['id'],
-                    'name' => $locker['name'],
-                    'address' => $locker['address'],
-                    'street' => $locker['street'],
-                    'house_number' => $locker['house_number'],
-                    'postal_code' => $locker['postal_code'],
-                    'city' => $locker['city']
-                )
-            );
-        }
-        $geojson = array(
-            'type' => 'FeatureCollection',
-            'features' => $features
-        );
-        $file = plugin_dir_path( __FILE__ ) . '../js/overseas-paketomati.geojson';
-        file_put_contents( $file, wp_json_encode( $geojson ) );
-    }    
-
-    function fetch_overseas_parcelshops() {
-        $saved_country = get_option("explm_country_option", '');
-        $api_key = get_option("explm_overseas_api_key_option", '');
-        $api_url = "https://api.overseas." . $saved_country . "/parcelshops?apikey=" . $api_key;
     
-        $response = wp_remote_get($api_url, array(
+        $saved_country = get_option("explm_country_option", '');
+        $courier = 'overseas';
+        $api_url = "https://expresslabelmaker.com/api/v1/{$saved_country}/{$courier}/delivery-locations";
+    
+        $userObj = new ExplmUser();
+        $user_data = $userObj->getData($saved_country . $courier);
+    
+        $body = array(
+            'user' => $user_data
+        );
+    
+        $args = array(
+            'method' => 'POST',
+            'headers' => array('Content-Type' => 'application/json'),
+            'body' => wp_json_encode($body),
             'timeout' => 120
-        ));        
+        );
+    
+        $response = wp_remote_request($api_url, $args);
     
         if (is_wp_error($response)) {
             error_log('ParcelShops API error: ' . $response->get_error_message());
@@ -84,6 +75,8 @@ class ExplmParcelLockers {
         }
     
         $body = wp_remote_retrieve_body($response);
+        error_log('ParcelShops API response: ' . $body); // za debug
+    
         $data = json_decode($body, true);
     
         if (json_last_error() !== JSON_ERROR_NONE) {
@@ -91,105 +84,147 @@ class ExplmParcelLockers {
             return;
         }
     
-        if (isset($data['status']) && $data['status'] === 0 && isset($data['data'])) {
-            foreach ($data['data'] as $parcel) {
-                if (!isset($parcel['GeoLat']) || empty($parcel['GeoLat']) ||
-                    !isset($parcel['GeoLong']) || empty($parcel['GeoLong'])) {
-                    continue;
-                }
-                $lat = $parcel['GeoLat'];
-                $lng = $parcel['GeoLong'];
-                
-                $this->overseas_lockers[] = array(
-                    'id'          => isset($parcel['CenterID']) ? $parcel['CenterID'] : '',
-                    'name'        => isset($parcel['Address']['Name']) ? $parcel['Address']['Name'] : '',
-                    'address'     => (isset($parcel['Address']['Street'], $parcel['Address']['HouseNumber'], $parcel['Address']['ZipCode'], $parcel['Address']['Place']))
-                                     ? $parcel['Address']['Street'] . ' ' . $parcel['Address']['HouseNumber'] . ', ' . 
-                                       $parcel['Address']['ZipCode'] . ' ' . $parcel['Address']['Place']
-                                     : '',
-                    'lat'         => $lat,
-                    'lng'         => $lng,
-                    'street'      => isset($parcel['Address']['Street']) ? $parcel['Address']['Street'] : '',
-                    'house_number'=> isset($parcel['Address']['HouseNumber']) ? $parcel['Address']['HouseNumber'] : '',
-                    'postal_code' => isset($parcel['Address']['ZipCode']) ? $parcel['Address']['ZipCode'] : '',
-                    'city'        => isset($parcel['Address']['Place']) ? $parcel['Address']['Place'] : ''
-                );
-            }
+        if (isset($data['data']['geojson'])) {
+            $file = plugin_dir_path(__FILE__) . '../json/overseas-parcelshops.geojson';
+            file_put_contents($file, wp_json_encode($data['data']['geojson']));
         } else {
-            error_log('ParcelShops API returned an error or invalid status: ' . print_r($data, true));
+            error_log('ParcelShops API missing geojson: ' . print_r($data, true));
         }
-    }
+    }      
 
     // Overseas
     private function load_overseas_lockers_file() {
-        $file = plugin_dir_path(__FILE__) . '../js/overseas-paketomati.geojson';
+        $file = plugin_dir_path(__FILE__) . '../json/overseas-parcelshops.geojson';
         if ( file_exists( $file ) ) {
             $geo_json = file_get_contents( $file );
             $data = json_decode( $geo_json, true );
+    
             if ( json_last_error() === JSON_ERROR_NONE && isset( $data['features'] ) ) {
                 foreach ( $data['features'] as $feature ) {
                     if ( isset( $feature['geometry']['coordinates'] ) && isset( $feature['properties'] ) ) {
+                        $props = $feature['properties'];
                         $this->overseas_lockers[] = array(
-                            'id'           => $feature['properties']['id'],
-                            'name'         => $feature['properties']['name'],
-                            'address'      => $feature['properties']['address'],
-                            'lat'          => (float)$feature['geometry']['coordinates'][1],
-                            'lng'          => (float)$feature['geometry']['coordinates'][0],
-                            'street'       => $feature['properties']['street'],
-                            'house_number' => $feature['properties']['house_number'],
-                            'postal_code'  => $feature['properties']['postal_code'],
-                            'city'         => $feature['properties']['city']
+                            'location_id'           => $props['location_id'] ?? '',
+                            'name'         => $props['name'] ?? '',
+                            'address'      => trim(
+                                ($props['street'] ?? '') . ' ' .
+                                ($props['house_number'] ?? '') . ', ' .
+                                ($props['postal_code'] ?? '') . ' ' .
+                                ($props['place'] ?? '')
+                            ),
+                            'lat'          => (float)($feature['geometry']['coordinates'][1] ?? 0),
+                            'lng'          => (float)($feature['geometry']['coordinates'][0] ?? 0),
+                            'street'       => $props['street'] ?? '',
+                            'house_number' => $props['house_number'] ?? '',
+                            'postal_code'  => $props['postal_code'] ?? '',
+                            'city'         => $props['place'] ?? ''
                         );
                     }
                 }
             }
-        } else {
-            $this->fetch_overseas_parcelshops();
         }
-    }
+    }    
 
     // DPD
-    private function load_parcel_lockers() {
-        $geo_json_file = plugin_dir_path(__FILE__) . '../js/dpd-paketomati.geojson';
-        
-        if (file_exists($geo_json_file)) {
-            $geo_json = file_get_contents($geo_json_file);
-            $data = json_decode($geo_json, true);
-            
-            if (json_last_error() === JSON_ERROR_NONE && isset($data['features'])) {
-                foreach ($data['features'] as $feature) {
-                    if (isset($feature['geometry']['coordinates']) && isset($feature['properties'])) {
-                        $this->lockers[] = array(
-                            'id'           => md5(serialize($feature['geometry']['coordinates'])),
-                            'name'         => $feature['properties']['Naziv lokacije'],
-                            'address'      => $feature['properties']['Ulica'] . ' ' . $feature['properties']['Kućni broj'] . ', ' . 
-                                              $feature['properties']['Poštanski broj'] . ' ' . $feature['properties']['Grad'],
-                            'lat'          => $feature['geometry']['coordinates'][1],
-                            'lng'          => $feature['geometry']['coordinates'][0],
-                            'street'       => $feature['properties']['Ulica'],
-                            'house_number' => $feature['properties']['Kućni broj'],
-                            'postal_code'  => $feature['properties']['Poštanski broj'],
-                            'city'         => $feature['properties']['Grad']
+
+    public function update_dpd_parcelshops_cron_callback() {
+        $saved_dpd_username = get_option('explm_dpd_username_option', '');
+        $saved_dpd_password = get_option('explm_dpd_password_option', '');
+        $enable_paketomat = get_option('explm_dpd_enable_pickup', '');
+        $shipping_method = get_option('explm_dpd_pickup_shipping_method', '');
+    
+        if ( empty($saved_dpd_username) || empty($saved_dpd_password) || empty($enable_paketomat) || empty($shipping_method) ) {
+            error_log('DPD ParcelShops update skipped: required settings missing.');
+            return;
+        }
+    
+        $saved_country = get_option("explm_country_option", '');
+        $courier = 'dpd';
+        $api_url = "https://expresslabelmaker.com/api/v1/{$saved_country}/{$courier}/delivery-locations";
+    
+        $userObj = new ExplmUser();
+        $user_data = $userObj->getData($saved_country . $courier);
+    
+        $body = array(
+            'user' => $user_data
+        );
+    
+        $args = array(
+            'method' => 'POST',
+            'headers' => array('Content-Type' => 'application/json'),
+            'body' => wp_json_encode($body),
+            'timeout' => 120
+        );
+    
+        $response = wp_remote_request($api_url, $args);
+    
+        if (is_wp_error($response)) {
+            error_log('DPD ParcelShops API error: ' . $response->get_error_message());
+            return;
+        }
+    
+        $body = wp_remote_retrieve_body($response);
+    
+        $data = json_decode($body, true);
+    
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            error_log('DPD ParcelShops API JSON error: ' . json_last_error_msg());
+            return;
+        }
+    
+        if (isset($data['data']['geojson'])) {
+            $file = plugin_dir_path(__FILE__) . '../json/dpd-parcelshops.geojson';
+            file_put_contents($file, wp_json_encode($data['data']['geojson']));
+        } else {
+            error_log('DPD ParcelShops API missing geojson: ' . print_r($data, true));
+        }
+    }
+    
+    private function load_dpd_parcel_lockers() {
+        $file = plugin_dir_path(__FILE__) . '../json/dpd-parcelshops.geojson';
+        if ( file_exists( $file ) ) {
+            $geo_json = file_get_contents( $file );
+            $data = json_decode( $geo_json, true );
+    
+            if ( json_last_error() === JSON_ERROR_NONE && isset( $data['features'] ) ) {
+                foreach ( $data['features'] as $feature ) {
+                    if ( isset( $feature['geometry']['coordinates'] ) && isset( $feature['properties'] ) ) {
+                        $props = $feature['properties'];
+                        $this->dpd_lockers[] = array(
+                            'location_id'   => $props['location_id'] ?? '',
+                            'name'          => $props['name'] ?? '',
+                            'address'       => trim(
+                                ($props['street'] ?? '') . ' ' .
+                                ($props['house_number'] ?? '') . ', ' .
+                                ($props['postal_code'] ?? '') . ' ' .
+                                ($props['place'] ?? '')
+                            ),
+                            'lat' => (float)($feature['geometry']['coordinates'][0] ?? 0),
+                            'lng' => (float)($feature['geometry']['coordinates'][1] ?? 0),
+                            'street'        => $props['street'] ?? '',
+                            'house_number'  => $props['house_number'] ?? '',
+                            'postal_code'   => $props['postal_code'] ?? '',
+                            'city'          => $props['place'] ?? ''
                         );
                     }
                 }
             }
         }
-    }
+    }    
 
     /**
      * Uključuje polja paketomata (za DPD i Overseas) u checkout postanje podataka.
      */
     public function include_parcel_locker_data($data) {
         $fields = array(
-            'dpd_parcel_locker',
+            'dpd_parcel_locker_location_id',
             'dpd_parcel_locker_name',
             'dpd_parcel_locker_address',
             'dpd_parcel_locker_street',
             'dpd_parcel_locker_house_number',
             'dpd_parcel_locker_postal_code',
             'dpd_parcel_locker_city',
-            'overseas_parcel_locker',
+            'overseas_parcel_locker_location_id',
             'overseas_parcel_locker_name',
             'overseas_parcel_locker_address',
             'overseas_parcel_locker_street',
@@ -222,8 +257,8 @@ class ExplmParcelLockers {
             wp_localize_script('parcel-lockers-js', 'dpd_parcel_lockers_vars', array(
                 'ajax_url'    => admin_url('admin-ajax.php'),
                 'nonce'       => wp_create_nonce('dpd_parcel_lockers_nonce'),
-                'default_lat' => !empty($this->lockers) ? $this->lockers[0]['lat'] : '45.8150',
-                'default_lng' => !empty($this->lockers) ? $this->lockers[0]['lng'] : '15.9819'
+                'default_lat' => !empty($this->dpd_lockers) ? $this->dpd_lockers[0]['lat'] : '45.8150',
+                'default_lng' => !empty($this->dpd_lockers) ? $this->dpd_lockers[0]['lng'] : '15.9819'
             ));
             
             // Overseas
@@ -232,6 +267,15 @@ class ExplmParcelLockers {
                 'nonce'       => wp_create_nonce('overseas_parcel_lockers_nonce'),
                 'default_lat' => !empty($this->overseas_lockers) ? $this->overseas_lockers[0]['lat'] : '45.8150',
                 'default_lng' => !empty($this->overseas_lockers) ? $this->overseas_lockers[0]['lng'] : '15.9819'
+            ));
+
+            wp_localize_script('parcel-lockers-js', 'parcel_locker_i18n', array(
+                'loading'             => __('Učitavanje...', 'express-label-maker'),
+                'choose_locker'       => __('Odaberite paketomat:', 'express-label-maker'),
+                'no_lockers'          => __('Nema paketomata za prikaz.', 'express-label-maker'),
+                'search_placeholder'  => __('Pretražite paketomate...', 'express-label-maker'),
+                'selected_locker'     => __('Odabrani paketomat:', 'express-label-maker'),
+                'clear'               => __('Obriši paketomat', 'express-label-maker'),
             ));
         }
     }
@@ -263,7 +307,7 @@ class ExplmParcelLockers {
             // DPD
             echo '<div class="dpd-parcel-locker-container">';
             echo '<button type="button" class="button alt" id="select-dpd-parcel-locker">' . __('Odaberite paketomat', 'express-label-maker') . '</button>';
-            echo '<input type="hidden" name="dpd_parcel_locker" id="dpd_parcel_locker" value="">';
+            echo '<input type="hidden" name="dpd_parcel_locker_location_id" id="dpd_parcel_locker_location_id" value="">';
             echo '<input type="hidden" name="dpd_parcel_locker_name" id="dpd_parcel_locker_name" value="">';
             echo '<input type="hidden" name="dpd_parcel_locker_address" id="dpd_parcel_locker_address" value="">';
             echo '<input type="hidden" name="dpd_parcel_locker_street" id="dpd_parcel_locker_street" value="">';
@@ -281,7 +325,7 @@ class ExplmParcelLockers {
             // Overseas
             echo '<div class="overseas-parcel-locker-container">';
             echo '<button type="button" class="button alt" id="select-overseas-parcel-locker">' . __('Odaberite paketomat', 'express-label-maker') . '</button>';
-            echo '<input type="hidden" name="overseas_parcel_locker" id="overseas_parcel_locker" value="">';
+            echo '<input type="hidden" name="overseas_parcel_locker_location_id" id="overseas_parcel_locker_location_id" value="">';
             echo '<input type="hidden" name="overseas_parcel_locker_name" id="overseas_parcel_locker_name" value="">';
             echo '<input type="hidden" name="overseas_parcel_locker_address" id="overseas_parcel_locker_address" value="">';
             echo '<input type="hidden" name="overseas_parcel_locker_street" id="overseas_parcel_locker_street" value="">';
@@ -298,7 +342,7 @@ class ExplmParcelLockers {
     public function get_parcel_lockers() {
         check_ajax_referer('dpd_parcel_lockers_nonce', 'nonce');
         wp_send_json_success(array(
-            'lockers' => $this->lockers
+            'lockers' => $this->dpd_lockers
         ));
     }
     
@@ -311,67 +355,46 @@ class ExplmParcelLockers {
     }
     
     // DPD OVERSEAS
-    public function save_parcel_locker_to_order($order_id) {
-        error_log('Parcel Locker - POST data: ' . print_r($_POST, true));
-        
-        if (!empty($_POST['dpd_parcel_locker'])) {
-            // DPD
+    public function save_parcel_locker_to_order($order, $data) {
+        if (!empty($_POST['dpd_parcel_locker_location_id'])) {
             $locker_data = array(
-                'dpd_parcel_locker_id'         => sanitize_text_field($_POST['dpd_parcel_locker']),
-                'dpd_parcel_locker_name'       => sanitize_text_field($_POST['dpd_parcel_locker_name']),
-                'dpd_parcel_locker_address'    => sanitize_text_field($_POST['dpd_parcel_locker_address']),
-                'dpd_parcel_locker_street'     => sanitize_text_field($_POST['dpd_parcel_locker_street']),
-                'dpd_parcel_locker_house_number' => sanitize_text_field($_POST['dpd_parcel_locker_house_number']),
-                'dpd_parcel_locker_postal_code'=> sanitize_text_field($_POST['dpd_parcel_locker_postal_code']),
-                'dpd_parcel_locker_city'       => sanitize_text_field($_POST['dpd_parcel_locker_city'])
+                'dpd_parcel_locker_location_id'   => sanitize_text_field($_POST['dpd_parcel_locker_location_id']),
+                'dpd_parcel_locker_name'          => sanitize_text_field($_POST['dpd_parcel_locker_name']),
+                'dpd_parcel_locker_address'       => sanitize_text_field($_POST['dpd_parcel_locker_address']),
+                'dpd_parcel_locker_street'        => sanitize_text_field($_POST['dpd_parcel_locker_street']),
+                'dpd_parcel_locker_house_number'  => sanitize_text_field($_POST['dpd_parcel_locker_house_number']),
+                'dpd_parcel_locker_postal_code'   => sanitize_text_field($_POST['dpd_parcel_locker_postal_code']),
+                'dpd_parcel_locker_city'          => sanitize_text_field($_POST['dpd_parcel_locker_city']),
             );
-            
+    
             foreach ($locker_data as $key => $value) {
-                update_post_meta($order_id, $key, $value);
-                error_log("Saved $key: $value");
+                $order->update_meta_data($key, $value);
             }
-            
-            $order = wc_get_order($order_id);
-            $shipping_address_1 = $locker_data['dpd_parcel_locker_street'] . ' ' . $locker_data['dpd_parcel_locker_house_number'];
-            $shipping_city      = $locker_data['dpd_parcel_locker_city'];
-            $shipping_postcode  = $locker_data['dpd_parcel_locker_postal_code'];
-            
-            $order->set_shipping_address_1($shipping_address_1);
-            $order->set_shipping_city($shipping_city);
-            $order->set_shipping_postcode($shipping_postcode);
-            $order->save();
-            error_log("Order shipping address updated (DPD): $shipping_address_1, $shipping_postcode $shipping_city");
-        } elseif (!empty($_POST['overseas_parcel_locker'])) {
-            // Overseas
+    
+            $order->set_shipping_address_1($locker_data['dpd_parcel_locker_street'] . ' ' . $locker_data['dpd_parcel_locker_house_number']);
+            $order->set_shipping_postcode($locker_data['dpd_parcel_locker_postal_code']);
+            $order->set_shipping_city($locker_data['dpd_parcel_locker_city']);
+    
+        } elseif (!empty($_POST['overseas_parcel_locker_location_id'])) {
             $locker_data = array(
-                'overseas_parcel_locker_id'         => sanitize_text_field($_POST['overseas_parcel_locker']),
-                'overseas_parcel_locker_name'       => sanitize_text_field($_POST['overseas_parcel_locker_name']),
-                'overseas_parcel_locker_address'    => sanitize_text_field($_POST['overseas_parcel_locker_address']),
-                'overseas_parcel_locker_street'     => sanitize_text_field($_POST['overseas_parcel_locker_street']),
-                'overseas_parcel_locker_house_number' => sanitize_text_field($_POST['overseas_parcel_locker_house_number']),
-                'overseas_parcel_locker_postal_code'=> sanitize_text_field($_POST['overseas_parcel_locker_postal_code']),
-                'overseas_parcel_locker_city'       => sanitize_text_field($_POST['overseas_parcel_locker_city'])
+                'overseas_parcel_locker_location_id'   => sanitize_text_field($_POST['overseas_parcel_locker_location_id']),
+                'overseas_parcel_locker_name'          => sanitize_text_field($_POST['overseas_parcel_locker_name']),
+                'overseas_parcel_locker_address'       => sanitize_text_field($_POST['overseas_parcel_locker_address']),
+                'overseas_parcel_locker_street'        => sanitize_text_field($_POST['overseas_parcel_locker_street']),
+                'overseas_parcel_locker_house_number'  => sanitize_text_field($_POST['overseas_parcel_locker_house_number']),
+                'overseas_parcel_locker_postal_code'   => sanitize_text_field($_POST['overseas_parcel_locker_postal_code']),
+                'overseas_parcel_locker_city'          => sanitize_text_field($_POST['overseas_parcel_locker_city']),
             );
-            
+    
             foreach ($locker_data as $key => $value) {
-                update_post_meta($order_id, $key, $value);
-                error_log("Saved $key: $value");
+                $order->update_meta_data($key, $value);
             }
-            
-            $order = wc_get_order($order_id);
-            $shipping_address_1 = $locker_data['overseas_parcel_locker_street'] . ' ' . $locker_data['overseas_parcel_locker_house_number'];
-            $shipping_city      = $locker_data['overseas_parcel_locker_city'];
-            $shipping_postcode  = $locker_data['overseas_parcel_locker_postal_code'];
-            
-            $order->set_shipping_address_1($shipping_address_1);
-            $order->set_shipping_city($shipping_city);
-            $order->set_shipping_postcode($shipping_postcode);
-            $order->save();
-            error_log("Order shipping address updated (Overseas): $shipping_address_1, $shipping_postcode $shipping_city");
-        } else {
-            error_log('Parcel Locker - No locker data found in POST');
+    
+            $order->set_shipping_address_1($locker_data['overseas_parcel_locker_street'] . ' ' . $locker_data['overseas_parcel_locker_house_number']);
+            $order->set_shipping_postcode($locker_data['overseas_parcel_locker_postal_code']);
+            $order->set_shipping_city($locker_data['overseas_parcel_locker_city']);
         }
-    }
+    }    
 
     public function validate_parcel_locker_selection() {
         $chosen_methods = WC()->session->get('chosen_shipping_methods');
@@ -383,7 +406,7 @@ class ExplmParcelLockers {
         $dpd_shipping_method = str_replace(":", "-", $dpd_shipping_method);
 
         if ($dpd_enabled === '1' && $chosen_method === $dpd_shipping_method) {
-            if (empty($_POST['dpd_parcel_locker'])) {
+            if (empty($_POST['dpd_parcel_locker_location_id'])) {
                 wc_add_notice(esc_html__('Molimo odaberite paketomat za DPD dostavu.', 'express-label-maker'), 'error');
             }
         }
@@ -394,7 +417,7 @@ class ExplmParcelLockers {
         $overseas_shipping_method = str_replace(":", "-", $overseas_shipping_method);
         
         if ($overseas_enabled === '1' && $chosen_method === $overseas_shipping_method) {
-            if (empty($_POST['overseas_parcel_locker'])) {
+            if (empty($_POST['overseas_parcel_locker_location_id'])) {
                 wc_add_notice(esc_html__('Molimo odaberite paketomat za Overseas dostavu.', 'express-label-maker'), 'error');
             }
         }
