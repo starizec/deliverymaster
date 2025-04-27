@@ -43,10 +43,25 @@ class ExplmPrintLabel
         $body_response = json_decode(wp_remote_retrieve_body($response), true);
 
         if ($response['response']['code'] != '201') {
-            $error_id = isset($body_response['errors'][0]['error_id']) ? $body_response['errors'][0]['error_id'] : 'unknown';
-            $error_message = isset($body_response['errors'][0]['error_details']) ? $body_response['errors'][0]['error_details'] : 'unknown';
-            wp_send_json_error(array('error_id' => $error_id, 'error_message' => $error_message));
-        }
+            $errors = array();
+        
+            if (!empty($body_response['errors']) && is_array($body_response['errors'])) {
+                $order_number = !empty($body_response['errors']['order_number']) ? $body_response['errors']['order_number'] : 'unknown';
+                $error_message = !empty($body_response['errors']['error_message']) ? $body_response['errors']['error_message'] : 'unknown';
+        
+                $errors[] = array(
+                    'order_number' => $order_number,
+                    'error_message' => $error_message
+                );
+            } elseif (!empty($body_response['error'])) {
+                $errors[] = array(
+                    'order_number' => 'unknown',
+                    'error_message' => $body_response['error']
+                );
+            }
+        
+            wp_send_json_error(array('errors' => $errors));
+        }                                      
 
         $decoded_data = base64_decode($body_response['data']['label'], true);
 

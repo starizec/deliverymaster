@@ -67,7 +67,10 @@ if (!defined('ABSPATH')) {
             </div>
             <div class="explm_form_columns">
 
-            <?php //DODATI KURIRE
+            <?php 
+                $dpd_parcel_locker_location_id = '';
+                $overseas_parcel_locker_location_id = '';
+             //DODATI KURIRE
                 switch ($courier) {
                     case 'dpd':
                     $dpd_parcel_locker_location_id = ExplmLabelMaker::get_order_meta($order_data['id'], 'dpd_parcel_locker_location_id', true);

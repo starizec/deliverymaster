@@ -5,7 +5,7 @@
  * Plugin URI: https://expresslabelmaker.com/
  * Description: Print shipping labels and track parcels for multiple couriers directly from WooCommerce.
  * Tags: woocommerce, shipping, label printing, DPD, Overseas
- * Version: 1.25115
+ * Version: 1.25118.1
  * Author: expresslabelmaker
  * Tested up to: 6.8
  * License: GPLv2 or later
@@ -61,14 +61,16 @@ class ExplmLabelMaker
         $this->couriers = new ExpmlCouriers();
     }
 
-    public function explm_enqueue_scripts($hook)
-    {
+    public function explm_enqueue_scripts($hook) {
         wp_enqueue_style('explm_admin_css', plugin_dir_url(__FILE__) . 'css/elm.css', array(), '1.0.1');
-        wp_enqueue_script('explm_admin_js', plugin_dir_url(__FILE__) . 'js/elm.js', array('jquery'), '1.0.1', true);
+        wp_enqueue_script('sweetalert2', 'https://cdn.jsdelivr.net/npm/sweetalert2@11', array(), '11', true);
     
-        $email = get_option('explm_email_option', '');
-        $licence = get_option('explm_licence_option', '');
-        $saved_service_type = get_option('explm_dpd_service_type_option', '');
+        wp_enqueue_script('explm_admin_js', plugin_dir_url(__FILE__) . 'js/elm.js', array('jquery'), '1.0.1', true);
+        wp_enqueue_script('explm_print_label_js', plugin_dir_url(__FILE__) . 'js/print-label.js', array('jquery', 'sweetalert2'), '1.0.0', true);
+        wp_enqueue_script('explm_print_labels_js', plugin_dir_url(__FILE__) . 'js/print-labels.js', array('jquery', 'sweetalert2'), '1.0.0', true);
+        wp_enqueue_script('explm_parcel_statuses_js', plugin_dir_url(__FILE__) . 'js/parcel-statuses.js', array('jquery', 'sweetalert2'), '1.0.0', true);
+        wp_enqueue_script('explm_licence_settings_js', plugin_dir_url(__FILE__) . 'js/licence-settings.js', array('jquery', 'sweetalert2'), '1.0.0', true);
+        wp_enqueue_script('explm_collection_request_js', plugin_dir_url(__FILE__) . 'js/collection-request.js', array('jquery', 'sweetalert2'), '1.0.0', true);
     
         wp_localize_script(
             'explm_admin_js',
@@ -76,12 +78,12 @@ class ExplmLabelMaker
             array(
                 'ajax_url' => admin_url('admin-ajax.php'),
                 'nonce' => wp_create_nonce('explm_nonce'),
-                'email' => $email,
-                'licence' => $licence,
-                'serviceType' => $saved_service_type,
+                'email' => get_option('explm_email_option', ''),
+                'licence' => get_option('explm_licence_option', ''),
+                'serviceType' => get_option('explm_dpd_service_type_option', ''),
                 'savedLabelTime' => esc_html__('%1$d minutes of your life just came back. That’s %2$d h and %3$d min you didn’t spend typing shipping labels. Your keyboard thanks you.', 'express-label-maker')
             )
-        );
+            );
     }    
 
     // Translation

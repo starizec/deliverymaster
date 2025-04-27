@@ -52,11 +52,27 @@ class ExplmCollectionRequest
 
         $body_response = json_decode(wp_remote_retrieve_body($response), true);
 
+        error_log(print_r($body_response, true));
+
         if ($response['response']['code'] != '201') {
-            $error_id = isset($body_response['errors'][0]['error_id']) ? $body_response['errors'][0]['error_id'] : 'unknown';
-            $error_message = isset($body_response['errors'][0]['error_details']) ? $body_response['errors'][0]['error_details'] : 'unknown';
-            wp_send_json_error(array('error_id' => $error_id, 'error_message' => $error_message));
-        }
+            $errors = array();
+        
+            if (!empty($body_response['errors']) && is_array($body_response['errors'])) {
+                foreach ($body_response['errors'] as $error) {
+                    $errors[] = array(
+                        'error_id' => !empty($error['error_id']) ? $error['error_id'] : 'unknown',
+                        'error_message' => !empty($error['error_details']) ? $error['error_details'] : 'unknown'
+                    );
+                }
+            } elseif (!empty($body_response['error'])) {
+                $errors[] = array(
+                    'error_id' => 'unknown',
+                    'error_message' => $body_response['error']
+                );
+            }
+        
+            wp_send_json_error(array('errors' => $errors));
+        }        
 
         $meta_key = $saved_country . "_" . $courier . "_collection_request";
         

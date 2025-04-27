@@ -1,0 +1,231 @@
+jQuery(document).ready(function ($) {
+    $("body").append(
+      '<div class="explm_loading_panel"><div class="explm_spinner"></div></div>'
+    );
+  
+    $(document).on("click", ".elm-start-trial-btn", function (e) {
+      e.preventDefault();
+  
+      $(".explm_loading_panel").fadeIn(300).css({
+        display: "flex",
+        "z-index": "9999999",
+      });
+  
+      $.ajax({
+        url: explm_ajax.ajax_url,
+        type: "POST",
+        data: {
+          action: "explm_start_trial",
+          security: explm_ajax.nonce,
+          email: $("#explm_email").val(),
+          domain: window.location.hostname,
+          licence: "trial",
+        },
+        success: function (response) {
+          if (response.success) {
+            $(".explm_loading_panel").fadeOut(300);
+            $("#explm_email").val(response.data.email);
+            $("#explm_licence_key").val(response.data.licence);
+            $(".elm-start-trial-btn").hide();
+            $("#explm_submit_btn").prop("disabled", false);
+  
+            Swal.fire({
+              icon: "success",
+              title: "Trial Started",
+              text: "Your license has been generated and your trial has started.",
+              confirmButtonText: "OK",
+              customClass: {
+                popup: 'explm-swal-scroll',
+                title: 'explm-swal-title',
+                confirmButton: 'explm-swal-button'
+              },
+            });
+  
+            jQuery(".explm_modal_wrapper").fadeOut(300, function () {
+              jQuery(this).remove();
+            });
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              html:
+                "<b>Error ID:</b> " + (response.data.error_id || "null") + "<br>" +
+                "<b>Message:</b> " + (response.data.error_message || "null"),
+              confirmButtonText: "OK",
+              customClass: {
+                popup: 'explm-swal-scroll',
+                title: 'explm-swal-title',
+                confirmButton: 'explm-swal-button'
+              },
+            });
+            $(".explm_loading_panel").fadeOut(300);
+          }
+        },
+      });
+    });
+  });
+  
+  // LICENCE CHECK
+  jQuery(document).ready(function ($) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const page = urlParams.get("page");
+  
+    if (page !== "express_label_maker") {
+      return;
+    }
+  
+    if (!explm_ajax.email || !explm_ajax.licence) {
+      return;
+    }
+  
+    $.ajax({
+      url: explm_ajax.ajax_url,
+      type: "POST",
+      data: {
+        action: "explm_licence_check",
+        security: explm_ajax.nonce,
+        domain: window.location.hostname,
+      },
+      success: function (response) {
+        if (response.success) {
+          $("#explm_valid_from").val(response.data.valid_from);
+          $("#explm_valid_until").val(response.data.valid_until);
+          $("#explm_usage_limit").val(response.data.usage_limit);
+          $("#explm_usage").val(response.data.usage);
+  
+          const usage = parseInt(response.data.usage, 10);
+          if (!isNaN(usage) && usage >= 1) {
+            const totalMinutes = usage * 5;
+            const days = Math.floor(totalMinutes / 1440);
+            const hours = Math.floor((totalMinutes % 1440) / 60);
+            const minutes = totalMinutes % 60;
+  
+            const message = explm_ajax.savedLabelTime
+              .replace("%1$d", totalMinutes)
+              .replace("%2$d", hours)
+              .replace("%3$d", minutes)
+              .replace("%4$d", days);
+  
+            const output = $(
+              '<p style="margin-top:20px; font-weight:bold;">' + message + "</p>"
+            );
+            $("#explm_usage").closest("table").after(output);
+          }
+  
+          if (response.data.usage_limit - response.data.usage <= 2) {
+            Swal.fire({
+              icon: "warning",
+              title: "Usage Warning",
+              text: "Only " + (response.data.usage_limit - response.data.usage) + " label(s) left until the limit!",
+              confirmButtonText: "OK",
+              customClass: {
+                popup: 'explm-swal-scroll',
+                title: 'explm-swal-title',
+                confirmButton: 'explm-swal-button'
+              },
+            });
+          }
+  
+          if (response.data.valid_until != null) {
+            let today = new Date();
+            let validUntil = new Date(response.data.valid_until);
+  
+            let timeDifference = validUntil.getTime() - today.getTime();
+            let dayDifference = timeDifference / (1000 * 3600 * 24);
+  
+            if (dayDifference <= 10) {
+              Swal.fire({
+                icon: "warning",
+                title: "License Expiry Warning",
+                text: "You have " + Math.round(dayDifference) + " day(s) left until your license expires!",
+                confirmButtonText: "OK",
+                customClass: {
+                  popup: 'explm-swal-scroll',
+                  title: 'explm-swal-title',
+                  confirmButton: 'explm-swal-button'
+                },
+              });
+            }
+          }
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            html:
+              "<b>Error ID:</b> " + (response.data.error_id || "null") + "<br>" +
+              "<b>Message:</b> " + (response.data.error_message || "null"),
+            confirmButtonText: "OK",
+            customClass: {
+              popup: 'explm-swal-scroll',
+              title: 'explm-swal-title',
+              confirmButton: 'explm-swal-button'
+            },
+          });
+        }
+      },
+    });
+  });
+  
+  // LICENCE JS
+  document.addEventListener("DOMContentLoaded", function () {
+    const url = window.location.search;
+  
+    if (
+      url !== "?page=express_label_maker&tab=licence" &&
+      url !== "?page=express_label_maker"
+    ) {
+      return;
+    }
+  
+    var emailInput = document.getElementById("explm_email");
+    var licenceKeyInput = document.getElementById("explm_licence_key");
+    var countrySelect = document.getElementById("explm_country");
+    var startTrialButton = document.getElementById("start-trial-btn");
+    var submitButton = document.getElementById("explm_submit_btn");
+  
+    function toggleStartTrialButton() {
+      startTrialButton.style.display =
+        licenceKeyInput.value.trim() === "" ? "inline-block" : "none";
+    }
+  
+    function toggleSubmitButton() {
+      submitButton.disabled =
+        emailInput.value.trim() === "" ||
+        licenceKeyInput.value.trim() === "" ||
+        countrySelect.value.trim() === "";
+    }
+  
+    toggleStartTrialButton();
+    toggleSubmitButton();
+  
+    licenceKeyInput.addEventListener("input", function () {
+      toggleStartTrialButton();
+      toggleSubmitButton();
+    });
+  
+    emailInput.addEventListener("input", toggleSubmitButton);
+    countrySelect.addEventListener("change", toggleSubmitButton);
+  }); 
+  
+  jQuery(document).ready(function ($) {
+    const usageField = $("#explm_usage");
+    console.log(usageField, "usageField");
+    const outputContainer = $(
+      '<p id="explm_saving_summary" style="font-weight:bold; margin-top: 20px;"></p>'
+    );
+  
+    if (usageField.length) {
+      const usage = parseInt(usageField.val(), 10);
+      if (!isNaN(usage)) {
+        const totalMinutes = usage * 5;
+        const days = Math.floor(totalMinutes / 1440);
+        const hours = Math.floor((totalMinutes % 1440) / 60);
+        const minutes = totalMinutes % 60;
+  
+        const message = `Uštedili ste ${minutes} minuta, ${hours} sati i ${days} dana na ispisu naljepnica.`;
+        outputContainer.text(message);
+  
+        usageField.closest("table").after(outputContainer);
+      }
+    }
+  });
