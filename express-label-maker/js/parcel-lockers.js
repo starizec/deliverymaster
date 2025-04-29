@@ -92,6 +92,10 @@ jQuery(document).ready(function ($) {
 
   // DPD
   function initDpdMap(lockers) {
+    if (!Array.isArray(lockers) || lockers.length === 0) {
+      $("#map-loading").fadeOut();
+      return;
+    }
     dpdMap = L.map("dpd-parcel-locker-map").setView(
       [dpd_parcel_lockers_vars.default_lat, dpd_parcel_lockers_vars.default_lng],
       8
@@ -273,6 +277,10 @@ jQuery(document).ready(function ($) {
 
   // Overseas
   function initOverseasMap(lockers) {
+    if (!Array.isArray(lockers) || lockers.length === 0) {
+      $("#map-loading").fadeOut();
+      return;
+    }
     overseasMap = L.map("overseas-parcel-locker-map").setView(
       [overseas_parcel_lockers_vars.default_lat, overseas_parcel_lockers_vars.default_lng],
       8

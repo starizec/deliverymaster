@@ -7,6 +7,8 @@ if (!defined('ABSPATH')) {
 function explm_overseas_tab_content() {
     if (isset($_POST['delete_overseas_api_key']) && isset($_POST['explm_overseas_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['explm_overseas_nonce'])), 'explm_save_overseas_settings')) {
         delete_option('explm_overseas_api_key_option');
+        delete_option('explm_overseas_enable_pickup');
+        delete_option('explm_overseas_pickup_shipping_method');
         echo '<div class="updated"><p>' . esc_html__('API key deleted.', 'express-label-maker') . '</p></div>';
     }
     elseif (isset($_POST['explm_overseas_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['explm_overseas_nonce'])), 'explm_save_overseas_settings')) {
@@ -21,6 +23,12 @@ function explm_overseas_tab_content() {
             update_option('explm_overseas_api_key_option', $api_key);
             update_option('explm_overseas_enable_pickup', $enable_paketomat);
             update_option('explm_overseas_pickup_shipping_method', $shipping_method);
+            if ( '1' === $enable_paketomat && !empty($shipping_method) ) {
+                if ( class_exists('ExplmParcelLockers') ) {
+                    $parcel_locker_obj = new ExplmParcelLockers();
+                    $parcel_locker_obj->explm_update_overseas_parcelshops_cron_callback();
+                }
+            }
             echo '<div class="updated"><p>' . esc_html__('API key saved.', 'express-label-maker') . '</p></div>';
         } else {
             echo '<div class="error"><p>' . esc_html__('API key is required.', 'express-label-maker') . '</p></div>';

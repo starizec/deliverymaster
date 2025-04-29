@@ -27,6 +27,8 @@ class ExplmPrintLabel
             "parcel" => $parcel_data
         );
 
+        error_log(print_r($body, true));
+
         $args = array(
             'method' => 'POST',
             'headers' => array('Content-Type' => 'application/json'),

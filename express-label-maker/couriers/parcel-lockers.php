@@ -8,44 +8,38 @@ class ExplmParcelLockers {
     private $overseas_lockers = array();   // Overseas
 
     public function __construct() {
-        add_action('wp_enqueue_scripts', array($this, 'enqueue_scripts'));
-        add_action('woocommerce_after_shipping_rate', array($this, 'add_parcel_locker_button'), 10, 2);
-        add_action('wp_ajax_get_dpd_parcel_lockers', array($this, 'get_parcel_lockers'));
-        add_action('wp_ajax_nopriv_get_dpd_parcel_lockers', array($this, 'get_parcel_lockers'));
-        add_action('wp_ajax_get_overseas_parcel_lockers', array($this, 'get_overseas_parcel_lockers'));
-        add_action('wp_ajax_nopriv_get_overseas_parcel_lockers', array($this, 'get_overseas_parcel_lockers'));
-        add_action('woocommerce_checkout_create_order', array($this, 'save_parcel_locker_to_order'), 20, 2);
-        add_filter('woocommerce_checkout_posted_data', array($this, 'include_parcel_locker_data'));
-        add_action('woocommerce_checkout_process', array($this, 'validate_parcel_locker_selection'));
-        
-        $this->load_dpd_parcel_lockers();
-        $this->load_overseas_lockers_file();
+        add_action('wp_enqueue_scripts', array($this, 'explm_enqueue_scripts'));
+        add_action('woocommerce_after_shipping_rate', array($this, 'explm_add_parcel_locker_button'), 10, 2);
+        add_action('wp_ajax_get_dpd_parcel_lockers', array($this, 'explm_get_parcel_lockers'));
+        add_action('wp_ajax_nopriv_get_dpd_parcel_lockers', array($this, 'explm_get_parcel_lockers'));
+        add_action('wp_ajax_get_overseas_parcel_lockers', array($this, 'explm_get_overseas_parcel_lockers'));
+        add_action('wp_ajax_nopriv_get_overseas_parcel_lockers', array($this, 'explm_get_overseas_parcel_lockers'));
+        add_action('woocommerce_checkout_create_order', array($this, 'explm_save_parcel_locker_to_order'), 20, 2);
+        add_filter('woocommerce_checkout_posted_data', array($this, 'explm_include_parcel_locker_data'));
+        add_action('woocommerce_checkout_process', array($this, 'explm_validate_parcel_locker_selection'));
 
         // Overseas Cron
 
-        if (!wp_next_scheduled('update_overseas_parcelshops_cron')) {
-            do_action('update_overseas_parcelshops_cron');
-            wp_schedule_event(time(), 'daily', 'update_overseas_parcelshops_cron');
+        if (!wp_next_scheduled('explm_update_overseas_parcelshops_cron')) {
+            wp_schedule_event(time(), 'daily', 'explm_update_overseas_parcelshops_cron');
         }
-        add_action('update_overseas_parcelshops_cron', array($this, 'update_overseas_parcelshops_cron_callback'));
+        add_action('explm_update_overseas_parcelshops_cron', array($this, 'explm_update_overseas_parcelshops_cron_callback'));
 
          // DPD Cron
 
-         if (!wp_next_scheduled('update_dpd_parcelshops_cron')) {
-            do_action('update_dpd_parcelshops_cron');
-            wp_schedule_event(time(), 'daily', 'update_dpd_parcelshops_cron');
+         if (!wp_next_scheduled('explm_update_dpd_parcelshops_cron')) {
+            wp_schedule_event(time(), 'daily', 'explm_update_dpd_parcelshops_cron');
         }
-        add_action('update_dpd_parcelshops_cron', array($this, 'update_dpd_parcelshops_cron_callback'));    
+        add_action('explm_update_dpd_parcelshops_cron', array($this, 'explm_update_dpd_parcelshops_cron_callback'));    
     }
     
         // Overseas
-    public function update_overseas_parcelshops_cron_callback() {
+    public function explm_update_overseas_parcelshops_cron_callback() {
         $api_key = get_option('explm_overseas_api_key_option', '');
         $enable_paketomat = get_option('explm_overseas_enable_pickup', '');
         $shipping_method = get_option('explm_overseas_pickup_shipping_method', '');
     
-        if ( empty($api_key) || empty($enable_paketomat) || empty($shipping_method) ) {
-            error_log('Overseas ParcelShops update skipped: required settings missing.');
+        if ( empty($api_key) || $enable_paketomat !== '1' || empty($shipping_method) ) {
             return;
         }
     
@@ -75,7 +69,6 @@ class ExplmParcelLockers {
         }
     
         $body = wp_remote_retrieve_body($response);
-        error_log('ParcelShops API response: ' . $body); // za debug
     
         $data = json_decode($body, true);
     
@@ -94,6 +87,7 @@ class ExplmParcelLockers {
 
     // Overseas
     private function load_overseas_lockers_file() {
+        $this->overseas_lockers = array();
         $file = plugin_dir_path(__FILE__) . '../json/overseas-parcelshops.geojson';
         if ( file_exists( $file ) ) {
             $geo_json = file_get_contents( $file );
@@ -127,14 +121,13 @@ class ExplmParcelLockers {
 
     // DPD
 
-    public function update_dpd_parcelshops_cron_callback() {
+    public function explm_update_dpd_parcelshops_cron_callback() {
         $saved_dpd_username = get_option('explm_dpd_username_option', '');
         $saved_dpd_password = get_option('explm_dpd_password_option', '');
         $enable_paketomat = get_option('explm_dpd_enable_pickup', '');
         $shipping_method = get_option('explm_dpd_pickup_shipping_method', '');
     
-        if ( empty($saved_dpd_username) || empty($saved_dpd_password) || empty($enable_paketomat) || empty($shipping_method) ) {
-            error_log('DPD ParcelShops update skipped: required settings missing.');
+        if ( empty($saved_dpd_username) || empty($saved_dpd_password) || $enable_paketomat !== '1' || empty($shipping_method) ) {
             return;
         }
     
@@ -181,6 +174,7 @@ class ExplmParcelLockers {
     }
     
     private function load_dpd_parcel_lockers() {
+        $this->dpd_lockers = array();
         $file = plugin_dir_path(__FILE__) . '../json/dpd-parcelshops.geojson';
         if ( file_exists( $file ) ) {
             $geo_json = file_get_contents( $file );
@@ -212,10 +206,7 @@ class ExplmParcelLockers {
         }
     }    
 
-    /**
-     * Uključuje polja paketomata (za DPD i Overseas) u checkout postanje podataka.
-     */
-    public function include_parcel_locker_data($data) {
+    public function explm_include_parcel_locker_data($data) {
         $fields = array(
             'dpd_parcel_locker_location_id',
             'dpd_parcel_locker_name',
@@ -242,8 +233,9 @@ class ExplmParcelLockers {
         return $data;
     }
 
-    public function enqueue_scripts() {
-        if (is_checkout()) {
+    public function explm_enqueue_scripts() {
+        if (is_checkout()) {    
+
             wp_enqueue_style('leaflet-css', 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css');
             wp_enqueue_style('markercluster-css', 'https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css');
             wp_enqueue_style('markercluster-default-css', 'https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css');
@@ -281,7 +273,7 @@ class ExplmParcelLockers {
     }
     
     // DPD OVERSEAS
-    public function add_parcel_locker_button($method, $index) {
+    public function explm_add_parcel_locker_button($method, $index) {
         if (!is_checkout()) {
             return;
         }
@@ -339,23 +331,34 @@ class ExplmParcelLockers {
     }
     
     // DPD
-    public function get_parcel_lockers() {
+    public function explm_get_parcel_lockers() {
         check_ajax_referer('dpd_parcel_lockers_nonce', 'nonce');
+
+        if (empty($this->dpd_lockers)) {
+            $this->load_dpd_parcel_lockers();
+        }
+
         wp_send_json_success(array(
             'lockers' => $this->dpd_lockers
         ));
     }
-    
+
     // OVERSEAS
-    public function get_overseas_parcel_lockers() {
+    public function explm_get_overseas_parcel_lockers() {
         check_ajax_referer('overseas_parcel_lockers_nonce', 'nonce');
+
+        if (empty($this->overseas_lockers)) {
+            $this->load_overseas_lockers_file();
+        }
+
         wp_send_json_success(array(
             'lockers' => $this->overseas_lockers
         ));
     }
+
     
     // DPD OVERSEAS
-    public function save_parcel_locker_to_order($order, $data) {
+    public function explm_save_parcel_locker_to_order($order, $data) {
         if (!empty($_POST['dpd_parcel_locker_location_id'])) {
             $locker_data = array(
                 'dpd_parcel_locker_location_id'   => sanitize_text_field($_POST['dpd_parcel_locker_location_id']),
@@ -396,7 +399,7 @@ class ExplmParcelLockers {
         }
     }    
 
-    public function validate_parcel_locker_selection() {
+    public function explm_validate_parcel_locker_selection() {
         $chosen_methods = WC()->session->get('chosen_shipping_methods');
         $chosen_method = isset($chosen_methods[0]) ? str_replace(":", "-", $chosen_methods[0]) : '';
 

@@ -84,8 +84,6 @@ class ExplmPrintLabels {
     
         $body_response = json_decode(wp_remote_retrieve_body($response), true);
     
-        error_log(print_r($body_response, true));
-    
         $errors = array();
     
         if (!empty($body_response['errors']) && is_array($body_response['errors'])) {

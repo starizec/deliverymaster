@@ -8,6 +8,9 @@ function explm_dpd_tab_content() {
     if (isset($_POST['delete_dpd_account']) && isset($_POST['explm_dpd_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['explm_dpd_nonce'])), 'explm_save_dpd_settings')) {
         delete_option('explm_dpd_username_option');
         delete_option('explm_dpd_password_option');
+        delete_option('explm_dpd_service_type_option');
+        delete_option('explm_dpd_enable_pickup');
+        delete_option('explm_dpd_pickup_shipping_method');
         echo '<div class="updated"><p>' . esc_html__('DPD account deleted.', 'express-label-maker') . '</p></div>';
     }
     elseif ( isset($_POST['explm_dpd_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['explm_dpd_nonce'])), 'explm_save_dpd_settings') ) {
@@ -27,6 +30,12 @@ function explm_dpd_tab_content() {
             update_option('explm_dpd_service_type_option', $service_type);
             update_option('explm_dpd_enable_pickup', $enable_paketomat);
             update_option('explm_dpd_pickup_shipping_method', $shipping_method);
+            if ( '1' === $enable_paketomat && !empty($shipping_method) ) {
+                if ( class_exists('ExplmParcelLockers') ) {
+                    $parcel_locker_obj = new ExplmParcelLockers();
+                    $parcel_locker_obj->explm_update_dpd_parcelshops_cron_callback();
+                }
+            }
             echo '<div class="updated"><p>' . esc_html__('DPD settings saved.', 'express-label-maker') . '</p></div>';
         } else {
             echo '<div class="error"><p>' . esc_html__('Username, Password, and Service Type are required.', 'express-label-maker') . '</p></div>';
