@@ -154,8 +154,6 @@ class ExplmParcelLockers {
         $body = array(
             'user' => $user_data
         );
-
-        error_log(print_r($body, true));
     
         $args = array(
             'method' => 'POST',
