@@ -98,10 +98,8 @@ function update_parcel_status(order_id, pl_status) {
                   const spanElement = $(
                     '<span title="' + statusText + '">' + statusText + "</span>"
                   );
-                  if (statusText.length > 30) {
-                    spanElement.text(statusText.substring(0, 30) + "...");
-                    spanElement.attr("title", statusText);
-                  }
+                  
+                  spanElement.attr("title", statusText);
   
                   applyStatusClass(spanElement, statusText);
                   parcel_status_element.html(spanElement);
@@ -136,6 +134,12 @@ function update_parcel_status(order_id, pl_status) {
           element.addClass("elm-status-cancelled");
           break;
         case "Otkupnina plaćena gotovinom.": //OVERSEAS
+          element.addClass("elm-status-delivered");
+          break;
+        case "Prijevoz/pouzeće je naplaćen.": //OVERSEAS
+          element.addClass("elm-status-delivered");
+          break;
+        case "Pošiljka je isporučena.": //OVERSEAS
           element.addClass("elm-status-delivered");
           break;
         default:

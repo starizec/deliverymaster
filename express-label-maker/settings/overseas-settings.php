@@ -9,7 +9,7 @@ function explm_overseas_tab_content() {
         delete_option('explm_overseas_api_key_option');
         delete_option('explm_overseas_enable_pickup');
         delete_option('explm_overseas_pickup_shipping_method');
-        echo '<div class="updated"><p>' . esc_html__('API key deleted.', 'express-label-maker') . '</p></div>';
+        echo '<div class="updated"><p>' . esc_html__('Overseas settings deleted.', 'express-label-maker') . '</p></div>';
     }
     elseif (isset($_POST['explm_overseas_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['explm_overseas_nonce'])), 'explm_save_overseas_settings')) {
         $api_key = isset($_POST['explm_overseas_api_key']) ? sanitize_text_field(wp_unslash($_POST['explm_overseas_api_key'])) : '';
@@ -29,7 +29,7 @@ function explm_overseas_tab_content() {
                     $parcel_locker_obj->explm_update_overseas_parcelshops_cron_callback();
                 }
             }
-            echo '<div class="updated"><p>' . esc_html__('API key saved.', 'express-label-maker') . '</p></div>';
+            echo '<div class="updated"><p>' . esc_html__('Overseas settings saved.', 'express-label-maker') . '</p></div>';
         } else {
             echo '<div class="error"><p>' . esc_html__('API key is required.', 'express-label-maker') . '</p></div>';
         }
@@ -40,7 +40,7 @@ function explm_overseas_tab_content() {
 
     echo '<div style="display:block;">';
     echo '<div style="float: left; width: 48%; padding-right: 2%;">';
-    echo '<h3>' . esc_html__('Overseas API Settings', 'express-label-maker') . '</h3>';
+    echo '<h3>' . esc_html__('Overseas Settings', 'express-label-maker') . '</h3>';
     echo '<form method="post" action="">';
     echo '<table class="form-table">';
     echo '<tr>';
@@ -75,7 +75,7 @@ function explm_overseas_tab_content() {
     echo '</table>';
     echo '<p class="submit">';
     echo '<input type="submit" name="submit" id="submit-overseas-settings" class="button button-primary" value="' . esc_attr__('Save Changes', 'express-label-maker') . '">';
-    echo '<input type="submit" name="delete_overseas_api_key" class="button" value="' . esc_attr__('Delete API Key', 'express-label-maker') . '" style="background-color: transparent; color: red; border: 1px solid red; margin-left: 10px;">';
+    echo '<input type="submit" name="delete_overseas_api_key" class="button" value="' . esc_attr__('Delete Account', 'express-label-maker') . '" style="background-color: transparent; color: red; border: 1px solid red; margin-left: 10px;">';
     echo '</p>';
     wp_nonce_field('explm_save_overseas_settings', 'explm_overseas_nonce');
     echo '</form>';

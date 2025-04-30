@@ -5,7 +5,7 @@
  * Plugin URI: https://expresslabelmaker.com/
  * Description: Print shipping labels and track parcels for multiple couriers directly from WooCommerce.
  * Tags: woocommerce, shipping, label printing, DPD, Overseas
- * Version: 1.25119.1
+ * Version: 1.25120.1
  * Author: expresslabelmaker
  * Tested up to: 6.8
  * License: GPLv2 or later
@@ -62,15 +62,17 @@ class ExplmLabelMaker
     }
 
     public function explm_enqueue_scripts($hook) {
-        wp_enqueue_style('explm_admin_css', plugin_dir_url(__FILE__) . 'css/elm.css', array(), '1.0.1');
-        wp_enqueue_script('sweetalert2', 'https://cdn.jsdelivr.net/npm/sweetalert2@11', array(), '11', true);
+        $plugin_version = self::get_plugin_version();
+
+        wp_enqueue_style('explm_admin_css', plugin_dir_url(__FILE__) . 'css/elm.css', array(), $plugin_version);
+        wp_enqueue_script('sweetalert2', plugin_dir_url(__FILE__) . 'js/vendor/sweetalert2.all.min.js', array(), '11.0.0', true);
     
-        wp_enqueue_script('explm_admin_js', plugin_dir_url(__FILE__) . 'js/elm.js', array('jquery'), '1.0.1', true);
-        wp_enqueue_script('explm_print_label_js', plugin_dir_url(__FILE__) . 'js/print-label.js', array('jquery', 'sweetalert2'), '1.0.0', true);
-        wp_enqueue_script('explm_print_labels_js', plugin_dir_url(__FILE__) . 'js/print-labels.js', array('jquery', 'sweetalert2'), '1.0.0', true);
-        wp_enqueue_script('explm_parcel_statuses_js', plugin_dir_url(__FILE__) . 'js/parcel-statuses.js', array('jquery', 'sweetalert2'), '1.0.0', true);
-        wp_enqueue_script('explm_licence_settings_js', plugin_dir_url(__FILE__) . 'js/licence-settings.js', array('jquery', 'sweetalert2'), '1.0.0', true);
-        wp_enqueue_script('explm_collection_request_js', plugin_dir_url(__FILE__) . 'js/collection-request.js', array('jquery', 'sweetalert2'), '1.0.0', true);
+        wp_enqueue_script('explm_admin_js', plugin_dir_url(__FILE__) . 'js/elm.js', array('jquery'), $plugin_version, true);
+        wp_enqueue_script('explm_print_label_js', plugin_dir_url(__FILE__) . 'js/print-label.js', array('jquery', 'sweetalert2'), $plugin_version, true);
+        wp_enqueue_script('explm_print_labels_js', plugin_dir_url(__FILE__) . 'js/print-labels.js', array('jquery', 'sweetalert2'), $plugin_version, true);
+        wp_enqueue_script('explm_parcel_statuses_js', plugin_dir_url(__FILE__) . 'js/parcel-statuses.js', array('jquery', 'sweetalert2'), $plugin_version, true);
+        wp_enqueue_script('explm_licence_settings_js', plugin_dir_url(__FILE__) . 'js/licence-settings.js', array('jquery', 'sweetalert2'), $plugin_version, true);
+        wp_enqueue_script('explm_collection_request_js', plugin_dir_url(__FILE__) . 'js/collection-request.js', array('jquery', 'sweetalert2'), $plugin_version, true);
     
         wp_localize_script(
             'explm_admin_js',
@@ -413,6 +415,17 @@ class ExplmLabelMaker
     public static function get_order_meta($order_id, $meta_key, $single = true) {
         $order = self::get_order($order_id);
         return $order ? $order->get_meta($meta_key, $single) : false;
+    }
+
+    public static function get_plugin_version() {
+        if (!function_exists('get_plugin_data')) {
+            require_once ABSPATH . 'wp-admin/includes/plugin.php';
+        }
+    
+        $plugin_file = plugin_dir_path(__FILE__) . 'express-label-maker.php';
+        $plugin_data = get_plugin_data($plugin_file);
+    
+        return isset($plugin_data['Version']) ? $plugin_data['Version'] : '';
     }
     
 }

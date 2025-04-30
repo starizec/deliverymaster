@@ -9,7 +9,7 @@ jQuery(document).ready(function ($) {
   $(document).on("click", "#select-dpd-parcel-locker", function (e) {
     e.preventDefault();
     var $dpdButton = $(this);
-    $dpdButton.prop("disabled", true).text("Učitavanje...");
+    $dpdButton.prop("disabled", true).text(parcel_locker_i18n.loading);
 
     var dpdModal = $(`
       <div class="parcel-locker-modal dpd-parcel-locker-modal">
@@ -24,9 +24,9 @@ jQuery(document).ready(function ($) {
                   </div>
               </div>
               <div class="parcel-locker-list-container">
-                  <h3>Odaberite paketomat:</h3>
+                  <h3>${parcel_locker_i18n.choose_locker}</h3>
                   <div class="parcel-locker-search">
-                      <input type="text" id="dpd-parcel-locker-search" placeholder="Pretražite paketomate...">
+                      <input type="text" id="dpd-parcel-locker-search" placeholder="${parcel_locker_i18n.choose_locker}...">
                   </div>
                   <div class="parcel-locker-list"></div>
               </div>
@@ -79,7 +79,7 @@ jQuery(document).ready(function ($) {
         }
       },
       complete: function () {
-        $dpdButton.prop("disabled", false).text("Odaberite paketomat");
+        $dpdButton.prop("disabled", false).text(parcel_locker_i18n.choose_locker);
       },
     });
 
@@ -129,7 +129,7 @@ jQuery(document).ready(function ($) {
     $(".explm-no-lockers").remove();
   
     if (lockers.length === 0) {
-      list.after('<div class="explm-no-lockers">Nema paketomata za prikaz...</div>');
+      list.after(`<div class="explm-no-lockers">${parcel_locker_i18n.no_parcel_lockers}</div>`);
       return;
     }
   
@@ -147,7 +147,7 @@ jQuery(document).ready(function ($) {
       var visibleCount = $(".parcel-locker-list .parcel-locker-item:visible").length;
       $(".explm-no-lockers").remove();
       if (visibleCount === 0) {
-        list.append(`<div class="explm-no-lockers">Nema paketomata za prikaz.</div>`);
+        list.append(`<div class="explm-no-lockers">There are no parcel lockers to display.</div>`);
       }
     });
   }
@@ -163,7 +163,7 @@ jQuery(document).ready(function ($) {
     $("#dpd_parcel_locker_postal_code").val(locker.postal_code);
     $("#dpd_parcel_locker_city").val(locker.city);
     $("#selected-dpd-parcel-locker-info")
-      .html(`<strong>Odabrani paketomat:</strong><p>${locker.name}<br>${locker.address}</p>`)
+      .html(`<strong>${parcel_locker_i18n.selected_locker}</strong><p>${locker.name}<br>${locker.address}</p>`)
       .show();
     $("#clear-dpd-parcel-locker").show();
     $(document.body).trigger("update_checkout");
@@ -193,7 +193,7 @@ jQuery(document).ready(function ($) {
   $(document).on("click", "#select-overseas-parcel-locker", function (e) {
     e.preventDefault();
     var $overseasButton = $(this);
-    $overseasButton.prop("disabled", true).text("Učitavanje...");
+    $overseasButton.prop("disabled", true).text(parcel_locker_i18n.loading);
   
     var overseasModal = $(`
       <div class="parcel-locker-modal overseas-parcel-locker-modal">
@@ -208,9 +208,9 @@ jQuery(document).ready(function ($) {
                   </div>
               </div>
               <div class="parcel-locker-list-container">
-                  <h3>Odaberite paketomat:</h3>
+                  <h3>${parcel_locker_i18n.choose_locker}</h3>
                   <div class="parcel-locker-search">
-                      <input type="text" id="overseas-parcel-locker-search" placeholder="Pretražite paketomate...">
+                      <input type="text" id="overseas-parcel-locker-search" placeholder="${parcel_locker_i18n.choose_locker}...">
                   </div>
                   <div class="parcel-locker-list"></div>
               </div>
@@ -265,7 +265,7 @@ jQuery(document).ready(function ($) {
             }
           },
           complete: function () {
-            $overseasButton.prop("disabled", false).text("Odaberite paketomat");
+            $overseasButton.prop("disabled", false).text(parcel_locker_i18n.choose_locker);
           },
         });
     });
@@ -319,7 +319,7 @@ jQuery(document).ready(function ($) {
     $(".explm-no-lockers").remove();
 
     if (lockers.length === 0) {
-      list.after('<div class="explm-no-lockers">Nema paketomata za prikaz...</div>');
+      list.after(`<div class="explm-no-lockers">${parcel_locker_i18n.no_parcel_lockers}</div>`);
       return;
     }
     lockers.forEach(function (locker) {
@@ -336,7 +336,7 @@ jQuery(document).ready(function ($) {
       var visibleCount = $(".parcel-locker-list .parcel-locker-item:visible").length;
       $(".explm-no-lockers").remove();
       if (visibleCount === 0) {
-        list.append(`<div class="explm-no-lockers">Nema paketomata za prikaz.</div>`);
+        list.append(`<div class="explm-no-lockers">${parcel_locker_i18n.no_parcel_lockers}</div>`);
       }
     });
   }
@@ -350,7 +350,7 @@ jQuery(document).ready(function ($) {
     $("#overseas_parcel_locker_postal_code").val(locker.postal_code);
     $("#overseas_parcel_locker_city").val(locker.city);
     $("#selected-overseas-parcel-locker-info")
-      .html(`<strong>Odabrani paketomat:</strong><p>${locker.name}<br>${locker.address}</p>`)
+      .html(`<strong>${parcel_locker_i18n.selected_locker}</strong><p>${locker.name}<br>${locker.address}</p>`)
       .show();
     $("#clear-overseas-parcel-locker").show();
     $(document.body).trigger("update_checkout");

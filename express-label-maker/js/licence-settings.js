@@ -67,16 +67,23 @@ jQuery(document).ready(function ($) {
   
   // LICENCE CHECK
   jQuery(document).ready(function ($) {
-    const urlParams = new URLSearchParams(window.location.search);
-    const page = urlParams.get("page");
+    const url = window.location.search;
   
-    if (page !== "express_label_maker") {
+    if (
+      url !== "?page=express_label_maker&tab=licence" &&
+      url !== "?page=express_label_maker"
+    ) {
       return;
     }
   
     if (!explm_ajax.email || !explm_ajax.licence) {
       return;
     }
+
+    $(".explm_loading_panel").fadeIn(300).css({
+      display: "flex",
+      "z-index": "9999999",
+    });
   
     $.ajax({
       url: explm_ajax.ajax_url,
@@ -87,6 +94,7 @@ jQuery(document).ready(function ($) {
         domain: window.location.hostname,
       },
       success: function (response) {
+        $(".explm_loading_panel").fadeOut(300);
         if (response.success) {
           $("#explm_valid_from").val(response.data.valid_from);
           $("#explm_valid_until").val(response.data.valid_until);
@@ -101,15 +109,38 @@ jQuery(document).ready(function ($) {
             const minutes = totalMinutes % 60;
   
             const message = explm_ajax.savedLabelTime
-              .replace("%1$d", totalMinutes)
-              .replace("%2$d", hours)
-              .replace("%3$d", minutes)
-              .replace("%4$d", days);
-  
-            const output = $(
-              '<p style="margin-top:20px; font-weight:bold;">' + message + "</p>"
-            );
-            $("#explm_usage").closest("table").after(output);
+            .replace("%1$d", totalMinutes)
+            .replace("%2$d", hours)
+            .replace("%3$d", minutes)
+            .replace("%4$d", days);
+          
+          const output = $(`
+            <div style="
+              margin-top: 20px;
+              padding: 25px;
+              background: linear-gradient(135deg, #0477d880, #ffffff);
+              border-radius: 12px;
+              box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+              text-align: center;
+              font-size: 18px;
+              font-weight: bold;
+              animation: pulse 2s infinite;
+            ">
+              🕒 ${message}
+            </div>
+          
+            <style>
+              @keyframes pulse {
+                0% { box-shadow: 0 0 0 0 #0477d880; }
+                70% { box-shadow: 0 0 0 10px rgba(76, 175, 80, 0); }
+                100% { box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
+              }
+            </style>
+          `);
+          
+          $("#explm_usage").closest("table").after(output);
+          
+          
           }
   
           if (response.data.usage_limit - response.data.usage <= 2) {
@@ -206,26 +237,3 @@ jQuery(document).ready(function ($) {
     emailInput.addEventListener("input", toggleSubmitButton);
     countrySelect.addEventListener("change", toggleSubmitButton);
   }); 
-  
-  jQuery(document).ready(function ($) {
-    const usageField = $("#explm_usage");
-    console.log(usageField, "usageField");
-    const outputContainer = $(
-      '<p id="explm_saving_summary" style="font-weight:bold; margin-top: 20px;"></p>'
-    );
-  
-    if (usageField.length) {
-      const usage = parseInt(usageField.val(), 10);
-      if (!isNaN(usage)) {
-        const totalMinutes = usage * 5;
-        const days = Math.floor(totalMinutes / 1440);
-        const hours = Math.floor((totalMinutes % 1440) / 60);
-        const minutes = totalMinutes % 60;
-  
-        const message = `Uštedili ste ${minutes} minuta, ${hours} sati i ${days} dana na ispisu naljepnica.`;
-        outputContainer.text(message);
-  
-        usageField.closest("table").after(outputContainer);
-      }
-    }
-  });

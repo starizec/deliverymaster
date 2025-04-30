@@ -17,7 +17,6 @@ class ExplmParcelStatuses {
         $pl_status = isset($_POST['pl_status']) ? sanitize_text_field(wp_unslash($_POST['pl_status'])) : '';
 
         if ($order_id > 0 && !empty($pl_status)) {
-            // Koristimo centraliziranu metodu za ažuriranje meta podataka
             $success = ExplmLabelMaker::update_order_meta($order_id, 'explm_parcel_status', $pl_status);
             
             if ($success) {
@@ -42,11 +41,9 @@ class ExplmParcelStatuses {
         $response = array();
         
         foreach ($orders as $order_id) {
-            // Koristimo centraliziranu metodu za dobivanje narudžbe
             $order = ExplmLabelMaker::get_order($order_id);
             if (!$order) continue;
 
-            // Dohvaćanje svih meta podataka
             $meta_data = $order->get_meta_data();
             $latest_parcel_meta = null;
             $latest_timestamp = 0;
@@ -54,10 +51,8 @@ class ExplmParcelStatuses {
             foreach ($meta_data as $meta) {
                 $meta_key = $meta->key;
                 
-                // Tražimo meta podatke koji završavaju s '_parcels'
                 if (strpos($meta_key, '_parcels') !== false) {
                     $timestamp_key = $meta_key . '_last_updated';
-                    // Koristimo centraliziranu metodu za dobivanje meta podataka
                     $timestamp = ExplmLabelMaker::get_order_meta($order_id, $timestamp_key);
                     
                     if ($timestamp && strtotime($timestamp) > $latest_timestamp) {

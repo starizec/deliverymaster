@@ -17,13 +17,7 @@ class ExplmUser
     //DODATI KURIRE HrOverseas(), HrGLS
 
     public function HrDPD() {
-        if (!function_exists('get_plugin_data')) {
-            require_once ABSPATH . 'wp-admin/includes/plugin.php';
-        }
-    
-        $plugin_file = dirname(__DIR__) . '/express-label-maker.php'; 
-        $plugin_data = get_plugin_data($plugin_file);
-        $plugin_version = isset($plugin_data['Version']) ? $plugin_data['Version'] : '';
+        $plugin_version = ExplmLabelMaker::get_plugin_version();
 
         $server_name = isset($_SERVER['SERVER_NAME']) ? sanitize_text_field(wp_unslash($_SERVER['SERVER_NAME'])) : '';
         return [
@@ -38,13 +32,7 @@ class ExplmUser
     }
 
     public function HrOverseas() {
-        if (!function_exists('get_plugin_data')) {
-            require_once ABSPATH . 'wp-admin/includes/plugin.php';
-        }
-    
-        $plugin_file = dirname(__DIR__) . '/express-label-maker.php';
-        $plugin_data = get_plugin_data($plugin_file);
-        $plugin_version = isset($plugin_data['Version']) ? $plugin_data['Version'] : '';
+        $plugin_version = ExplmLabelMaker::get_plugin_version();
 
         $server_name = isset($_SERVER['SERVER_NAME']) ? sanitize_text_field(wp_unslash($_SERVER['SERVER_NAME'])) : '';
         return [

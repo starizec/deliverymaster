@@ -145,13 +145,13 @@
   margin: 0;
 }
 /*PARCEL STATUS*/
-.column-explm_parcel_status{
-  text-align: right !important;
-}
-
 .elm-package-status {
   padding-left: 5px;
-  padding-right: 15px;
+  padding-right: 5px;
+  display: inline-block !important;
+  white-space: nowrap !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .elm-status-delivered {
@@ -196,7 +196,7 @@
   background-color: #2271b1;
 }
 div:where(.swal2-icon) {
-  margin: 1.25em auto .6em !important;
+  margin: 1.25em auto 0.6em !important;
 }
 div:where(.swal2-container) div:where(.swal2-actions) {
   margin: 0.25em auto 0 !important;

@@ -98,8 +98,8 @@ jQuery(document).ready(function ($) {
   
     function setDPDParcelData(form) {
       const isCod = form.find('input[name="parcel_type"]:checked').val() === "cod";
-      const dpdParcelLockerId = $("#dpdParcelLockerId").val();
-  
+      const dpdParcelLockerId = form.find('input[name="parcel_locker"]').val();
+    
       let parcelType = "";
       if (dpdParcelLockerId) {
         parcelType = "D-B2C-PSD";
@@ -108,8 +108,8 @@ jQuery(document).ready(function ($) {
       } else if (explm_ajax.serviceType === "DPD Home") {
         parcelType = isCod ? "D-COD-B2C" : "D-B2C";
       }
-  
-      return {
+    
+      const data = {
         cod_amount: form.find('input[name="cod_amount"]').val(),
         name1: form.find('input[name="customer_name"]').val(),
         street: form.find('input[name="customer_address"]').val(),
@@ -125,16 +125,21 @@ jQuery(document).ready(function ($) {
         parcel_type: parcelType,
         num_of_parcel: form.find('input[name="package_number"]').val(),
         phone: form.find('input[name="phone"]').val(),
-        contact: form.find('input[name="contact_person"]').val(),
-        pudo_id: dpdParcelLockerId
+        contact: form.find('input[name="contact_person"]').val()
       };
-    }
+    
+      if (dpdParcelLockerId) {
+        data.pudo_id = dpdParcelLockerId;
+      }
+    
+      return data;
+    }    
   
     function setOverseasParcelData(form) {
       const isCod = form.find('input[name="parcel_type"]:checked').val() === "cod";
-      const overseasParcelLockerId = $("#overseasParcelLockerId").val();
+      const overseasParcelLockerId = form.find('input[name="parcel_locker"]').val();
   
-      return {
+      const data = {
         cod_amount: isCod ? form.find('input[name="cod_amount"]').val() : null,
         name1: form.find('input[name="customer_name"]').val(),
         rPropNum: form.find('input[name="customer_address"]').val() + " " + form.find('input[name="house_number"]').val(),
@@ -147,6 +152,12 @@ jQuery(document).ready(function ($) {
         phone: form.find('input[name="phone"]').val(),
         pudo_id: overseasParcelLockerId
       };
+
+      if (overseasParcelLockerId) {
+        data.pudo_id = overseasParcelLockerId;
+      }
+    
+      return data;
     }
   
     function downloadPdf(base64data, fileName) {

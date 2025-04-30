@@ -193,8 +193,8 @@ class ExplmParcelLockers {
                                 ($props['postal_code'] ?? '') . ' ' .
                                 ($props['place'] ?? '')
                             ),
-                            'lat' => (float)($feature['geometry']['coordinates'][0] ?? 0),
-                            'lng' => (float)($feature['geometry']['coordinates'][1] ?? 0),
+                            'lat'          => (float)($feature['geometry']['coordinates'][1] ?? 0),
+                            'lng'          => (float)($feature['geometry']['coordinates'][0] ?? 0),
                             'street'        => $props['street'] ?? '',
                             'house_number'  => $props['house_number'] ?? '',
                             'postal_code'   => $props['postal_code'] ?? '',
@@ -236,14 +236,18 @@ class ExplmParcelLockers {
     public function explm_enqueue_scripts() {
         if (is_checkout()) {    
 
-            wp_enqueue_style('leaflet-css', 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css');
-            wp_enqueue_style('markercluster-css', 'https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css');
-            wp_enqueue_style('markercluster-default-css', 'https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css');
-            wp_enqueue_style('parcel-lockers-css', plugin_dir_url(__FILE__) . '../css/parcel-lockers.css');
-            
-            wp_enqueue_script('leaflet-js', 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.js', array(), '1.7.1', true);
-            wp_enqueue_script('markercluster-js', 'https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js', array('leaflet-js'), '1.4.1', true);
-            wp_enqueue_script('parcel-lockers-js', plugin_dir_url(__FILE__) . '../js/parcel-lockers.js', array('jquery', 'leaflet-js', 'markercluster-js'), '1.0.0', true);
+            $plugin_version = ExplmLabelMaker::get_plugin_version();
+
+            // CSS
+            wp_enqueue_style('leaflet-css', plugin_dir_url(__FILE__) . '../css/vendor/leaflet.css', array(), '1.7.1');
+            wp_enqueue_style('markercluster-css', plugin_dir_url(__FILE__) . '../css/vendor/markercluster.css', array(), '1.4.1');
+            wp_enqueue_style('markercluster-default-css', plugin_dir_url(__FILE__) . '../css/vendor/markercluster.default.css', array(), '1.4.1');
+            wp_enqueue_style('parcel-lockers-css', plugin_dir_url(__FILE__) . '../css/parcel-lockers.css', array(), $plugin_version);
+
+            // JS
+            wp_enqueue_script('leaflet-js', plugin_dir_url(__FILE__) . '../js/vendor/leaflet.js', array(), '1.7.1', true);
+            wp_enqueue_script('markercluster-js', plugin_dir_url(__FILE__) . '../js/vendor/leaflet.markercluster.js', array('leaflet-js'), '1.4.1', true);
+            wp_enqueue_script('parcel-lockers-js', plugin_dir_url(__FILE__) . '../js/parcel-lockers.js', array('jquery', 'leaflet-js', 'markercluster-js'), $plugin_version, true);
             
             // DPD
             wp_localize_script('parcel-lockers-js', 'dpd_parcel_lockers_vars', array(
@@ -262,12 +266,13 @@ class ExplmParcelLockers {
             ));
 
             wp_localize_script('parcel-lockers-js', 'parcel_locker_i18n', array(
-                'loading'             => __('Učitavanje...', 'express-label-maker'),
-                'choose_locker'       => __('Odaberite paketomat:', 'express-label-maker'),
-                'no_lockers'          => __('Nema paketomata za prikaz.', 'express-label-maker'),
-                'search_placeholder'  => __('Pretražite paketomate...', 'express-label-maker'),
-                'selected_locker'     => __('Odabrani paketomat:', 'express-label-maker'),
-                'clear'               => __('Obriši paketomat', 'express-label-maker'),
+                'loading'             => __('Loading...', 'express-label-maker'),
+                'choose_locker'       => __('Choose parcel locker', 'express-label-maker'),
+                'no_lockers'          => __('There are no parcel lockers to display.', 'express-label-maker'),
+                'search_placeholder'  => __('Search parcel lockers...', 'express-label-maker'),
+                'selected_locker'     => __('Selected parcel locker', 'express-label-maker'),
+                'clear'               => __('Delete parcel locker', 'express-label-maker'),
+                'no_parcel_lockers'   => __('There are no parcel lockers to display...', 'express-label-maker'),
             ));
         }
     }
@@ -298,7 +303,7 @@ class ExplmParcelLockers {
             
             // DPD
             echo '<div class="dpd-parcel-locker-container">';
-            echo '<button type="button" class="button alt" id="select-dpd-parcel-locker">' . __('Odaberite paketomat', 'express-label-maker') . '</button>';
+            echo '<button type="button" class="button alt" id="select-dpd-parcel-locker">' . __('Choose parcel locker', 'express-label-maker') . '</button>';
             echo '<input type="hidden" name="dpd_parcel_locker_location_id" id="dpd_parcel_locker_location_id" value="">';
             echo '<input type="hidden" name="dpd_parcel_locker_name" id="dpd_parcel_locker_name" value="">';
             echo '<input type="hidden" name="dpd_parcel_locker_address" id="dpd_parcel_locker_address" value="">';
@@ -307,7 +312,7 @@ class ExplmParcelLockers {
             echo '<input type="hidden" name="dpd_parcel_locker_postal_code" id="dpd_parcel_locker_postal_code" value="">';
             echo '<input type="hidden" name="dpd_parcel_locker_city" id="dpd_parcel_locker_city" value="">';
             echo '<div id="selected-dpd-parcel-locker-info" style="display:none; margin-top:10px;"></div>';
-            echo '<button type="button" id="clear-dpd-parcel-locker" class="button" style="display:none;">Obriši paketomat</button>';
+            echo '<button type="button" id="clear-dpd-parcel-locker" class="button" style="display:none;">' . __('Delete parcel locker', 'express-label-maker') . '</button>';
             echo '</div>';
             
         } elseif ($overseas_enabled === '1' && 
@@ -316,7 +321,7 @@ class ExplmParcelLockers {
             
             // Overseas
             echo '<div class="overseas-parcel-locker-container">';
-            echo '<button type="button" class="button alt" id="select-overseas-parcel-locker">' . __('Odaberite paketomat', 'express-label-maker') . '</button>';
+            echo '<button type="button" class="button alt" id="select-overseas-parcel-locker">' . __('Choose parcel locker', 'express-label-maker') . '</button>';
             echo '<input type="hidden" name="overseas_parcel_locker_location_id" id="overseas_parcel_locker_location_id" value="">';
             echo '<input type="hidden" name="overseas_parcel_locker_name" id="overseas_parcel_locker_name" value="">';
             echo '<input type="hidden" name="overseas_parcel_locker_address" id="overseas_parcel_locker_address" value="">';
@@ -325,7 +330,7 @@ class ExplmParcelLockers {
             echo '<input type="hidden" name="overseas_parcel_locker_postal_code" id="overseas_parcel_locker_postal_code" value="">';
             echo '<input type="hidden" name="overseas_parcel_locker_city" id="overseas_parcel_locker_city" value="">';
             echo '<div id="selected-overseas-parcel-locker-info" style="display:none; margin-top:10px;"></div>';
-            echo '<button type="button" id="clear-overseas-parcel-locker" class="button" style="display:none;">Obriši paketomat</button>';
+            echo '<button type="button" id="clear-overseas-parcel-locker" class="button" style="display:none;">' . __('Delete parcel locker', 'express-label-maker') . '</button>';
             echo '</div>';
         }
     }
@@ -410,7 +415,7 @@ class ExplmParcelLockers {
 
         if ($dpd_enabled === '1' && $chosen_method === $dpd_shipping_method) {
             if (empty($_POST['dpd_parcel_locker_location_id'])) {
-                wc_add_notice(esc_html__('Molimo odaberite paketomat za DPD dostavu.', 'express-label-maker'), 'error');
+                wc_add_notice(esc_html__('Please select a parcel machine for DPD delivery.', 'express-label-maker'), 'error');
             }
         }
         
@@ -421,7 +426,7 @@ class ExplmParcelLockers {
         
         if ($overseas_enabled === '1' && $chosen_method === $overseas_shipping_method) {
             if (empty($_POST['overseas_parcel_locker_location_id'])) {
-                wc_add_notice(esc_html__('Molimo odaberite paketomat za Overseas dostavu.', 'express-label-maker'), 'error');
+                wc_add_notice(esc_html__('Please select a parcel locker for Overseas delivery.', 'express-label-maker'), 'error');
             }
         }
     }

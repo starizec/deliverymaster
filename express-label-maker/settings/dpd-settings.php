@@ -46,7 +46,7 @@ function explm_dpd_tab_content() {
 
     echo '<div style="display:block;">';
     echo '<div style="float: left; width: 48%; padding-right: 2%;">';
-    echo '<h3>' . esc_html__('DPD User Data', 'express-label-maker') . '</h3>';
+    echo '<h3>' . esc_html__('DPD Settings', 'express-label-maker') . '</h3>';
     echo '<form method="post" action="">';
     echo '<table class="form-table">';
 

@@ -80,6 +80,11 @@ if (!defined('ABSPATH')) {
                     <?php esc_html_e('Reference:', 'express-label-maker'); ?>
                     <input type="text" name="reference" value="<?php echo esc_attr($order_data['id']); ?>">
                 </label>
+                <!-- Parcel Locker -->
+                <label class="labels">
+                    <?php esc_html_e('Parcel Locker:', 'express-label-maker'); ?>
+                    <input type="text" name="parcel_locker" value="<?php echo esc_attr($dpd_parcel_locker_location_id); ?>">
+                </label>
                 <!--Payment Method -->
                 <label class="labels">
                     <?php esc_html_e('Payment Method:', 'express-label-maker'); ?>
@@ -136,6 +141,11 @@ if (!defined('ABSPATH')) {
                 <label class="labels">
                     <?php esc_html_e('Reference:', 'express-label-maker'); ?>
                     <input type="text" name="reference" value="<?php echo esc_attr($order_data['id']); ?>">
+                </label>
+                <!-- Parcel Locker -->
+                <label class="labels">
+                    <?php esc_html_e('Parcel Locker:', 'express-label-maker'); ?>
+                    <input type="text" name="parcel_locker" value="<?php echo esc_attr($overseas_parcel_locker_location_id); ?>">
                 </label>
                 <!--Payment Method -->
                 <label class="labels">
