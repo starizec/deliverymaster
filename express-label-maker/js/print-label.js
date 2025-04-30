@@ -1,25 +1,25 @@
 jQuery(document).ready(function ($) {
     // Dodaj loader samo ako ne postoji
-    if (!$(".explm_loading_panel").length) {
-      $("body").append('<div class="explm_loading_panel"><div class="explm_spinner"></div></div>');
+    if (!$(".explm-loading-panel").length) {
+      $("body").append('<div class="explm-loading-panel"><div class="explm-spinner"></div></div>');
     }
   
     function showLoader() {
-      $(".explm_loading_panel").fadeIn(300).css({ display: "flex", "z-index": "9999999" });
+      $(".explm-loading-panel").fadeIn(300).css({ display: "flex", "z-index": "9999999" });
     }
   
     function hideLoader() {
-      $(".explm_loading_panel").fadeOut(300);
+      $(".explm-loading-panel").fadeOut(300);
     }
   
     function hideModal() {
-      $(".explm_modal_wrapper").fadeOut(300, function () {
+      $(".explm-modal-wrapper").fadeOut(300, function () {
         $(this).remove();
       });
     }
   
     // Otvori modal za potvrdu
-    $("body").on("click", ".explm_open_modal", function (e) {
+    $("body").on("click", ".explm-open-modal", function (e) {
       e.preventDefault();
   
       const orderId = $(this).data("order-id");
@@ -35,7 +35,7 @@ jQuery(document).ready(function ($) {
       }, function (response) {
         if (response.success) {
           $("body").append(response.data);
-          $(".explm_modal_wrapper").fadeIn(300).css("display", "flex");
+          $(".explm-modal-wrapper").fadeIn(300).css("display", "flex");
           $("#hiddenCourier").val(courier);
         } else {
           showErrorPopup(response.data.error_id, response.data.error_message);
@@ -45,7 +45,7 @@ jQuery(document).ready(function ($) {
     });
   
     // Cancel modal
-    $("body").on("click", ".explm_cancel_action", function (e) {
+    $("body").on("click", ".explm-cancel-action", function (e) {
       e.preventDefault();
       hideModal();
     });
@@ -57,7 +57,7 @@ jQuery(document).ready(function ($) {
       showLoader();
   
       const courier = $("#hiddenCourier").val();
-      const form = $("#explm_order_details_form");
+      const form = $("#explm-order-details-form");
       const orderId = $("#hiddenOrderId").val();
   
       let parcelData;

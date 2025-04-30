@@ -20,8 +20,8 @@ function update_parcel_status(order_id, pl_status) {
   }
   
   function displayError(error) {
-    $(".elm-error").text(error);
-    $(".elm-error").removeAttr("style");
+    $(".explm-error").text(error);
+    $(".explm-error").removeAttr("style");
   }
   
   function getStatusText(r, meta) {
@@ -122,28 +122,28 @@ function update_parcel_status(order_id, pl_status) {
   
   function applyStatusClass(element, status) {
     if (status) {
-      element.addClass("elm-package-status order-status");
+      element.addClass("explm-package-status order-status");
       switch (status) {
         case "PRINTED": //DPD
-          element.addClass("elm-status-printed");
+          element.addClass("explm-status-printed");
           break;
         case "DELIVERED": //DPD
-          element.addClass("elm-status-delivered");
+          element.addClass("explm-status-delivered");
           break;
         case "CANCELLED": //DPD
-          element.addClass("elm-status-cancelled");
+          element.addClass("explm-status-cancelled");
           break;
         case "Otkupnina plaćena gotovinom.": //OVERSEAS
-          element.addClass("elm-status-delivered");
+          element.addClass("explm-status-delivered");
           break;
         case "Prijevoz/pouzeće je naplaćen.": //OVERSEAS
-          element.addClass("elm-status-delivered");
+          element.addClass("explm-status-delivered");
           break;
         case "Pošiljka je isporučena.": //OVERSEAS
-          element.addClass("elm-status-delivered");
+          element.addClass("explm-status-delivered");
           break;
         default:
-          element.addClass("elm-status-rest");
+          element.addClass("explm-status-rest");
           break;
       }
     }

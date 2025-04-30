@@ -68,20 +68,33 @@ class ExplmParcelLockers {
             return;
         }
     
-        $body = wp_remote_retrieve_body($response);
+        $body_response = json_decode(wp_remote_retrieve_body($response), true);
+
+        if ($response['response']['code'] != '201') {
+            $errors = array();
+        
+            if (!empty($body_response['errors']) && is_array($body_response['errors'])) {
+                foreach ($body_response['errors'] as $error) {
+                    $errors[] = array(
+                        'error_id' => !empty($error['error_id']) ? $error['error_id'] : 'unknown',
+                        'error_message' => !empty($error['error_details']) ? $error['error_details'] : 'unknown'
+                    );
+                }
+            } elseif (!empty($body_response['error'])) {
+                $errors[] = array(
+                    'error_id' => 'unknown',
+                    'error_message' => $body_response['error']
+                );
+            }
+        
+            wp_send_json_error(array('errors' => $errors));
+        }  
     
-        $data = json_decode($body, true);
-    
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            error_log('ParcelShops API JSON error: ' . json_last_error_msg());
-            return;
-        }
-    
-        if (isset($data['data']['geojson'])) {
+        if (isset($body_response['data']['geojson'])) {
             $file = plugin_dir_path(__FILE__) . '../json/overseas-parcelshops.geojson';
-            file_put_contents($file, wp_json_encode($data['data']['geojson']));
+            file_put_contents($file, wp_json_encode($body_response['data']['geojson']));
         } else {
-            error_log('ParcelShops API missing geojson: ' . print_r($data, true));
+            error_log('ParcelShops API missing geojson: ' . print_r($body_response, true));
         }
     }      
 
@@ -141,6 +154,8 @@ class ExplmParcelLockers {
         $body = array(
             'user' => $user_data
         );
+
+        error_log(print_r($body, true));
     
         $args = array(
             'method' => 'POST',
@@ -156,20 +171,33 @@ class ExplmParcelLockers {
             return;
         }
     
-        $body = wp_remote_retrieve_body($response);
+        $body_response = json_decode(wp_remote_retrieve_body($response), true);
+
+        if ($response['response']['code'] != '201') {
+            $errors = array();
+        
+            if (!empty($body_response['errors']) && is_array($body_response['errors'])) {
+                foreach ($body_response['errors'] as $error) {
+                    $errors[] = array(
+                        'error_id' => !empty($error['error_id']) ? $error['error_id'] : 'unknown',
+                        'error_message' => !empty($error['error_details']) ? $error['error_details'] : 'unknown'
+                    );
+                }
+            } elseif (!empty($body_response['error'])) {
+                $errors[] = array(
+                    'error_id' => 'unknown',
+                    'error_message' => $body_response['error']
+                );
+            }
+        
+            wp_send_json_error(array('errors' => $errors));
+        }  
     
-        $data = json_decode($body, true);
-    
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            error_log('DPD ParcelShops API JSON error: ' . json_last_error_msg());
-            return;
-        }
-    
-        if (isset($data['data']['geojson'])) {
+        if (isset($body_response['data']['geojson'])) {
             $file = plugin_dir_path(__FILE__) . '../json/dpd-parcelshops.geojson';
-            file_put_contents($file, wp_json_encode($data['data']['geojson']));
+            file_put_contents($file, wp_json_encode( $body_response['data']['geojson']));
         } else {
-            error_log('DPD ParcelShops API missing geojson: ' . print_r($data, true));
+            error_log('DPD ParcelShops API missing geojson: ' . print_r( $body_response, true));
         }
     }
     

@@ -1,6 +1,6 @@
 jQuery(document).ready(function ($) {
     $("body").append(
-      '<div class="explm_loading_panel"><div class="explm_spinner"></div></div>'
+      '<div class="explm-loading-panel"><div class="explm-spinner"></div></div>'
     );
   
     $("body").on("click", "#explm_collection_request", function (e) {
@@ -8,8 +8,8 @@ jQuery(document).ready(function ($) {
   
       var order_id = $(this).data("order-id");
   
-      $(".explm_loading_panel").fadeIn(300);
-      $(".explm_loading_panel").css("display", "flex");
+      $(".explm-loading-panel").fadeIn(300);
+      $(".explm-loading-panel").css("display", "flex");
   
       $.ajax({
         url: explm_ajax.ajax_url,
@@ -22,8 +22,8 @@ jQuery(document).ready(function ($) {
         success: function (response) {
           if (response.success) {
             $("body").append(response.data);
-            $(".explm_modal_wrapper").fadeIn(300);
-            $(".explm_modal_wrapper").css("display", "flex");
+            $(".explm-modal-wrapper").fadeIn(300);
+            $(".explm-modal-wrapper").css("display", "flex");
           } else {
             alert(
               "Error ID: " +
@@ -34,41 +34,41 @@ jQuery(document).ready(function ($) {
                   : "null")
             );
           }
-          $(".explm_loading_panel").fadeOut(300);
+          $(".explm-loading-panel").fadeOut(300);
         },
         error: function () {
-          $(".explm_loading_panel").fadeOut(300);
+          $(".explm-loading-panel").fadeOut(300);
         },
       });
     });
   });
   
-  jQuery("body").on("click", ".explm_cancel_action", function () {
-    jQuery(".explm_modal_wrapper").fadeOut(300, function () {
+  jQuery("body").on("click", ".explm-cancel-action", function () {
+    jQuery(".explm-modal-wrapper").fadeOut(300, function () {
       jQuery(this).remove();
     });
   });
   
-  jQuery("body").on("click", ".explm_cancel_action", function (e) {
+  jQuery("body").on("click", ".explm-cancel-action", function (e) {
     e.preventDefault();
   });
   
   //SEND COLLECTION REQUEST
   jQuery(document).ready(function ($) {
     $("body").append(
-      '<div class="explm_loading_panel"><div class="explm_spinner"></div></div>'
+      '<div class="explm-loading-panel"><div class="explm-spinner"></div></div>'
     );
     $(document).on("click", ".explm_confirm_collection_action", function (e) {
       e.preventDefault();
   
-      $(".explm_loading_panel").fadeIn(300);
-      $(".explm_loading_panel").css({
+      $(".explm-loading-panel").fadeIn(300);
+      $(".explm-loading-panel").css({
         display: "flex",
         "z-index": "9999999",
       });
   
       var courier = $("#collection_courier").val();
-      var form = $("#explm_collection_order_details_form");
+      var form = $("#explm-collection-order-details-form");
       var orderId = $("#hiddenOrderId").val();
       var country = $("#hiddenCountry").val();
   
@@ -92,7 +92,7 @@ jQuery(document).ready(function ($) {
         },
         success: function (response) {
           if (response.success) {
-            jQuery(".explm_modal_wrapper").fadeOut(300, function () {
+            jQuery(".explm-modal-wrapper").fadeOut(300, function () {
               jQuery(this).remove();
             });
         
@@ -111,7 +111,7 @@ jQuery(document).ready(function ($) {
             })
         
           } else {
-            jQuery(".explm_modal_wrapper").fadeOut(300, function () {
+            jQuery(".explm-modal-wrapper").fadeOut(300, function () {
               jQuery(this).remove();
             });
         

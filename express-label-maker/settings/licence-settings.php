@@ -42,7 +42,7 @@ function explm_licence_tab_content()
     echo '<tr>';
     echo '<th scope="row"><label for="explm_licence_key">' . esc_html__('Licence*', 'express-label-maker') . '</label></th>';
     echo '<td><input name="explm_licence_key" type="text" id="explm_licence_key" value="' . esc_attr($saved_licence_key) . '" class="regular-text" placeholder="' . esc_html__('Your licence key or click Start Trial', 'express-label-maker') . '">';
-    echo '<button id="start-trial-btn" class="button elm-start-trial-btn" style="display:none;margin-left:15px;">' . esc_html__('Start Trial', 'express-label-maker') . '</button></td>';
+    echo '<button id="start-trial-btn" class="button explm-start-trial-btn" style="display:none;margin-left:15px;">' . esc_html__('Start Trial', 'express-label-maker') . '</button></td>';
     echo '</tr>';
     echo '<tr>';
     echo '<th scope="row"><label for="explm_country">' . esc_html__('Country*', 'express-label-maker') . '</label></th>';
@@ -65,15 +65,15 @@ function explm_licence_tab_content()
     echo '<h3>' . esc_html__('Licence status', 'express-label-maker') . '</h3>';
     echo '<tr>';
     echo '<th scope="row" style="width: 100px;"><label>' . esc_html__('Valid from', 'express-label-maker') . '</label></th>';
-    echo '<td><input type="text" readonly value="" class="regular-text explm_licence_inputs" id="explm_valid_from"></td>';
+    echo '<td><input type="text" readonly value="" class="regular-text explm-licence-inputs" id="explm_valid_from"></td>';
     echo '<th scope="row" style="padding-left: 2%;width: 100px;"><label>' . esc_html__('Label limit', 'express-label-maker') . '</label></th>';
-    echo '<td><input type="text" readonly value="" class="regular-text explm_licence_inputs" id="explm_usage_limit"></td>';
+    echo '<td><input type="text" readonly value="" class="regular-text explm-licence-inputs" id="explm_usage_limit"></td>';
     echo '</tr>';
     echo '<tr>';
     echo '<th scope="row" style="width: 100px;"><label>' . esc_html__('Valid to', 'express-label-maker') . '</label></th>';
-    echo '<td><input type="text" readonly value="" class="regular-text explm_licence_inputs" id="explm_valid_until"></td>';
+    echo '<td><input type="text" readonly value="" class="regular-text explm-licence-inputs" id="explm_valid_until"></td>';
     echo '<th scope="row" style="padding-left: 2%;width: 100px;"><label>' . esc_html__('Used', 'express-label-maker') . '</label></th>';
-    echo '<td><input type="text" readonly value="" class="regular-text explm_licence_inputs" id="explm_usage"></td>';
+    echo '<td><input type="text" readonly value="" class="regular-text explm-licence-inputs" id="explm_usage"></td>';
     echo '</tr>';
     echo '</table>';
     echo '</div>';

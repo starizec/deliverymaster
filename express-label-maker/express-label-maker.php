@@ -221,11 +221,11 @@ class ExplmLabelMaker
         ?>
     
         <div class="explm_custom_order_metabox_content">
-            <h4 class="explm_custom_order_metabox_title"><?php echo esc_html__('Print label', 'express-label-maker'); ?></h4>
-            <div class="explm_custom_order_wrapper">
+            <h4 class="explm-custom-order-metabox-title"><?php echo esc_html__('Print label', 'express-label-maker'); ?></h4>
+            <div class="explm-custom-order-wrapper">
                 <?php foreach ($courier_icons as $courier => $icon): ?>
-                    <div class="explm_icon_container">
-                        <a href="#" class="explm_open_modal button button-primary explm_open_modal_order" 
+                    <div class="explm-icon-container">
+                        <a href="#" class="explm-open-modal button button-primary explm-open-modal-order" 
                            data-order-id="<?php echo esc_attr($order_id); ?>" 
                            data-courier="<?php echo esc_attr($courier); ?>">
                             <?php echo esc_html($icon['button_text']); ?>
@@ -235,8 +235,8 @@ class ExplmLabelMaker
             </div>
     
             <?php if (!empty(array_filter($pdf_urls))) : ?>
-                <div class="explm_custom_order_pdf_wrapper">
-                    <h4 class="explm_custom_order_metabox_title"><?php echo esc_html__('Labels', 'express-label-maker'); ?></h4>
+                <div class="explm-custom-order-pdf-wrapper">
+                    <h4 class="explm-custom-order-metabox-title"><?php echo esc_html__('Labels', 'express-label-maker'); ?></h4>
                     <?php foreach ($pdf_urls as $pdf_url): ?>
                         <?php if (!empty(trim($pdf_url))) : ?>
                             <a href="<?php echo esc_url(trim($pdf_url)); ?>" target="_blank" class="explm_pdf_link">
@@ -247,9 +247,9 @@ class ExplmLabelMaker
                 </div>
             <?php endif; ?>
     
-            <div class="explm_custom_order_buttons">
+            <div class="explm-custom-order-buttons">
                 <?php if ($dpd_parcel_link || $overseas_parcel_link): ?>
-                    <h4 class="explm_custom_order_metabox_title"><?php echo esc_html__('Stack and trace', 'express-label-maker'); ?></h4>
+                    <h4 class="explm-custom-order-metabox-title"><?php echo esc_html__('Stack and trace', 'express-label-maker'); ?></h4>
                     <?php if ($dpd_parcel_link): ?>
                         <div class="explm_stack_and_trace_button">
                             <a href="<?php echo esc_url($dpd_parcel_link); ?>" target="_blank" class="button button-secondary">
@@ -265,7 +265,7 @@ class ExplmLabelMaker
                         </div>
                     <?php endif; ?>
                     <?php if ($dpd_condition): ?>
-                        <h4 class="explm_custom_order_metabox_title"><?php echo esc_html__('Collection request', 'express-label-maker'); ?></h4>
+                        <h4 class="explm-custom-order-metabox-title"><?php echo esc_html__('Collection request', 'express-label-maker'); ?></h4>
                         <div class="explm_collection_request_button">
                             <button data-order-id="<?php echo esc_attr($order_id); ?>" id="explm_collection_request" class="button button-primary">
                                 <?php echo esc_html__('DPD Collection request', 'express-label-maker'); ?>
@@ -298,7 +298,7 @@ class ExplmLabelMaker
 
         foreach ($courier_icons as $courier => $icon) {
             $icon_url = plugin_dir_url(__FILE__) . $icon['url'];
-            echo '<a href="#" class="explm_open_modal button" data-order-id="' . esc_attr($order_id) . '" data-courier="' . esc_attr($courier) . '"><img src="' . esc_url($icon_url) . '" alt="' . esc_attr($icon['alt']) . '" class="' . esc_attr($courier) . '-action-icon" /></a>';
+            echo '<a href="#" class="explm-open-modal button" data-order-id="' . esc_attr($order_id) . '" data-courier="' . esc_attr($courier) . '"><img src="' . esc_url($icon_url) . '" alt="' . esc_attr($icon['alt']) . '" class="explm-' . esc_attr($courier) . '-action-icon" /></a>';
         }
     }
 

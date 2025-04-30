@@ -1,12 +1,12 @@
 jQuery(document).ready(function ($) {
     $("body").append(
-      '<div class="explm_loading_panel"><div class="explm_spinner"></div></div>'
+      '<div class="explm-loading-panel"><div class="explm-spinner"></div></div>'
     );
   
-    $(document).on("click", ".elm-start-trial-btn", function (e) {
+    $(document).on("click", ".explm-start-trial-btn", function (e) {
       e.preventDefault();
   
-      $(".explm_loading_panel").fadeIn(300).css({
+      $(".explm-loading-panel").fadeIn(300).css({
         display: "flex",
         "z-index": "9999999",
       });
@@ -23,10 +23,10 @@ jQuery(document).ready(function ($) {
         },
         success: function (response) {
           if (response.success) {
-            $(".explm_loading_panel").fadeOut(300);
+            $(".explm-loading-panel").fadeOut(300);
             $("#explm_email").val(response.data.email);
             $("#explm_licence_key").val(response.data.licence);
-            $(".elm-start-trial-btn").hide();
+            $(".explm-start-trial-btn").hide();
             $("#explm_submit_btn").prop("disabled", false);
   
             Swal.fire({
@@ -41,7 +41,7 @@ jQuery(document).ready(function ($) {
               },
             });
   
-            jQuery(".explm_modal_wrapper").fadeOut(300, function () {
+            jQuery(".explm-modal-wrapper").fadeOut(300, function () {
               jQuery(this).remove();
             });
           } else {
@@ -58,7 +58,7 @@ jQuery(document).ready(function ($) {
                 confirmButton: 'explm-swal-button'
               },
             });
-            $(".explm_loading_panel").fadeOut(300);
+            $(".explm-loading-panel").fadeOut(300);
           }
         },
       });
@@ -80,7 +80,7 @@ jQuery(document).ready(function ($) {
       return;
     }
 
-    $(".explm_loading_panel").fadeIn(300).css({
+    $(".explm-loading-panel").fadeIn(300).css({
       display: "flex",
       "z-index": "9999999",
     });
@@ -94,7 +94,7 @@ jQuery(document).ready(function ($) {
         domain: window.location.hostname,
       },
       success: function (response) {
-        $(".explm_loading_panel").fadeOut(300);
+        $(".explm-loading-panel").fadeOut(300);
         if (response.success) {
           $("#explm_valid_from").val(response.data.valid_from);
           $("#explm_valid_until").val(response.data.valid_until);
@@ -105,8 +105,8 @@ jQuery(document).ready(function ($) {
           if (!isNaN(usage) && usage >= 1) {
             const totalMinutes = usage * 5;
             const days = Math.floor(totalMinutes / 1440);
-            const hours = Math.floor((totalMinutes % 1440) / 60);
-            const minutes = totalMinutes % 60;
+            const hours = Math.floor(totalMinutes / 60);
+            const minutes = totalMinutes % 60;   
   
             const message = explm_ajax.savedLabelTime
             .replace("%1$d", totalMinutes)

@@ -4,103 +4,103 @@ if (!defined('ABSPATH')) {
 }
 ?>
 
-<div class="explm_loading_panel">
-    <div class="explm_spinner"></div>
+<div class="explm-loading-panel">
+    <div class="explm-spinner"></div>
 </div>
-<div class="explm_modal_wrapper">
-    <div class="explm_modal">
-        <div class="explm_modal_header">
+<div class="explm-modal-wrapper">
+    <div class="explm-modal">
+        <div class="explm-modal-header">
             <h2 style="margin-top: 0;">
                 <?php esc_html_e('Order Details', 'express-label-maker'); ?> #
                 <?php echo esc_attr($order_data['id']); ?>
             </h2>
-            <button class="explm_close_button explm_cancel_action">&times;</button>
+            <button class="explm-close-button explm-cancel-action">&times;</button>
         </div>
-        <div class="elm-error" style="display: none"></div>
-        <form id="explm_collection_order_details_form">
-            <div class="explm_form_columns">
+        <div class="explm-error" style="display: none"></div>
+        <form id="explm-collection-order-details-form">
+            <div class="explm-form-columns">
                 <h3 style="margin: 0 0 5px 0;"><?php esc_html_e('Pickup address', 'express-label-maker'); ?></h3>
                 <!-- Customer's Name -->
-                <label class="labels">
+                <label class="explm-labels">
                     <?php esc_html_e("Customer's Name:", 'express-label-maker'); ?>
                     <input type="text" name="customer_name" value="<?php echo esc_attr($shipping['first_name'] . ' ' . $shipping['last_name']); ?>">
                 </label>
                 <!-- Customer's Address -->
-                <label class="labels">
+                <label class="explm-labels">
                     <?php esc_html_e("Customer's Address:", 'express-label-maker'); ?>
                     <input type="text" name="customer_address" value="<?php echo esc_attr(trim($address_without_house_number)); ?>">
                 </label>
                 <!-- House Number -->
-                <label class="labels">
+                <label class="explm-labels">
                     <?php esc_html_e('House Number:', 'express-label-maker'); ?>
                     <input type="text" name="house_number" value="<?php echo esc_attr($house_number); ?>">
                 </label>
                 <!-- City -->
-                <label class="labels">
+                <label class="explm-labels">
                     <?php esc_html_e('City:', 'express-label-maker'); ?>
                     <input type="text" name="city" value="<?php echo esc_attr($shipping['city']); ?>">
                 </label>
                 <!-- ZIP Code -->
-                <label class="labels">
+                <label class="explm-labels">
                     <?php esc_html_e('ZIP Code:', 'express-label-maker'); ?>
                     <input type="text" name="zip_code" value="<?php echo esc_attr($shipping['postcode']); ?>">
                 </label>
                 <!-- Country -->
-                <label class="labels">
+                <label class="explm-labels">
                     <?php esc_html_e('Country:', 'express-label-maker'); ?>
                     <input type="text" name="country" value="<?php echo esc_attr($shipping['country']); ?>">
                 </label>
                 <!-- Contact Person -->
-                <label class="labels">
+                <label class="explm-labels">
                     <?php esc_html_e('Contact Person:', 'express-label-maker'); ?>
                     <input type="text" name="contact_person" value="<?php echo esc_attr($shipping['first_name'] . ' ' . $shipping['last_name']); ?>">
                 </label>
                 <!-- Phone -->
-                <label class="labels">
+                <label class="explm-labels">
                     <?php esc_html_e('Phone:', 'express-label-maker'); ?>
                     <input type="text" name="phone" value="<?php echo esc_attr($billing['phone']); ?>">
                 </label>
                 <!-- Email -->
-                <label class="labels">
+                <label class="explm-labels">
                     <?php esc_html_e('Email:', 'express-label-maker'); ?>
                     <input type="email" name="email" value="<?php echo esc_attr($billing['email']); ?>">
                 </label>
                  <!-- Info for sender -->
-                <label class="labels">
+                <label class="explm-labels">
                     <?php esc_html_e('Info for sender:', 'express-label-maker'); ?>
                     <textarea name="collection_info_for_sender"></textarea>
                 </label>
             </div>
-            <div class="explm_form_columns">
+            <div class="explm-form-columns">
             <h3 style="margin: 0 0 5px 0;"><?php esc_html_e('Delivery address', 'express-label-maker'); ?></h3>
 
             <!-- Company or personal name -->
-            <label class="labels">
+            <label class="explm-labels">
                     <?php esc_html_e('Company or personal name:', 'express-label-maker'); ?>
                     <input type="text" name="collection_company_or_personal_name" value="<?php echo esc_attr(get_option('explm_dpd_company_or_personal_name', '')); ?>">
                 </label>
                 <!-- Contact person -->
-                <label class="labels">
+                <label class="explm-labels">
                     <?php esc_html_e('Contact person:', 'express-label-maker'); ?>
                     <input type="text" name="collection_contact_person" value="<?php echo esc_attr(get_option('explm_dpd_contact_person', '')); ?>">
                 </label>
                 <!-- Street -->
-                <label class="labels">
+                <label class="explm-labels">
                     <?php esc_html_e('Street:', 'express-label-maker'); ?>
                     <input type="text" name="collection_street" value="<?php echo esc_attr(get_option('explm_dpd_street', '')); ?>">
                 </label>
                 <!-- Property number -->
-                <label class="labels">
+                <label class="explm-labels">
                     <?php esc_html_e('Property number:', 'express-label-maker'); ?>
                     <input type="text" name="collection_property_number" value="<?php echo esc_attr(get_option('explm_dpd_property_number', '')); ?>">
                 </label>
                 <!-- City -->
-                <label class="labels">
+                <label class="explm-labels">
                     <?php esc_html_e('City:', 'express-label-maker'); ?>
                     <input type="text" name="collection_city" value="<?php echo esc_attr(get_option('explm_dpd_city', '')); ?>">
                 </label>
                 <!-- Country -->
-                <label class="labels">
+                <label class="explm-labels">
                     <?php esc_html_e('Country:', 'express-label-maker'); ?>
                     <select name="collection_country">
                         <option value="AT" <?php selected(get_option('explm_dpd_country'), 'AT'); ?>><?php echo esc_html__('Austria', 'express-label-maker'); ?></option>
@@ -132,34 +132,34 @@ if (!defined('ABSPATH')) {
                     </select>
                 </label>
                 <!-- Postal Code -->
-                <label class="labels">
+                <label class="explm-labels">
                     <?php esc_html_e('Postal Code:', 'express-label-maker'); ?>
                     <input type="text" name="collection_postal_code" value="<?php echo esc_attr(get_option('explm_dpd_postal_code', '')); ?>">
                 </label>
                 <!-- Phone -->
-                <label class="labels">
+                <label class="explm-labels">
                     <?php esc_html_e('Phone:', 'express-label-maker'); ?>
                     <input type="text" name="collection_phone" value="<?php echo esc_attr(get_option('explm_dpd_phone', '')); ?>">
                 </label>
                 <!-- Email -->
-                <label class="labels">
+                <label class="explm-labels">
                     <?php esc_html_e('Email:', 'express-label-maker'); ?>
                     <input type="email" name="collection_email" value="<?php echo esc_attr(get_option('explm_dpd_email', '')); ?>">
                 </label>
                  <!-- Pickup Date -->
-                <label class="labels">
+                <label class="explm-labels">
                     <?php esc_html_e('Pickup Date:', 'express-label-maker'); ?>
                     <input type="date" name="collection_pickup_date" value="<?php echo esc_attr(gmdate('Y-m-d', strtotime('+1 day'))); ?>">
                 </label>
                 <!-- Courier selection -->
-                <label class="labels">
+                <label class="explm-labels">
                     <?php esc_html_e('Select Courier:', 'express-label-maker'); ?>
                     <select id="collection_courier" name="collection_courier_selection">
                         <option value="dpd">DPD</option>
                     </select>
                 </label>
                  <!-- Info for courier -->
-                 <label class="labels">
+                 <label class="explm-labels">
                     <?php esc_html_e('Info for courier:', 'express-label-maker'); ?>
                     <textarea name="collection_info_for_courier"></textarea>
                 </label>
@@ -167,11 +167,11 @@ if (!defined('ABSPATH')) {
                 <input type="hidden" id="hiddenCountry" value="<?php echo esc_attr(get_option('explm_country_option', '')); ?>" />
                 <input type="hidden" id="hiddenOrderId" value="<?php echo esc_attr($order_data['id']); ?>" />
         </form>
-        <div class="explm_modal_actions">
+        <div class="explm-modal-actions">
             <button class="button button-primary explm_confirm_collection_action">
                 <?php esc_html_e('Send request', 'express-label-maker'); ?>
             </button>
-            <button class="button explm_cancel_action">
+            <button class="button explm-cancel-action">
                 <?php esc_html_e('Cancel', 'express-label-maker'); ?>
             </button>
         </div>

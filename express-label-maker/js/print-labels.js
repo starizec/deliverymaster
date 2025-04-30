@@ -1,6 +1,6 @@
 jQuery(document).ready(function ($) {
     $("body").append(
-      '<div class="explm_loading_panel"><div class="explm_spinner"></div></div>'
+      '<div class="explm-loading-panel"><div class="explm-spinner"></div></div>'
     );
   
     var orderFilterForm = $("#posts-filter, #wc-orders-filter");
@@ -20,7 +20,7 @@ jQuery(document).ready(function ($) {
       if (supportedActionValues.includes(actionValue)) {
         e.preventDefault();
   
-        $(".explm_loading_panel").fadeIn(300).css({
+        $(".explm-loading-panel").fadeIn(300).css({
           display: "flex",
           "z-index": "9999999",
         });
@@ -34,7 +34,7 @@ jQuery(document).ready(function ($) {
           .get();
   
         if (checkedPostIds.length === 0) {
-          jQuery(".explm_modal_wrapper").fadeOut(300, function () {
+          jQuery(".explm-modal-wrapper").fadeOut(300, function () {
             jQuery(this).remove();
           });
           Swal.fire({
@@ -63,7 +63,7 @@ jQuery(document).ready(function ($) {
           success: function (response) {
             console.log(response, "resp");
           
-            $(".explm_loading_panel").fadeOut(300);
+            $(".explm-loading-panel").fadeOut(300);
           
             if (response.success) {
           
@@ -109,7 +109,7 @@ jQuery(document).ready(function ($) {
                   });
                 }
   
-                jQuery(".explm_modal_wrapper").fadeOut(300, function () {
+                jQuery(".explm-modal-wrapper").fadeOut(300, function () {
                   jQuery(this).remove();
                 });
           
@@ -176,7 +176,7 @@ jQuery(document).ready(function ($) {
             }
           },        
           error: function () {
-            $(".explm_loading_panel").fadeOut(300);
+            $(".explm-loading-panel").fadeOut(300);
             Swal.fire({
               icon: "error",
               title: "Server error",
