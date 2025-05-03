@@ -168,6 +168,12 @@ class ExplmPrintLabels {
     }     
 
     public function setDPDParcelsData($shipping, $billing, $order_data, $order_total, $address_without_house_number, $house_number, $weight, $order_id, $parcel_type, $package_number, $payment_method = null) {
+        
+        $dpd_note = get_option('explm_dpd_customer_note', '');
+        $sender_remark = !empty($dpd_note) 
+            ? $dpd_note 
+            : (!empty($order_data['customer_note']) ? (string)$order_data['customer_note'] : null);
+        
         $data = array(
             'cod_amount'    => (float)$order_total,
             'name1'         => (string)trim($shipping['first_name'] . ' ' . $shipping['last_name']),
@@ -177,7 +183,7 @@ class ExplmPrintLabels {
             'country'       => (string)$shipping['country'], 
             'pcode'         => (string)$shipping['postcode'],
             'email'         => isset($billing['email']) ? (string)$billing['email'] : null, 
-            'sender_remark' => isset($order_data['customer_note']) ? (string)$order_data['customer_note'] : null, 
+            'sender_remark' => $sender_remark, 
             'weight'        => (float)$weight,
             'order_number'  => (string)$order_id,
             'cod_purpose'   => (string)$order_id,
@@ -200,6 +206,12 @@ class ExplmPrintLabels {
     }      
     
     public function setOVERSEASParcelsData($shipping, $billing, $order_data, $order_total, $address_without_house_number, $house_number, $weight, $order_id, $parcel_type, $package_number, $payment_method) {
+        
+        $overseas_note = get_option('explm_overseas_customer_note', '');
+        $sender_remark = !empty($overseas_note) 
+            ? $overseas_note 
+            : (!empty($order_data['customer_note']) ? (string)$order_data['customer_note'] : null);
+
         $data = array(
             'cod_amount'     => $payment_method === 'cod' ? (float)$order_total : null,
             'name1'          => (string)trim($shipping['first_name'] . ' ' . $shipping['last_name']),
@@ -207,7 +219,7 @@ class ExplmPrintLabels {
             'city'           => (string)$shipping['city'],
             'pcode'          => (string)$shipping['postcode'],
             'email'          => isset($billing['email']) ? (string)$billing['email'] : null,
-            'sender_remark'  => isset($order_data['customer_note']) ? (string)$order_data['customer_note'] : null, 
+            'sender_remark'  => $sender_remark, 
             'order_number'   => (string)$order_id,
             'num_of_parcel'  => (int)$package_number,
             'phone'          => isset($billing['phone']) ? (string)$billing['phone'] : null

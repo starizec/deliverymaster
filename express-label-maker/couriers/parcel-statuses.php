@@ -39,7 +39,7 @@ class ExplmParcelStatuses {
         ));
 
         $response = array();
-        
+
         foreach ($orders as $order_id) {
             $order = ExplmLabelMaker::get_order($order_id);
             if (!$order) continue;

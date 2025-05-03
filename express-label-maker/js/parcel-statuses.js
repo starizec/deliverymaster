@@ -142,6 +142,9 @@ function update_parcel_status(order_id, pl_status) {
         case "Pošiljka je isporučena.": //OVERSEAS
           element.addClass("explm-status-delivered");
           break;
+        case "Pošiljka je isporučena originalnom pošiljatelju.": //OVERSEAS
+          element.addClass("explm-status-delivered");
+          break;
         default:
           element.addClass("explm-status-rest");
           break;

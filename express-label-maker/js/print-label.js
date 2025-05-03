@@ -108,6 +108,10 @@ jQuery(document).ready(function ($) {
       } else if (explm_ajax.serviceType === "DPD Home") {
         parcelType = isCod ? "D-COD-B2C" : "D-B2C";
       }
+
+      const sender_remark = explm_ajax.dpd_note.trim() !== "" 
+      ? explm_ajax.dpd_note 
+      : form.find('textarea[name="note"]').val();
     
       const data = {
         cod_amount: form.find('input[name="cod_amount"]').val(),
@@ -118,7 +122,7 @@ jQuery(document).ready(function ($) {
         country: form.find('input[name="country"]').val(),
         pcode: form.find('input[name="zip_code"]').val(),
         email: form.find('input[name="email"]').val(),
-        sender_remark: form.find('textarea[name="note"]').val(),
+        sender_remark: sender_remark,
         weight: form.find('input[name="weight"]').val(),
         order_number: form.find('input[name="reference"]').val(),
         cod_purpose: form.find('input[name="reference"]').val(),
@@ -138,6 +142,10 @@ jQuery(document).ready(function ($) {
     function setOverseasParcelData(form) {
       const isCod = form.find('input[name="parcel_type"]:checked').val() === "cod";
       const overseasParcelLockerId = form.find('input[name="parcel_locker"]').val();
+
+      const sender_remark = explm_ajax.overseas_note.trim() !== "" 
+      ? explm_ajax.overseas_note 
+      : form.find('textarea[name="note"]').val();
   
       const data = {
         cod_amount: isCod ? form.find('input[name="cod_amount"]').val() : null,
@@ -146,7 +154,7 @@ jQuery(document).ready(function ($) {
         city: form.find('input[name="city"]').val(),
         pcode: form.find('input[name="zip_code"]').val(),
         email: form.find('input[name="email"]').val(),
-        sender_remark: form.find('textarea[name="note"]').val(),
+        sender_remark: sender_remark,
         order_number: form.find('input[name="reference"]').val(),
         num_of_parcel: form.find('input[name="package_number"]').val(),
         phone: form.find('input[name="phone"]').val(),

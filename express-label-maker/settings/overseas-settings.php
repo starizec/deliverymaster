@@ -9,12 +9,14 @@ function explm_overseas_tab_content() {
         delete_option('explm_overseas_api_key_option');
         delete_option('explm_overseas_enable_pickup');
         delete_option('explm_overseas_pickup_shipping_method');
+        delete_option('explm_overseas_customer_note');
         echo '<div class="updated"><p>' . esc_html__('Overseas settings deleted.', 'express-label-maker') . '</p></div>';
     }
     elseif (isset($_POST['explm_overseas_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['explm_overseas_nonce'])), 'explm_save_overseas_settings')) {
         $api_key = isset($_POST['explm_overseas_api_key']) ? sanitize_text_field(wp_unslash($_POST['explm_overseas_api_key'])) : '';
         $enable_paketomat = isset($_POST['enable_paketomat']) ? sanitize_text_field(wp_unslash($_POST['enable_paketomat'])) : '';
         $shipping_method  = isset($_POST['explm_overseas_shipping_method']) ? sanitize_text_field(wp_unslash($_POST['explm_overseas_shipping_method'])) : '';
+        $customer_note = isset($_POST['explm_overseas_customer_note']) ? sanitize_textarea_field(wp_unslash($_POST['explm_overseas_customer_note'])) : '';
     
         if ( $enable_paketomat !== '1' ) {
             $shipping_method = '';
@@ -23,6 +25,7 @@ function explm_overseas_tab_content() {
             update_option('explm_overseas_api_key_option', $api_key);
             update_option('explm_overseas_enable_pickup', $enable_paketomat);
             update_option('explm_overseas_pickup_shipping_method', $shipping_method);
+            update_option('explm_overseas_customer_note', $customer_note);
             if ( '1' === $enable_paketomat && !empty($shipping_method) ) {
                 if ( class_exists('ExplmParcelLockers') ) {
                     $parcel_locker_obj = new ExplmParcelLockers();
@@ -71,6 +74,15 @@ function explm_overseas_tab_content() {
     }
 
     echo '</select></td>';
+    echo '</tr>';
+    echo '<tr>';
+    echo '<th scope="row"><label for="explm_overseas_customer_note">' . esc_html__('Customer Note', 'express-label-maker') . ' ';
+    echo '<span style="cursor:help;" title="' . esc_attr__('If you enter a note here, it will override the customer\'s note on the shipping label.', 'express-label-maker') . '">ℹ️</span>';
+    echo '</label></th>';
+
+    $customer_note = get_option('explm_overseas_customer_note', '');
+    
+    echo '<td><textarea name="explm_overseas_customer_note" id="explm_overseas_customer_note" rows="3" cols="40">' . esc_textarea($customer_note) . '</textarea></td>';
     echo '</tr>';
     echo '</table>';
     echo '<p class="submit">';

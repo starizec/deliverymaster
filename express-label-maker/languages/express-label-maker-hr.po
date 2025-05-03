@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ExpressLabelMaker\n"
-"POT-Creation-Date: 2025-04-30 02:30+0200\n"
-"PO-Revision-Date: 2025-04-30 02:30+0200\n"
+"POT-Creation-Date: 2025-05-03 02:01+0200\n"
+"PO-Revision-Date: 2025-05-03 02:03+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: hr_HR\n"
@@ -21,50 +21,50 @@ msgstr ""
 msgid "Invalid input provided."
 msgstr "Unesen je nevažeći unos."
 
-#: couriers/collection-request.php:27 express-label-maker.php:359
-#: express-label-maker.php:389
+#: couriers/collection-request.php:27 express-label-maker.php:361
+#: express-label-maker.php:391
 msgid "Order not found."
 msgstr "Narudžba nije pronađena."
 
-#: couriers/collection-request.php:92
+#: couriers/collection-request.php:90
 msgid "Failed to update order meta."
 msgstr "Nije uspjelo ažuriranje meta podataka narudžbe."
 
-#: couriers/parcel-lockers.php:269
+#: couriers/parcel-lockers.php:295
 msgid "Loading..."
 msgstr "Učitavanje..."
 
-#: couriers/parcel-lockers.php:270 couriers/parcel-lockers.php:306
-#: couriers/parcel-lockers.php:324
+#: couriers/parcel-lockers.php:296 couriers/parcel-lockers.php:332
+#: couriers/parcel-lockers.php:350
 msgid "Choose parcel locker"
 msgstr "Odaberi paketomat"
 
-#: couriers/parcel-lockers.php:271
+#: couriers/parcel-lockers.php:297
 msgid "There are no parcel lockers to display."
 msgstr "Nema paketomata za prikaz."
 
-#: couriers/parcel-lockers.php:272
+#: couriers/parcel-lockers.php:298
 msgid "Search parcel lockers..."
 msgstr "Pretraži paketomate..."
 
-#: couriers/parcel-lockers.php:273
+#: couriers/parcel-lockers.php:299
 msgid "Selected parcel locker"
 msgstr "Odabrani paketomat"
 
-#: couriers/parcel-lockers.php:274 couriers/parcel-lockers.php:315
-#: couriers/parcel-lockers.php:333
+#: couriers/parcel-lockers.php:300 couriers/parcel-lockers.php:341
+#: couriers/parcel-lockers.php:359
 msgid "Delete parcel locker"
 msgstr "Obriši paketomat"
 
-#: couriers/parcel-lockers.php:275
+#: couriers/parcel-lockers.php:301
 msgid "There are no parcel lockers to display..."
 msgstr "Nema paketomata za prikaz..."
 
-#: couriers/parcel-lockers.php:418
+#: couriers/parcel-lockers.php:444
 msgid "Please select a parcel machine for DPD delivery."
 msgstr "Molimo odaberite paketomat za DPD dostavu."
 
-#: couriers/parcel-lockers.php:429
+#: couriers/parcel-lockers.php:455
 msgid "Please select a parcel locker for Overseas delivery."
 msgstr "Molimo odaberite paketomat za Overseas dostavu."
 
@@ -77,65 +77,65 @@ msgstr ""
 "%1$d minuta tvog života upravo ti je vraćeno. To je %2$d h i %3$d min koje "
 "nisi proveo tipkajući naljepnice. Tvoja tipkovnica ti zahvaljuje."
 
-#: express-label-maker.php:98 express-label-maker.php:122
+#: express-label-maker.php:100 express-label-maker.php:124
 msgid "Settings"
 msgstr "Postavke"
 
 #. Plugin Name of the plugin/theme
-#: express-label-maker.php:107 express-label-maker.php:108
-#: express-label-maker.php:149
+#: express-label-maker.php:109 express-label-maker.php:110
+#: express-label-maker.php:151
 msgid "Express Label Maker"
 msgstr "Express Label Maker"
 
-#: express-label-maker.php:121
+#: express-label-maker.php:123
 msgid "Licence"
 msgstr "Licenca"
 
-#: express-label-maker.php:123
+#: express-label-maker.php:125
 msgid "DPD"
 msgstr "DPD"
 
-#: express-label-maker.php:124
+#: express-label-maker.php:126
 msgid "Overseas"
 msgstr "Overseas"
 
-#: express-label-maker.php:162
+#: express-label-maker.php:164
 msgid "DPD Print Label"
 msgstr "DPD Print Naljepnica"
 
-#: express-label-maker.php:171
+#: express-label-maker.php:173
 msgid "Overseas Print Label"
 msgstr "Overseas Print Naljepnica"
 
-#: express-label-maker.php:224
+#: express-label-maker.php:226
 msgid "Print label"
 msgstr "Print naljepnica"
 
-#: express-label-maker.php:239
+#: express-label-maker.php:241
 msgid "Labels"
 msgstr "Naljepnice"
 
-#: express-label-maker.php:252
+#: express-label-maker.php:254
 msgid "Stack and trace"
 msgstr "Praćenje pošiljke"
 
-#: express-label-maker.php:256
+#: express-label-maker.php:258
 msgid "DPD Stack and trace"
 msgstr "DPD Praćenje pošiljke"
 
-#: express-label-maker.php:263
+#: express-label-maker.php:265
 msgid "Overseas Stack and Trace"
 msgstr "Overseas Praćenje pošiljke"
 
-#: express-label-maker.php:268
+#: express-label-maker.php:270
 msgid "Collection request"
 msgstr "Zahtjev za prikup"
 
-#: express-label-maker.php:271
+#: express-label-maker.php:273
 msgid "DPD Collection request"
 msgstr "DPD Zahtjev za prikup"
 
-#: express-label-maker.php:286
+#: express-label-maker.php:288
 msgid "Package status"
 msgstr "Status paketa"
 
@@ -222,134 +222,134 @@ msgid "Property number:"
 msgstr "Kućni broj:"
 
 #: forms/express-label-maker-collection-form.php:106
-#: settings/dpd-settings.php:154 settings/overseas-settings.php:140
+#: settings/dpd-settings.php:165 settings/overseas-settings.php:152
 msgid "Austria"
 msgstr "Austrija"
 
 #: forms/express-label-maker-collection-form.php:107
-#: settings/dpd-settings.php:155 settings/overseas-settings.php:141
+#: settings/dpd-settings.php:166 settings/overseas-settings.php:153
 msgid "Belgium"
 msgstr "Belgija"
 
 #: forms/express-label-maker-collection-form.php:108
-#: settings/dpd-settings.php:156 settings/overseas-settings.php:142
+#: settings/dpd-settings.php:167 settings/overseas-settings.php:154
 msgid "Bulgaria"
 msgstr "Bugarska"
 
 #: forms/express-label-maker-collection-form.php:109
-#: settings/dpd-settings.php:157 settings/licence-settings.php:51
-#: settings/overseas-settings.php:143
+#: settings/dpd-settings.php:168 settings/licence-settings.php:51
+#: settings/overseas-settings.php:155
 msgid "Croatia"
 msgstr "Hrvatska"
 
 #: forms/express-label-maker-collection-form.php:110
-#: settings/dpd-settings.php:158 settings/overseas-settings.php:144
+#: settings/dpd-settings.php:169 settings/overseas-settings.php:156
 msgid "Czechia"
 msgstr "Češka"
 
 #: forms/express-label-maker-collection-form.php:111
-#: settings/dpd-settings.php:159 settings/overseas-settings.php:145
+#: settings/dpd-settings.php:170 settings/overseas-settings.php:157
 msgid "Denmark"
 msgstr "Danska"
 
 #: forms/express-label-maker-collection-form.php:112
-#: settings/dpd-settings.php:160 settings/overseas-settings.php:146
+#: settings/dpd-settings.php:171 settings/overseas-settings.php:158
 msgid "Estonia"
 msgstr "Estonija"
 
 #: forms/express-label-maker-collection-form.php:113
-#: settings/dpd-settings.php:161 settings/overseas-settings.php:147
+#: settings/dpd-settings.php:172 settings/overseas-settings.php:159
 msgid "Finland"
 msgstr "Finska"
 
 #: forms/express-label-maker-collection-form.php:114
-#: settings/dpd-settings.php:162 settings/overseas-settings.php:148
+#: settings/dpd-settings.php:173 settings/overseas-settings.php:160
 msgid "France"
 msgstr "Francuska"
 
 #: forms/express-label-maker-collection-form.php:115
-#: settings/dpd-settings.php:163 settings/overseas-settings.php:149
+#: settings/dpd-settings.php:174 settings/overseas-settings.php:161
 msgid "Germany"
 msgstr "Njemačka"
 
 #: forms/express-label-maker-collection-form.php:116
-#: settings/dpd-settings.php:164 settings/overseas-settings.php:150
+#: settings/dpd-settings.php:175 settings/overseas-settings.php:162
 msgid "Hungary"
 msgstr "Mađarska"
 
 #: forms/express-label-maker-collection-form.php:117
-#: settings/dpd-settings.php:165 settings/overseas-settings.php:151
+#: settings/dpd-settings.php:176 settings/overseas-settings.php:163
 msgid "Ireland"
 msgstr "Irska"
 
 #: forms/express-label-maker-collection-form.php:118
-#: settings/dpd-settings.php:166 settings/overseas-settings.php:152
+#: settings/dpd-settings.php:177 settings/overseas-settings.php:164
 msgid "Italy"
 msgstr "Italija"
 
 #: forms/express-label-maker-collection-form.php:119
-#: settings/dpd-settings.php:167 settings/overseas-settings.php:153
+#: settings/dpd-settings.php:178 settings/overseas-settings.php:165
 msgid "Latvia"
 msgstr "Latvija"
 
 #: forms/express-label-maker-collection-form.php:120
-#: settings/dpd-settings.php:168 settings/overseas-settings.php:154
+#: settings/dpd-settings.php:179 settings/overseas-settings.php:166
 msgid "Lithuania"
 msgstr "Litva"
 
 #: forms/express-label-maker-collection-form.php:121
-#: settings/dpd-settings.php:169 settings/overseas-settings.php:155
+#: settings/dpd-settings.php:180 settings/overseas-settings.php:167
 msgid "Luxembourg"
 msgstr "Luksemburg"
 
 #: forms/express-label-maker-collection-form.php:122
-#: settings/dpd-settings.php:170 settings/overseas-settings.php:156
+#: settings/dpd-settings.php:181 settings/overseas-settings.php:168
 msgid "Netherlands"
 msgstr "Nizozemska"
 
 #: forms/express-label-maker-collection-form.php:123
-#: settings/dpd-settings.php:171 settings/overseas-settings.php:157
+#: settings/dpd-settings.php:182 settings/overseas-settings.php:169
 msgid "Poland"
 msgstr "Poljska"
 
 #: forms/express-label-maker-collection-form.php:124
-#: settings/dpd-settings.php:172 settings/overseas-settings.php:158
+#: settings/dpd-settings.php:183 settings/overseas-settings.php:170
 msgid "Portugal"
 msgstr "Portugal"
 
 #: forms/express-label-maker-collection-form.php:125
-#: settings/dpd-settings.php:173 settings/overseas-settings.php:159
+#: settings/dpd-settings.php:184 settings/overseas-settings.php:171
 msgid "Romania"
 msgstr "Rumunjska"
 
 #: forms/express-label-maker-collection-form.php:126
-#: settings/dpd-settings.php:174 settings/overseas-settings.php:160
+#: settings/dpd-settings.php:185 settings/overseas-settings.php:172
 msgid "Serbia"
 msgstr "Srbija"
 
 #: forms/express-label-maker-collection-form.php:127
-#: settings/dpd-settings.php:175 settings/overseas-settings.php:161
+#: settings/dpd-settings.php:186 settings/overseas-settings.php:173
 msgid "Slovakia"
 msgstr "Slovačka"
 
 #: forms/express-label-maker-collection-form.php:128
-#: settings/dpd-settings.php:176 settings/licence-settings.php:52
-#: settings/overseas-settings.php:162
+#: settings/dpd-settings.php:187 settings/licence-settings.php:52
+#: settings/overseas-settings.php:174
 msgid "Slovenia"
 msgstr "Slovenija"
 
 #: forms/express-label-maker-collection-form.php:129
-#: settings/dpd-settings.php:177 settings/overseas-settings.php:163
+#: settings/dpd-settings.php:188 settings/overseas-settings.php:175
 msgid "Spain"
 msgstr "Španjolska"
 
 #: forms/express-label-maker-collection-form.php:130
-#: settings/dpd-settings.php:178 settings/overseas-settings.php:164
+#: settings/dpd-settings.php:189 settings/overseas-settings.php:176
 msgid "Sweden"
 msgstr "Švedska"
 
 #: forms/express-label-maker-collection-form.php:131
-#: settings/dpd-settings.php:179 settings/overseas-settings.php:165
+#: settings/dpd-settings.php:190 settings/overseas-settings.php:177
 msgid "Switzerland"
 msgstr "Švicarska"
 
@@ -435,97 +435,109 @@ msgstr "Print"
 msgid "Every 4 Hours"
 msgstr "Svaka 4 sata"
 
-#: settings/dpd-settings.php:14
+#: settings/dpd-settings.php:15
 msgid "DPD account deleted."
 msgstr "DPD račun je izbrisan."
 
-#: settings/dpd-settings.php:39
+#: settings/dpd-settings.php:42
 msgid "DPD settings saved."
 msgstr "DPD postavke su spremljene."
 
-#: settings/dpd-settings.php:41
+#: settings/dpd-settings.php:44
 msgid "Username, Password, and Service Type are required."
 msgstr "Korisničko ime, lozinka i tip servisa su obavezni."
 
-#: settings/dpd-settings.php:49
+#: settings/dpd-settings.php:52
 msgid "DPD Settings"
 msgstr "DPD postavke"
 
-#: settings/dpd-settings.php:53
+#: settings/dpd-settings.php:56
 msgid "Username"
 msgstr "Korisničko ime"
 
-#: settings/dpd-settings.php:55
+#: settings/dpd-settings.php:58
 msgid "Password"
 msgstr "Lozinka"
 
-#: settings/dpd-settings.php:57
+#: settings/dpd-settings.php:60
 msgid "Service Type"
 msgstr "Tip servisa"
 
-#: settings/dpd-settings.php:65 settings/overseas-settings.php:52
+#: settings/dpd-settings.php:68 settings/overseas-settings.php:55
 msgid "Pickup station"
 msgstr "Paketomati"
 
-#: settings/dpd-settings.php:74 settings/overseas-settings.php:61
+#: settings/dpd-settings.php:77 settings/overseas-settings.php:64
 msgid "Pickup station delivery method"
 msgstr "Paketomati Metoda dostave"
 
-#: settings/dpd-settings.php:92 settings/dpd-settings.php:198
+#: settings/dpd-settings.php:92 settings/overseas-settings.php:79
+msgid "Customer Note"
+msgstr "Napomena kupca"
+
+#: settings/dpd-settings.php:93 settings/overseas-settings.php:80
+msgid ""
+"If you enter a note here, it will override the customer's note on the "
+"shipping label."
+msgstr ""
+"Ako ovdje unesete napomenu, ona će nadjačati napomenu kupca u narudžbi na "
+"naljepnici."
+
+#: settings/dpd-settings.php:103 settings/dpd-settings.php:209
 #: settings/general-settings.php:69 settings/licence-settings.php:58
-#: settings/overseas-settings.php:77 settings/overseas-settings.php:184
+#: settings/overseas-settings.php:89 settings/overseas-settings.php:196
 msgid "Save Changes"
 msgstr "Spremi promjene"
 
-#: settings/dpd-settings.php:93 settings/overseas-settings.php:78
+#: settings/dpd-settings.php:104 settings/overseas-settings.php:90
 msgid "Delete Account"
 msgstr "Obriši postavke"
 
-#: settings/dpd-settings.php:121 settings/overseas-settings.php:106
+#: settings/dpd-settings.php:132 settings/overseas-settings.php:118
 msgid "Collection Request Data saved."
 msgstr "Spremljeni podaci za zahtjev za prikupljanje."
 
-#: settings/dpd-settings.php:123 settings/overseas-settings.php:108
+#: settings/dpd-settings.php:134 settings/overseas-settings.php:120
 msgid "All fields are required."
 msgstr "Sva polja su obavezna."
 
-#: settings/dpd-settings.php:128 settings/overseas-settings.php:113
+#: settings/dpd-settings.php:139 settings/overseas-settings.php:125
 msgid "Collection Request Data"
 msgstr "Podaci o zahtjevu za prikupljanje"
 
-#: settings/dpd-settings.php:133 settings/overseas-settings.php:118
+#: settings/dpd-settings.php:144 settings/overseas-settings.php:130
 msgid "Company or personal name"
 msgstr "Tvrtka ili ime i prezime"
 
-#: settings/dpd-settings.php:134 settings/overseas-settings.php:119
+#: settings/dpd-settings.php:145 settings/overseas-settings.php:131
 msgid "Contact person"
 msgstr "Kontakt osoba"
 
-#: settings/dpd-settings.php:135 settings/overseas-settings.php:120
+#: settings/dpd-settings.php:146 settings/overseas-settings.php:132
 msgid "Street"
 msgstr "Ulica"
 
-#: settings/dpd-settings.php:136 settings/overseas-settings.php:121
+#: settings/dpd-settings.php:147 settings/overseas-settings.php:133
 msgid "Property number"
 msgstr "Kućni broj"
 
-#: settings/dpd-settings.php:137 settings/overseas-settings.php:122
+#: settings/dpd-settings.php:148 settings/overseas-settings.php:134
 msgid "City"
 msgstr "Grad"
 
-#: settings/dpd-settings.php:138 settings/overseas-settings.php:123
+#: settings/dpd-settings.php:149 settings/overseas-settings.php:135
 msgid "Country"
 msgstr "Država"
 
-#: settings/dpd-settings.php:139 settings/overseas-settings.php:124
+#: settings/dpd-settings.php:150 settings/overseas-settings.php:136
 msgid "Postal Code"
 msgstr "Poštanski broj"
 
-#: settings/dpd-settings.php:140 settings/overseas-settings.php:125
+#: settings/dpd-settings.php:151 settings/overseas-settings.php:137
 msgid "Phone"
 msgstr "Telefon"
 
-#: settings/dpd-settings.php:141 settings/overseas-settings.php:126
+#: settings/dpd-settings.php:152 settings/overseas-settings.php:138
 msgid "Email"
 msgstr "Email"
 
@@ -597,23 +609,23 @@ msgstr "Vrijedi do"
 msgid "Used"
 msgstr "Iskorišteno"
 
-#: settings/overseas-settings.php:12
+#: settings/overseas-settings.php:13
 msgid "Overseas settings deleted."
 msgstr "Overseas postavke obrisane."
 
-#: settings/overseas-settings.php:32
+#: settings/overseas-settings.php:35
 msgid "Overseas settings saved."
 msgstr "Overseas postavke su spremljene."
 
-#: settings/overseas-settings.php:34
+#: settings/overseas-settings.php:37
 msgid "API key is required."
 msgstr "API ključ je obavezan."
 
-#: settings/overseas-settings.php:43
+#: settings/overseas-settings.php:46
 msgid "Overseas Settings"
 msgstr "Overseas postavke"
 
-#: settings/overseas-settings.php:47
+#: settings/overseas-settings.php:50
 msgid "API Key"
 msgstr "API ključ"
 

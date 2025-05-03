@@ -5,7 +5,7 @@
  * Plugin URI: https://expresslabelmaker.com/
  * Description: Print shipping labels and track parcels for multiple couriers directly from WooCommerce.
  * Tags: woocommerce, shipping, label printing, DPD, Overseas
- * Version: 1.25120.1
+ * Version: 1.25123.1
  * Author: expresslabelmaker
  * Tested up to: 6.8
  * License: GPLv2 or later
@@ -83,7 +83,9 @@ class ExplmLabelMaker
                 'email' => get_option('explm_email_option', ''),
                 'licence' => get_option('explm_licence_option', ''),
                 'serviceType' => get_option('explm_dpd_service_type_option', ''),
-                'savedLabelTime' => esc_html__('%1$d minutes of your life just came back. That’s %2$d h and %3$d min you didn’t spend typing shipping labels. Your keyboard thanks you.', 'express-label-maker')
+                'savedLabelTime' => esc_html__('%1$d minutes of your life just came back. That’s %2$d h and %3$d min you didn’t spend typing shipping labels. Your keyboard thanks you.', 'express-label-maker'),
+                'dpd_note' => get_option('explm_dpd_customer_note', ''),
+                'overseas_note' => get_option('explm_overseas_customer_note', ''),
             )
             );
     }    
