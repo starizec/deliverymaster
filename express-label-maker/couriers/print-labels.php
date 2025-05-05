@@ -85,20 +85,22 @@ class ExplmPrintLabels {
         $body_response = json_decode(wp_remote_retrieve_body($response), true);
     
         $errors = array();
-    
+
         if (!empty($body_response['errors']) && is_array($body_response['errors'])) {
             foreach ($body_response['errors'] as $error) {
                 $errors[] = array(
                     'order_number' => !empty($error['order_number']) ? $error['order_number'] : 'unknown',
+                    'error_code' => !empty($error['error_code']) ? $error['error_code'] : 'unknown',
                     'error_message' => !empty($error['error_message']) ? $error['error_message'] : 'unknown'
                 );
             }
         } elseif (!empty($body_response['error'])) {
             $errors[] = array(
                 'order_number' => 'unknown',
+                'error_code' => 'unknown',
                 'error_message' => $body_response['error']
             );
-        }
+        }        
     
         $save_pdf_on_server = get_option('explm_save_pdf_on_server_option', 'true');
         $upload_dir = wp_upload_dir();
@@ -162,7 +164,6 @@ class ExplmPrintLabels {
                 'errors' => $errors
             ));
         } else {
-            // nema labela → vrati samo greške
             wp_send_json_error(array('errors' => $errors));
         }
     }     
@@ -173,6 +174,10 @@ class ExplmPrintLabels {
         $sender_remark = !empty($dpd_note) 
             ? $dpd_note 
             : (!empty($order_data['customer_note']) ? (string)$order_data['customer_note'] : null);
+        
+        if (!empty($sender_remark) && mb_strlen($sender_remark) > 50) {
+            $sender_remark = mb_substr($sender_remark, 0, 47) . '...';
+        }
         
         $data = array(
             'cod_amount'    => (float)$order_total,
@@ -211,6 +216,10 @@ class ExplmPrintLabels {
         $sender_remark = !empty($overseas_note) 
             ? $overseas_note 
             : (!empty($order_data['customer_note']) ? (string)$order_data['customer_note'] : null);
+        
+        if (!empty($sender_remark) && mb_strlen($sender_remark) > 35) {
+            $sender_remark = mb_substr($sender_remark, 0, 32) . '...';
+        }        
 
         $data = array(
             'cod_amount'     => $payment_method === 'cod' ? (float)$order_total : null,

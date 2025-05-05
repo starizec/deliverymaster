@@ -37,31 +37,38 @@ class ExplmPrintLabel
         $response = wp_remote_request('https://expresslabelmaker.com/api/v1/' . $saved_country . '/' . $courier . '/create/label', $args);
 
         if (is_wp_error($response)) {
-            wp_send_json_error(array('error_id' => null, 'error_message' => $response->get_error_message()));
+            wp_send_json_error(array(
+                'errors' => array(array(
+                    'order_number' => 'unknown',
+                    'error_code' => 'unknown',
+                    'error_message' => $response->get_error_message()
+                ))
+            ));
         }
-
+        
         $body_response = json_decode(wp_remote_retrieve_body($response), true);
-
+        
         if ($response['response']['code'] != '201') {
             $errors = array();
         
             if (!empty($body_response['errors']) && is_array($body_response['errors'])) {
-                $order_number = !empty($body_response['errors']['order_number']) ? $body_response['errors']['order_number'] : 'unknown';
-                $error_message = !empty($body_response['errors']['error_message']) ? $body_response['errors']['error_message'] : 'unknown';
-        
-                $errors[] = array(
-                    'order_number' => $order_number,
-                    'error_message' => $error_message
-                );
+                foreach ($body_response['errors'] as $error) {
+                    $errors[] = array(
+                        'order_number' => !empty($error['order_number']) ? $error['order_number'] : 'unknown',
+                        'error_code' => !empty($error['error_code']) ? $error['error_code'] : 'unknown',
+                        'error_message' => !empty($error['error_message']) ? $error['error_message'] : 'unknown'
+                    );
+                }
             } elseif (!empty($body_response['error'])) {
                 $errors[] = array(
                     'order_number' => 'unknown',
+                    'error_code' => 'unknown',
                     'error_message' => $body_response['error']
                 );
             }
         
             wp_send_json_error(array('errors' => $errors));
-        }                                      
+        }                                             
 
         $decoded_data = base64_decode($body_response['data']['label'], true);
 

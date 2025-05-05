@@ -82,7 +82,7 @@ function explm_overseas_tab_content() {
 
     $customer_note = get_option('explm_overseas_customer_note', '');
     
-    echo '<td><textarea name="explm_overseas_customer_note" id="explm_overseas_customer_note" rows="3" cols="40">' . esc_textarea($customer_note) . '</textarea></td>';
+    echo '<td><textarea name="explm_overseas_customer_note" id="explm_overseas_customer_note" rows="3" cols="40" maxlength="35">' . esc_textarea($customer_note) . '</textarea></td>';
     echo '</tr>';
     echo '</table>';
     echo '<p class="submit">';

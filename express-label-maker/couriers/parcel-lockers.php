@@ -76,19 +76,21 @@ class ExplmParcelLockers {
             if (!empty($body_response['errors']) && is_array($body_response['errors'])) {
                 foreach ($body_response['errors'] as $error) {
                     $errors[] = array(
-                        'error_id' => !empty($error['error_id']) ? $error['error_id'] : 'unknown',
+                        'order_number' => !empty($error['order_number']) ? $error['order_number'] : 'unknown',
+                        'error_code' => !empty($error['error_code']) ? $error['error_code'] : 'unknown',
                         'error_message' => !empty($error['error_details']) ? $error['error_details'] : 'unknown'
                     );
                 }
             } elseif (!empty($body_response['error'])) {
                 $errors[] = array(
-                    'error_id' => 'unknown',
+                    'order_number' => 'unknown',
+                    'error_code' => 'unknown',
                     'error_message' => $body_response['error']
                 );
             }
         
             wp_send_json_error(array('errors' => $errors));
-        }  
+        }          
     
         if (isset($body_response['data']['geojson'])) {
             $file = plugin_dir_path(__FILE__) . '../json/overseas-parcelshops.geojson';
@@ -177,19 +179,21 @@ class ExplmParcelLockers {
             if (!empty($body_response['errors']) && is_array($body_response['errors'])) {
                 foreach ($body_response['errors'] as $error) {
                     $errors[] = array(
-                        'error_id' => !empty($error['error_id']) ? $error['error_id'] : 'unknown',
+                        'order_number' => !empty($error['order_number']) ? $error['order_number'] : 'unknown',
+                        'error_code' => !empty($error['error_code']) ? $error['error_code'] : 'unknown',
                         'error_message' => !empty($error['error_details']) ? $error['error_details'] : 'unknown'
                     );
                 }
             } elseif (!empty($body_response['error'])) {
                 $errors[] = array(
-                    'error_id' => 'unknown',
+                    'order_number' => 'unknown',
+                    'error_code' => 'unknown',
                     'error_message' => $body_response['error']
                 );
             }
         
             wp_send_json_error(array('errors' => $errors));
-        }  
+        }        
     
         if (isset($body_response['data']['geojson'])) {
             $file = plugin_dir_path(__FILE__) . '../json/dpd-parcelshops.geojson';

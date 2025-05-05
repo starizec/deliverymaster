@@ -22,8 +22,8 @@ function explm_settings_tab_content()
     
         $orders = wc_get_orders([
             'status' => 'any',
-            'limit' => -1, // Get all orders
-            'return' => 'ids', // Only get order IDs for better performance
+            'limit' => -1, 
+            'return' => 'ids',
         ]);
     
         foreach ($orders as $order_id) {

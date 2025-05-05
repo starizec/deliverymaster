@@ -120,14 +120,16 @@ jQuery(document).ready(function ($) {
             if (Array.isArray(response.data.errors)) {
               if (response.data.errors.length === 1) {
                 errorsHtml =
-                  "<b>Error ID:</b> " + response.data.errors[0].error_id + "<br>" +
-                  "<b>Message:</b> " + response.data.errors[0].error_message;
+                "<b>Order number:</b> " + error.order_number + "<br>" +
+                "<b>Error code:</b> " + (error.error_code || "unknown") + "<br>" +
+                "<b>Message:</b> " + error.error_message;
               } else {
                 response.data.errors.forEach(function (error, index) {
                   errorsHtml +=
-                    "<b>Error " + (index + 1) + ":</b><br>" +
-                    "<b>Error ID:</b> " + error.error_id + "<br>" +
-                    "<b>Message:</b> " + error.error_message + "<br><br>";
+                  "<b>Error " + (index + 1) + ":</b><br>" +
+                  "<b>Order number:</b> " + error.order_number + "<br>" +
+                  "<b>Error code:</b> " + (error.error_code || "unknown") + "<br>" +
+                  "<b>Message:</b> " + error.error_message + "<br><br>";
                 });
               }
             } else {

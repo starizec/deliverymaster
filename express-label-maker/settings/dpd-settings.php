@@ -95,7 +95,7 @@ function explm_dpd_tab_content() {
 
     $customer_note = get_option('explm_dpd_customer_note', '');
     
-    echo '<td><textarea name="explm_dpd_customer_note" id="explm_dpd_customer_note" rows="3" cols="40">' . esc_textarea($customer_note) . '</textarea></td>';  
+    echo '<td><textarea name="explm_dpd_customer_note" id="explm_dpd_customer_note" rows="3" cols="40" maxlength="50">' . esc_textarea($customer_note) . '</textarea></td>';  
     echo '</tr>';
     echo '</table>';
 

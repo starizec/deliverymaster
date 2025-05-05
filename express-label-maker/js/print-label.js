@@ -109,9 +109,14 @@ jQuery(document).ready(function ($) {
         parcelType = isCod ? "D-COD-B2C" : "D-B2C";
       }
 
-      const sender_remark = explm_ajax.dpd_note.trim() !== "" 
-      ? explm_ajax.dpd_note 
-      : form.find('textarea[name="note"]').val();
+      const dpdNote = (explm_ajax.dpd_note || "").trim();
+      const customerNote = (form.find('textarea[name="note"]').val() || "").trim();
+    
+      let sender_remark = dpdNote !== "" ? dpdNote : customerNote;
+    
+      if (sender_remark.length > 50) {
+        sender_remark = sender_remark.substring(0, 47) + '...';
+      }
     
       const data = {
         cod_amount: form.find('input[name="cod_amount"]').val(),
@@ -143,9 +148,14 @@ jQuery(document).ready(function ($) {
       const isCod = form.find('input[name="parcel_type"]:checked').val() === "cod";
       const overseasParcelLockerId = form.find('input[name="parcel_locker"]').val();
 
-      const sender_remark = explm_ajax.overseas_note.trim() !== "" 
-      ? explm_ajax.overseas_note 
-      : form.find('textarea[name="note"]').val();
+      const overseasNote = (explm_ajax.overseas_note || "").trim();
+      const customerNote = (form.find('textarea[name="note"]').val() || "").trim();
+      
+      let sender_remark = overseasNote !== "" ? overseasNote : customerNote;
+      
+      if (sender_remark.length > 35) {
+          sender_remark = sender_remark.substring(0, 32) + '...';
+      }
   
       const data = {
         cod_amount: isCod ? form.find('input[name="cod_amount"]').val() : null,
@@ -191,12 +201,17 @@ jQuery(document).ready(function ($) {
       let html = "";
   
       if (errors.length === 1) {
-        html = `<b>Order number:</b> ${errors[0].order_number}<br><b>Message:</b> ${errors[0].error_message}`;
-      } else {
+        html = `<b>Order number:</b> ${errors[0].order_number}<br>` +
+               `<b>Error code:</b> ${errors[0].error_code || "unknown"}<br>` +
+               `<b>Message:</b> ${errors[0].error_message}`;
+    } else {
         errors.forEach((error, idx) => {
-          html += `<b>Error ${idx + 1}:</b><br><b>Order number:</b> ${error.order_number}<br><b>Message:</b> ${error.error_message}<br><br>`;
+            html += `<b>Error ${idx + 1}:</b><br>` +
+                    `<b>Order number:</b> ${error.order_number}<br>` +
+                    `<b>Error code:</b> ${error.error_code || "unknown"}<br>` +
+                    `<b>Message:</b> ${error.error_message}<br><br>`;
         });
-      }
+    }
   
       Swal.fire({
         icon: "error",

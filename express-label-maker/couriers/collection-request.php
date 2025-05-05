@@ -47,7 +47,13 @@ class ExplmCollectionRequest
         $response = wp_remote_request('https://expresslabelmaker.com/api/v1/' . $saved_country . '/' . $courier . '/create/collection-request', $args);
 
         if (is_wp_error($response)) {
-            wp_send_json_error(array('error_id' => null, 'error_message' => $response->get_error_message()));
+            wp_send_json_error(array(
+                'errors' => array(array(
+                    'order_number' => 'unknown',
+                    'error_code' => 'unknown',
+                    'error_message' => $response->get_error_message()
+                ))
+            ));
         }
 
         $body_response = json_decode(wp_remote_retrieve_body($response), true);
@@ -58,19 +64,21 @@ class ExplmCollectionRequest
             if (!empty($body_response['errors']) && is_array($body_response['errors'])) {
                 foreach ($body_response['errors'] as $error) {
                     $errors[] = array(
-                        'error_id' => !empty($error['error_id']) ? $error['error_id'] : 'unknown',
+                        'order_number' => !empty($error['order_number']) ? $error['order_number'] : 'unknown',
+                        'error_code' => !empty($error['error_code']) ? $error['error_code'] : 'unknown',
                         'error_message' => !empty($error['error_details']) ? $error['error_details'] : 'unknown'
                     );
                 }
             } elseif (!empty($body_response['error'])) {
                 $errors[] = array(
-                    'error_id' => 'unknown',
+                    'order_number' => 'unknown',
+                    'error_code' => 'unknown',
                     'error_message' => $body_response['error']
                 );
             }
         
             wp_send_json_error(array('errors' => $errors));
-        }        
+        }       
 
         $meta_key = $saved_country . "_" . $courier . "_collection_request";
         
