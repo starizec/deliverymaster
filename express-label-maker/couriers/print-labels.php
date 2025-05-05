@@ -83,6 +83,8 @@ class ExplmPrintLabels {
         }
     
         $body_response = json_decode(wp_remote_retrieve_body($response), true);
+/* 
+        error_log('response body: ' . print_r($body_response, true)); */
     
         $errors = array();
 
@@ -100,7 +102,7 @@ class ExplmPrintLabels {
                 'error_code' => 'unknown',
                 'error_message' => $body_response['error']
             );
-        }        
+        }
     
         $save_pdf_on_server = get_option('explm_save_pdf_on_server_option', 'true');
         $upload_dir = wp_upload_dir();

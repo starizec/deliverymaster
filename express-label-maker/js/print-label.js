@@ -199,6 +199,8 @@ jQuery(document).ready(function ($) {
   
     function showErrorsPopup(errors) {
       let html = "";
+
+      console.log(errors, 'errors')
   
       if (errors.length === 1) {
         html = `<b>Order number:</b> ${errors[0].order_number}<br>` +

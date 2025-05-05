@@ -130,6 +130,9 @@ function update_parcel_status(order_id, pl_status) {
         case "DELIVERED": //DPD
           element.addClass("explm-status-delivered");
           break;
+          case "DELIVERED_BY_DRIVER_TO_DPD_PARCELSHOP ": //DPD
+          element.addClass("explm-status-delivered");
+          break;
         case "CANCELLED": //DPD
           element.addClass("explm-status-cancelled");
           break;

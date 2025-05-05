@@ -119,6 +119,7 @@ jQuery(document).ready(function ($) {
         
             if (Array.isArray(response.data.errors)) {
               if (response.data.errors.length === 1) {
+                let error = response.data.errors[0];
                 errorsHtml =
                 "<b>Order number:</b> " + error.order_number + "<br>" +
                 "<b>Error code:</b> " + (error.error_code || "unknown") + "<br>" +

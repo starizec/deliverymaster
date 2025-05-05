@@ -27,7 +27,8 @@ class ExplmUser
             'username' => get_option("explm_dpd_username_option", ''),
             'password' => get_option("explm_dpd_password_option", ''),
             'platform' => 'wordpress',
-            'version'   => $plugin_version 
+            'version'   => $plugin_version,
+            'language' => get_user_locale() 
         ];
     }
 
@@ -41,7 +42,8 @@ class ExplmUser
             'email' => get_option('explm_email_option', ''),
             'apiKey' => get_option("explm_overseas_api_key_option", ''),
             'platform' => 'wordpress',
-            'version'   => $plugin_version 
+            'version'   => $plugin_version,
+            'language' => get_user_locale() 
         ];
     }
 }

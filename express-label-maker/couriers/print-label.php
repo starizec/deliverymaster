@@ -47,6 +47,8 @@ class ExplmPrintLabel
         }
         
         $body_response = json_decode(wp_remote_retrieve_body($response), true);
+
+        /* error_log('response body: ' . print_r($body_response, true)); */
         
         if ($response['response']['code'] != '201') {
             $errors = array();
