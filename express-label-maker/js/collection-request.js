@@ -77,6 +77,9 @@ jQuery(document).ready(function ($) {
         case "dpd":
           var parcelData = setDPDCollectionData(form);
           break;
+        case "overseas":
+          var parcelData = setOverseasCollectionData(form);
+          break;
       }
   
       $.ajax({
@@ -161,6 +164,38 @@ jQuery(document).ready(function ($) {
     });
   
     function setDPDCollectionData(form) {
+      var rawDate = form.find('input[name="collection_pickup_date"]').val();
+      var formattedDate = rawDate.split("-").join("");
+      return {
+        cname: form.find('input[name="customer_name"]').val(),
+        cname1: form.find('input[name="contact_person"]').val(),
+        cstreet: form.find('input[name="customer_address"]').val(),
+        cPropertyNumber: form.find('input[name="house_number"]').val(),
+        ccity: form.find('input[name="city"]').val(),
+        cpostal: form.find('input[name="zip_code"]').val(),
+        ccountry: form.find('input[name="country"]').val(),
+        cphone: form.find('input[name="phone"]').val(),
+        cemail: form.find('input[name="email"]').val(),
+        info1: form.find('input[name="collection_info_for_sender"]').val(),
+        info2: form.find('input[name="collection_info_for_courier"]').val(),
+        rname: form
+          .find('input[name="collection_company_or_personal_name"]')
+          .val(),
+        rname2: form.find('input[name="collection_contact_person"]').val(),
+        rstreet: form.find('input[name="collection_street"]').val(),
+        rPropertyNumber: form
+          .find('input[name="collection_property_number"]')
+          .val(),
+        rcity: form.find('input[name="collection_city"]').val(),
+        rpostal: form.find('input[name="collection_postal_code"]').val(),
+        rcountry: form.find('select[name="collection_country"]').val(),
+        rphone: form.find('input[name="collection_phone"]').val(),
+        remail: form.find('input[name="collection_email"]').val(),
+        pickup_date: formattedDate,
+      };
+    }
+
+    function setOverseasCollectionData(form) {
       var rawDate = form.find('input[name="collection_pickup_date"]').val();
       var formattedDate = rawDate.split("-").join("");
       return {

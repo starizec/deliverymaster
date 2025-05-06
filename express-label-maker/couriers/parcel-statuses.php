@@ -81,6 +81,27 @@ class ExplmParcelStatuses {
             $userStatusObj = new ExplmUserStatusData();
             $user_data_status = $userStatusObj->explm_getUserStatusData($pl_parcels, $pl_number);
 
+            if (stripos($pl_parcels, 'overseas') !== false && !empty($user_data_status['url'])) {
+
+                $remote_response = wp_remote_get($user_data_status['url']);
+            
+                if (!is_wp_error($remote_response)) {
+                    $body = json_decode(wp_remote_retrieve_body($remote_response), true);
+            
+                    if (!empty($body)) {
+            
+                        if (!empty($body['data']['CargoID'])) {
+                            $cargo_id = $body['data']['CargoID'];
+                            ExplmLabelMaker::update_order_meta($order_id, 'overseas_cargo_id', $cargo_id);
+                        }
+            
+                    }
+            
+                }
+            
+            }
+            
+
             $response[] = array(
                 'order_id' => $order_id,
                 'pl_number' => $pl_number,

@@ -2,6 +2,13 @@
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
+
+$saved_dpd_username = get_option('explm_dpd_username_option', '');
+$saved_dpd_password = get_option('explm_dpd_password_option', '');
+$saved_api_key = get_option('explm_overseas_api_key_option', '');
+
+$dpd_condition = !empty($saved_dpd_username) && !empty($saved_dpd_password);
+$overseas_condition = !empty($saved_api_key);
 ?>
 
 <div class="explm-loading-panel">
@@ -155,7 +162,13 @@ if (!defined('ABSPATH')) {
                 <label class="explm-labels">
                     <?php esc_html_e('Select Courier:', 'express-label-maker'); ?>
                     <select id="collection_courier" name="collection_courier_selection">
-                        <option value="dpd">DPD</option>
+                        <?php if ($dpd_condition): ?>
+                            <option value="dpd">DPD</option>
+                        <?php endif; ?>
+
+                        <?php if ($overseas_condition): ?>
+                            <option value="overseas">Overseas</option>
+                        <?php endif; ?>
                     </select>
                 </label>
                  <!-- Info for courier -->

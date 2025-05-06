@@ -5,7 +5,7 @@
  * Plugin URI: https://expresslabelmaker.com/
  * Description: Print shipping labels and track parcels for multiple couriers directly from WooCommerce.
  * Tags: woocommerce, shipping, label printing, DPD, Overseas
- * Version: 1.25126.1
+ * Version: 1.25126.2
  * Author: expresslabelmaker
  * Tested up to: 6.8
  * License: GPLv2 or later
@@ -210,15 +210,12 @@ class ExplmLabelMaker
         // Overseas parcel link generation
         $saved_api_key = get_option('explm_overseas_api_key_option', '');
         $meta_key_overseas = $saved_country . '_overseas_parcels';
-        $overseas_parcels_value = $order->get_meta($meta_key_overseas);
+        $cargo_id = $order->get_meta('overseas_cargo_id');
         $overseas_parcel_link = null;
-        
-        if ($overseas_parcels_value && $saved_api_key) {
-            $pl_number_parts = array_filter(explode(',', $overseas_parcels_value));
-            $first_value = trim(end($pl_number_parts));
-            if ($first_value) {
-                $overseas_parcel_link = 'https://is.overseas.hr/tracking/?trackingid=' . esc_attr($first_value);
-            }
+        $overseas_condition = !empty($saved_api_key);
+
+        if ($cargo_id && $saved_api_key) {
+            $overseas_parcel_link = 'https://is.overseas.hr/tracking/?trackingid=' . esc_attr($cargo_id);
         }
         ?>
     
@@ -266,15 +263,15 @@ class ExplmLabelMaker
                             </a>
                         </div>
                     <?php endif; ?>
-                    <?php if ($dpd_condition): ?>
+                    <?php endif; ?>
+                    <?php if ($dpd_condition || $overseas_condition): ?>
                         <h4 class="explm-custom-order-metabox-title"><?php echo esc_html__('Collection request', 'express-label-maker'); ?></h4>
                         <div class="explm_collection_request_button">
                             <button data-order-id="<?php echo esc_attr($order_id); ?>" id="explm_collection_request" class="button button-primary">
-                                <?php echo esc_html__('DPD Collection request', 'express-label-maker'); ?>
+                                <?php echo esc_html__('Collection request', 'express-label-maker'); ?>
                             </button>
                         </div>
                     <?php endif; ?>
-                <?php endif; ?>
             </div>
         </div>
         <?php
