@@ -103,9 +103,9 @@ class ExplmLicence
         );
 
         $response = wp_remote_request('https://expresslabelmaker.com/api/v1/licence/check', $args);
-/* 
-        error_log('response body: ' . print_r($response, true));
- */
+
+       /*  error_log('response body: ' . print_r($response, true)); */
+
         if (is_wp_error($response)) {
             wp_send_json_error(array(
                 'errors' => array(array(
@@ -116,6 +116,8 @@ class ExplmLicence
         }
         
         $body_response = json_decode(wp_remote_retrieve_body($response), true);
+
+       /*  error_log('response body: ' . print_r($body_response, true)); */
         
         if ($response['response']['code'] != '201') {
             $errors = array();

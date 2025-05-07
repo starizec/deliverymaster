@@ -157,11 +157,17 @@ jQuery(document).ready(function ($) {
                   $("#explm_usage").closest("table").after(output);
               }
 
-              if (response.data.usage_limit - response.data.usage <= 2) {
+              let remaining = response.data.usage_limit - response.data.usage;
+
+              if (remaining <= 2) {
+                  let message = remaining > 0
+                      ? "Only " + remaining + " label(s) left until the limit!"
+                      : "All labels have been used up!";
+              
                   Swal.fire({
                       icon: "warning",
                       title: "Usage Warning",
-                      text: "Only " + (response.data.usage_limit - response.data.usage) + " label(s) left until the limit!",
+                      text: message,
                       confirmButtonText: "OK",
                       customClass: {
                           popup: 'explm-swal-scroll',
@@ -169,7 +175,7 @@ jQuery(document).ready(function ($) {
                           confirmButton: 'explm-swal-button'
                       },
                   });
-              }
+              }              
 
               if (response.data.valid_until != null) {
                   let today = new Date();
