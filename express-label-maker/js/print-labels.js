@@ -8,8 +8,6 @@ jQuery(document).ready(function ($) {
     orderFilterForm.on("submit", function (e) {
       const actionValue = $(this).find('select[name="action"]').val();
   
-      console.log(actionValue, "action");
-  
       const supportedActionValues = [
         "explm_dpd_print_label",
         "explm_gls_print_label",
@@ -61,7 +59,6 @@ jQuery(document).ready(function ($) {
             actionValue: actionValue,
           },
           success: function (response) {
-            console.log(response, "resp");
           
             $(".explm-loading-panel").fadeOut(300);
           

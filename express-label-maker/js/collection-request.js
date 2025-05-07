@@ -15,31 +15,61 @@ jQuery(document).ready(function ($) {
         url: explm_ajax.ajax_url,
         type: "POST",
         data: {
-          action: "explm_show_collection_modal",
-          security: explm_ajax.nonce,
-          order_id: order_id,
+            action: "explm_show_collection_modal",
+            security: explm_ajax.nonce,
+            order_id: order_id,
         },
         success: function (response) {
-          if (response.success) {
-            $("body").append(response.data);
-            $(".explm-modal-wrapper").fadeIn(300);
-            $(".explm-modal-wrapper").css("display", "flex");
-          } else {
-            alert(
-              "Error ID: " +
-                (response.data.error_id ? response.data.error_id : "null") +
-                "\nMessage: " +
-                (response.data.error_message
-                  ? response.data.error_message
-                  : "null")
-            );
-          }
-          $(".explm-loading-panel").fadeOut(300);
+            if (response.success) {
+                $("body").append(response.data);
+                $(".explm-modal-wrapper").fadeIn(300);
+                $(".explm-modal-wrapper").css("display", "flex");
+            } else {
+                let errorsHtml = '';
+    
+                if (Array.isArray(response.data.errors)) {
+                    if (response.data.errors.length === 1) {
+                        let error = response.data.errors[0];
+                        errorsHtml =
+                            "<b>Error code:</b> " + (error.error_code || "unknown") + "<br>" +
+                            "<b>Message:</b> " + (error.error_message || "unknown");
+                    } else {
+                        response.data.errors.forEach(function (error, index) {
+                            errorsHtml +=
+                                "<b>Error " + (index + 1) + ":</b><br>" +
+                                "<b>Error code:</b> " + (error.error_code || "unknown") + "<br>" +
+                                "<b>Message:</b> " + (error.error_message || "unknown") + "<br><br>";
+                        });
+                    }
+                } else {
+                    errorsHtml = "<b>Unknown error occurred.</b>";
+                }
+    
+                Swal.fire({
+                    icon: "error",
+                    title: "Failed to load collection modal",
+                    html: errorsHtml,
+                    confirmButtonText: "OK",
+                    customClass: {
+                        popup: 'explm-swal-scroll',
+                        title: 'explm-swal-title',
+                        confirmButton: 'explm-swal-button'
+                    },
+                    didOpen: () => {
+                        const htmlContainer = Swal.getHtmlContainer();
+                        if (htmlContainer) {
+                            htmlContainer.style.maxHeight = '50vh';
+                            htmlContainer.style.overflowY = 'auto';
+                        }
+                    }
+                });
+            }
+            $(".explm-loading-panel").fadeOut(300);
         },
         error: function () {
-          $(".explm-loading-panel").fadeOut(300);
+            $(".explm-loading-panel").fadeOut(300);
         },
-      });
+    });    
     });
   });
   
@@ -124,14 +154,12 @@ jQuery(document).ready(function ($) {
               if (response.data.errors.length === 1) {
                 let error = response.data.errors[0];
                 errorsHtml =
-                "<b>Order number:</b> " + error.order_number + "<br>" +
                 "<b>Error code:</b> " + (error.error_code || "unknown") + "<br>" +
                 "<b>Message:</b> " + error.error_message;
               } else {
                 response.data.errors.forEach(function (error, index) {
                   errorsHtml +=
                   "<b>Error " + (index + 1) + ":</b><br>" +
-                  "<b>Order number:</b> " + error.order_number + "<br>" +
                   "<b>Error code:</b> " + (error.error_code || "unknown") + "<br>" +
                   "<b>Message:</b> " + error.error_message + "<br><br>";
                 });

@@ -40,7 +40,6 @@ class ExplmLicence
         if (is_wp_error($response)) {
             wp_send_json_error(array(
                 'errors' => array(array(
-                    'order_number' => 'unknown',
                     'error_code' => 'unknown',
                     'error_message' => $response->get_error_message()
                 ))
@@ -55,14 +54,12 @@ class ExplmLicence
             if (!empty($body_response['errors']) && is_array($body_response['errors'])) {
                 foreach ($body_response['errors'] as $error) {
                     $errors[] = array(
-                        'order_number' => !empty($error['order_number']) ? $error['order_number'] : 'unknown',
                         'error_code' => !empty($error['error_code']) ? $error['error_code'] : 'unknown',
                         'error_message' => !empty($error['error_details']) ? $error['error_details'] : 'unknown'
                     );
                 }
             } elseif (!empty($body_response['error'])) {
                 $errors[] = array(
-                    'order_number' => 'unknown',
                     'error_code' => 'unknown',
                     'error_message' => $body_response['error']
                 );
@@ -96,6 +93,8 @@ class ExplmLicence
             )
         );
 
+       /*  error_log('response body: ' . print_r($body, true));
+ */
         $args = array(
             'method' => 'POST',
             'headers' => array('Content-Type' => 'application/json'),
@@ -105,16 +104,37 @@ class ExplmLicence
 
         $response = wp_remote_request('https://expresslabelmaker.com/api/v1/licence/check', $args);
 
+       /*  error_log('response body: ' . print_r($response, true)); */
+
         if (is_wp_error($response)) {
-            wp_send_json_error(array('error_id' => null, 'error_message' => $response->get_error_message()));
+            wp_send_json_error(array(
+                'errors' => array(array(
+                    'error_code' => 'unknown',
+                    'error_message' => $response->get_error_message()
+                ))
+            ));
         }
-
+        
         $body_response = json_decode(wp_remote_retrieve_body($response), true);
-
+        
         if ($response['response']['code'] != '201') {
-            $error_id = $body_response['errors'][0]['error_id'];
-            $error_message = $body_response['errors'][0]['error_details'];
-            wp_send_json_error(array('error_id' => $error_id, 'error_message' => $error_message));
+            $errors = array();
+        
+            if (!empty($body_response['errors']) && is_array($body_response['errors'])) {
+                foreach ($body_response['errors'] as $error) {
+                    $errors[] = array(
+                        'error_code' => !empty($error['error_code']) ? $error['error_code'] : 'unknown',
+                        'error_message' => !empty($error['error_details']) ? $error['error_details'] : 'unknown'
+                    );
+                }
+            } elseif (!empty($body_response['error'])) {
+                $errors[] = array(
+                    'error_code' => 'unknown',
+                    'error_message' => $body_response['error']
+                );
+            }
+        
+            wp_send_json_error(array('errors' => $errors));
         }
 
         wp_send_json_success(array(
