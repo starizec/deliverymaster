@@ -64,7 +64,7 @@ class ExplmCollectionRequest
                 foreach ($body_response['errors'] as $error) {
                     $errors[] = array(
                         'error_code' => !empty($error['error_code']) ? $error['error_code'] : 'unknown',
-                        'error_message' => !empty($error['error_details']) ? $error['error_details'] : 'unknown'
+                        'error_message' => !empty($error['error_message']) ? $error['error_message'] : 'unknown'
                     );
                 }
             } elseif (!empty($body_response['error'])) {

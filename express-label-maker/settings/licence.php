@@ -55,7 +55,7 @@ class ExplmLicence
                 foreach ($body_response['errors'] as $error) {
                     $errors[] = array(
                         'error_code' => !empty($error['error_code']) ? $error['error_code'] : 'unknown',
-                        'error_message' => !empty($error['error_details']) ? $error['error_details'] : 'unknown'
+                        'error_message' => !empty($error['error_message']) ? $error['error_message'] : 'unknown'
                     );
                 }
             } elseif (!empty($body_response['error'])) {
@@ -103,9 +103,9 @@ class ExplmLicence
         );
 
         $response = wp_remote_request('https://expresslabelmaker.com/api/v1/licence/check', $args);
-
-       /*  error_log('response body: ' . print_r($response, true)); */
-
+/* 
+        error_log('response body: ' . print_r($response, true));
+ */
         if (is_wp_error($response)) {
             wp_send_json_error(array(
                 'errors' => array(array(
@@ -124,7 +124,7 @@ class ExplmLicence
                 foreach ($body_response['errors'] as $error) {
                     $errors[] = array(
                         'error_code' => !empty($error['error_code']) ? $error['error_code'] : 'unknown',
-                        'error_message' => !empty($error['error_details']) ? $error['error_details'] : 'unknown'
+                        'error_message' => !empty($error['error_message']) ? $error['error_message'] : 'unknown'
                     );
                 }
             } elseif (!empty($body_response['error'])) {
