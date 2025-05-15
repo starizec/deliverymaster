@@ -122,8 +122,10 @@
 
 #select-dpd-parcel-locker,
 #select-overseas-parcel-locker,
+#select-hp-parcel-locker,
 #clear-dpd-parcel-locker,
-#clear-overseas-parcel-locker {
+#clear-overseas-parcel-locker,
+#clear-hp-parcel-locker {
   cursor: pointer;
 }
 
@@ -133,6 +135,10 @@
 
 .overseas-parcel-locker-item:hover {
   background-color: rgba(23, 162, 241, 0.1);
+}
+
+.hp-parcel-locker-item:hover {
+  background-color: rgba(110, 204, 57, 0.1);
 }
 
 .loader {

@@ -133,7 +133,8 @@
 
 .explm-dpd-action-icon,
 .explm-gls-action-icon,
-.explm-overseas-action-icon {
+.explm-overseas-action-icon,
+.explm-hp-action-icon {
   cursor: pointer;
   width: 100% !important;
   margin: 0px !important;

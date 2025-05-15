@@ -68,7 +68,9 @@ jQuery(document).ready(function ($) {
                           title: 'explm-swal-title',
                           confirmButton: 'explm-swal-button'
                       },
-                  });
+                  }).then(function() {
+                    location.reload();
+                });
 
                   jQuery(".explm-modal-wrapper").fadeOut(300, function () {
                       jQuery(this).remove();

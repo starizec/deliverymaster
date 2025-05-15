@@ -4,7 +4,7 @@
  * Plugin Name: Express Label Maker
  * Plugin URI: https://expresslabelmaker.com/
  * Description: Print shipping labels and track parcels for multiple couriers directly from WooCommerce.
- * Tags: woocommerce, shipping, label printing, DPD, Overseas
+ * Tags: woocommerce, shipping, label printing, DPD, Overseas, Hrvatska pošta
  * Version: 1.25127.3
  * Author: expresslabelmaker
  * Tested up to: 6.8
@@ -20,9 +20,9 @@ require_once 'settings/general-settings.php';
 require_once 'settings/licence-settings.php';
 require_once 'settings/dpd-settings.php';
 require_once 'settings/overseas-settings.php';
+require_once 'settings/hp-settings.php';
 require_once 'settings/user-data.php';
 require_once 'settings/licence.php';
-require_once 'settings/cron.php';
 require_once 'couriers/print-label.php';
 require_once 'couriers/print-labels.php';
 require_once 'couriers/all-couriers.php';
@@ -48,12 +48,14 @@ class ExplmLabelMaker
         //HPOS
         add_filter('bulk_actions-woocommerce_page_wc-orders', array($this, 'explm_add_dpd_print_label_bulk_action'));
         add_filter('bulk_actions-woocommerce_page_wc-orders', array($this, 'explm_add_overseas_print_label_bulk_action'));
+        add_filter('bulk_actions-woocommerce_page_wc-orders', array($this, 'explm_add_hp_print_label_bulk_action'));
         add_action('manage_woocommerce_page_wc-orders_custom_column', [$this, 'display_custom_order_meta_data'], 20, 2);
         add_action('add_meta_boxes_woocommerce_page_wc-orders', array($this, 'explm_add_custom_meta_box'));
         add_filter('manage_woocommerce_page_wc-orders_columns', array($this, 'explm_add_status_column_header'), 20);
         // Legacy mode
         add_filter('bulk_actions-edit-shop_order', array($this, 'explm_add_dpd_print_label_bulk_action'));
         add_filter('bulk_actions-edit-shop_order', array($this, 'explm_add_overseas_print_label_bulk_action'));
+        add_filter('bulk_actions-edit-shop_order', array($this, 'explm_add_hp_print_label_bulk_action'));
         add_action('manage_shop_order_posts_custom_column', [$this, 'display_custom_order_meta_data'], 20, 2);
         add_action('add_meta_boxes', array($this, 'explm_add_custom_meta_box'));
         add_filter('manage_edit-shop_order_columns', array($this, 'explm_add_status_column_header'), 20);
@@ -124,6 +126,7 @@ class ExplmLabelMaker
         echo '<a href="?page=express_label_maker&tab=settings" class="nav-tab ' . esc_attr($tab == 'settings' ? 'nav-tab-active' : '') . '">' . esc_html__('Settings', 'express-label-maker') . '</a>';
         echo '<a href="?page=express_label_maker&tab=dpd" class="nav-tab ' . esc_attr($tab == 'dpd' ? 'nav-tab-active' : '') . '">' . esc_html__('DPD', 'express-label-maker') . '</a>';
         echo '<a href="?page=express_label_maker&tab=overseas" class="nav-tab ' . esc_attr($tab == 'overseas' ? 'nav-tab-active' : '') . '">' . esc_html__('Overseas', 'express-label-maker') . '</a>';
+        echo '<a href="?page=express_label_maker&tab=hp" class="nav-tab ' . esc_attr($tab == 'hp' ? 'nav-tab-active' : '') . '">' . esc_html__('HP', 'express-label-maker') . '</a>';
         echo '</nav>';
 
         if ($tab == 'licence') {
@@ -134,6 +137,8 @@ class ExplmLabelMaker
             explm_dpd_tab_content();
         } elseif ($tab == 'overseas') {
             explm_overseas_tab_content();
+        } elseif ($tab == 'hp') {
+            explm_hp_tab_content();
         }
     
         echo '</div>';
@@ -171,6 +176,16 @@ class ExplmLabelMaker
         $saved_api_key = get_option('explm_overseas_api_key_option', '');
         if (!empty($saved_api_key)) {
             $actions['explm_overseas_print_label'] = esc_html__('Overseas Print Label', 'express-label-maker');
+        }
+        return $actions;
+    }
+
+    public function explm_add_hp_print_label_bulk_action($actions)
+    {
+        $saved_hp_username = get_option('explm_hp_username_option', '');
+        $saved_hp_password = get_option('explm_hp_password_option', '');
+        if (!empty($saved_hp_username) && !empty($saved_hp_password)) {
+            $actions['explm_hp_print_label'] = esc_html__('HP Print Label', 'express-label-maker');
         }
         return $actions;
     }
@@ -217,6 +232,22 @@ class ExplmLabelMaker
         if ($cargo_id && $saved_api_key) {
             $overseas_parcel_link = 'https://is.overseas.hr/tracking/?trackingid=' . esc_attr($cargo_id);
         }
+
+        // HP parcel link generation
+        $saved_hp_username = get_option('explm_hp_username_option', '');
+        $saved_hp_password = get_option('explm_hp_password_option', '');
+        $hp_condition = !empty($saved_hp_username) && !empty($saved_hp_password);
+        $meta_key_hp = $saved_country . '_hp_parcels';
+        $hp_parcels_value = $order->get_meta($meta_key_hp);
+        $hp_parcel_link = null;
+        
+        if ($hp_parcels_value && $hp_condition) {
+            $pl_number_parts = array_filter(explode(',', $hp_parcels_value));
+            $first_value = trim(end($pl_number_parts));
+            if ($first_value) {
+                $hp_parcel_link = 'https://posiljka.posta.hr/' . esc_attr($saved_country) . '/tracking/trackingdata?barcode=' . esc_attr($first_value);
+            }
+        }
         ?>
     
         <div class="explm_custom_order_metabox_content">
@@ -247,7 +278,7 @@ class ExplmLabelMaker
             <?php endif; ?>
     
             <div class="explm-custom-order-buttons">
-                <?php if ($dpd_parcel_link || $overseas_parcel_link): ?>
+                <?php if ($dpd_parcel_link || $overseas_parcel_link || $hp_parcel_link): ?>
                     <h4 class="explm-custom-order-metabox-title"><?php echo esc_html__('Stack and trace', 'express-label-maker'); ?></h4>
                     <?php if ($dpd_parcel_link): ?>
                         <div class="explm_stack_and_trace_button">
@@ -263,8 +294,15 @@ class ExplmLabelMaker
                             </a>
                         </div>
                     <?php endif; ?>
+                    <?php if ($hp_parcel_link): ?>
+                        <div class="explm_stack_and_trace_button">
+                            <a href="<?php echo esc_url($hp_parcel_link); ?>" target="_blank" class="button button-secondary">
+                                <?php echo esc_html__('HP Stack and Trace', 'express-label-maker'); ?>
+                            </a>
+                        </div>
                     <?php endif; ?>
-                    <?php if ($dpd_condition || $overseas_condition): ?>
+                    <?php endif; ?>
+                    <?php if ($dpd_condition || $overseas_condition || $hp_condition): ?>
                         <h4 class="explm-custom-order-metabox-title"><?php echo esc_html__('Collection request', 'express-label-maker'); ?></h4>
                         <div class="explm_collection_request_button">
                             <button data-order-id="<?php echo esc_attr($order_id); ?>" id="explm_collection_request" class="button button-primary">
@@ -443,4 +481,5 @@ add_action('before_woocommerce_init', function() {
 register_deactivation_hook(__FILE__, function() {
     wp_clear_scheduled_hook('explm_update_overseas_parcelshops_cron');
     wp_clear_scheduled_hook('explm_update_dpd_parcelshops_cron');
+    wp_clear_scheduled_hook('explm_update_hp_parcelshops_cron');
 });

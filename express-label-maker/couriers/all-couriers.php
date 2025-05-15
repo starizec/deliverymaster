@@ -19,6 +19,12 @@ class ExpmlCouriers {
             'ajax_action' => 'explm_show_confirm_modal',
             'button_text' => 'Overseas Print',
         ),
+        'hp' => array(
+            'url' => 'assets/hp-logo.png',
+            'alt' => 'HP Logo',
+            'ajax_action' => 'explm_show_confirm_modal',
+            'button_text' => 'HP Print',
+        ),
     );
 
     public function get_courier_icons() {
@@ -36,6 +42,13 @@ class ExpmlCouriers {
         $saved_api_key = get_option('explm_overseas_api_key_option', '');
         if (!empty($saved_api_key)) {
             $available_icons['overseas'] = $icons['overseas'];
+        }
+
+        // Provjera za HP
+        $saved_username = get_option('explm_hp_username_option', '');
+        $saved_password = get_option('explm_hp_password_option', '');
+        if (!empty($saved_username) && !empty($saved_password)) {
+            $available_icons['hp'] = $icons['hp'];
         }
 
         return $available_icons;
