@@ -11,27 +11,43 @@ function explm_hp_tab_content() {
         delete_option('explm_hp_enable_pickup');
         delete_option('explm_hp_pickup_shipping_method');
         delete_option('explm_hp_customer_note');
+        delete_option('explm_hp_delivery_additional_services');
+        delete_option('explm_hp_delivery_service');
+        delete_option('explm_hp_parcel_size');
+        delete_option('explm_hp_insured_value');
         echo '<div class="updated"><p>' . esc_html__('HP account deleted.', 'express-label-maker') . '</p></div>';
-    }
-    elseif ( isset($_POST['explm_hp_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['explm_hp_nonce'])), 'explm_save_hp_settings') ) {
+    } elseif (isset($_POST['explm_hp_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['explm_hp_nonce'])), 'explm_save_hp_settings')) {
         $username         = isset($_POST['explm_hp_username']) ? sanitize_text_field(wp_unslash($_POST['explm_hp_username'])) : '';
         $password         = isset($_POST['explm_hp_password']) ? sanitize_text_field(wp_unslash($_POST['explm_hp_password'])) : '';
         $enable_paketomat = isset($_POST['enable_paketomat']) ? sanitize_text_field(wp_unslash($_POST['enable_paketomat'])) : '';
         $shipping_method  = isset($_POST['explm_hp_shipping_method']) ? sanitize_text_field(wp_unslash($_POST['explm_hp_shipping_method'])) : '';
-        $customer_note = isset($_POST['explm_hp_customer_note']) ? sanitize_textarea_field(wp_unslash($_POST['explm_hp_customer_note'])) : '';
-    
-        if ( $enable_paketomat !== '1' ) {
+        $customer_note    = isset($_POST['explm_hp_customer_note']) ? sanitize_textarea_field(wp_unslash($_POST['explm_hp_customer_note'])) : '';
+
+        $notif_selected = isset($_POST['delivery_additional_services']) ? array_map('sanitize_text_field', (array) $_POST['delivery_additional_services']) : [];
+        update_option('explm_hp_delivery_additional_services', implode(',', $notif_selected));
+
+        $delivery_service = isset($_POST['explm_hp_delivery_service']) ? sanitize_text_field($_POST['explm_hp_delivery_service']) : '';
+        update_option('explm_hp_delivery_service', $delivery_service);
+
+        $parcel_size = isset($_POST['explm_hp_parcel_size']) ? sanitize_text_field($_POST['explm_hp_parcel_size']) : '';
+        update_option('explm_hp_parcel_size', $parcel_size);
+
+        $insured_value = isset($_POST['explm_hp_insured_value']) ? '1' : '0';
+        update_option('explm_hp_insured_value', $insured_value);
+
+        if ($enable_paketomat !== '1') {
             $shipping_method = '';
         }
-    
-        if ( !empty($username) && !empty($password) ) {
+
+        if (!empty($username) && !empty($password)) {
             update_option('explm_hp_username_option', $username);
             update_option('explm_hp_password_option', $password);
             update_option('explm_hp_enable_pickup', $enable_paketomat);
             update_option('explm_hp_pickup_shipping_method', $shipping_method);
             update_option('explm_hp_customer_note', $customer_note);
-            if ( '1' === $enable_paketomat && !empty($shipping_method) ) {
-                if ( class_exists('ExplmParcelLockers') ) {
+
+            if ('1' === $enable_paketomat && !empty($shipping_method)) {
+                if (class_exists('ExplmParcelLockers')) {
                     $parcel_locker_obj = new ExplmParcelLockers();
                     $parcel_locker_obj->explm_update_hp_parcelshops_cron_callback();
                 }
@@ -43,6 +59,10 @@ function explm_hp_tab_content() {
     }
 
     $saved_country = strtoupper(get_option('explm_country_option', ''));
+    $saved_enable = get_option('explm_hp_enable_pickup', '');
+    $saved_method = get_option('explm_hp_pickup_shipping_method', '');
+    $customer_note = get_option('explm_hp_customer_note', '');
+    $saved_notifs = explode(',', get_option('explm_hp_delivery_additional_services', '32,33'));
 
     echo '<div style="display:block;">';
     echo '<div style="float: left; width: 48%; padding-right: 2%;">';
@@ -51,46 +71,98 @@ function explm_hp_tab_content() {
     echo '<table class="form-table">';
 
     echo '<tr><th scope="row"><label for="explm_hp_username">' . esc_html__('Username', 'express-label-maker') . '</label></th>';
-    echo '<td><input name="explm_hp_username" type="text" id="explm_hp_username" value="' . esc_attr(get_option('explm_hp_username_option', '')) . '" class="regular-text" required autocomplete="username"></td></tr>';   
+    echo '<td><input name="explm_hp_username" type="text" id="explm_hp_username" value="' . esc_attr(get_option('explm_hp_username_option', '')) . '" class="regular-text" required autocomplete="username"></td></tr>';
     echo '<tr><th scope="row"><label for="explm_hp_password">' . esc_html__('Password', 'express-label-maker') . '</label></th>';
-    echo '<td><input name="explm_hp_password" type="password" id="explm_hp_password" value="' . esc_attr(get_option('explm_hp_password_option', '')) . '" class="regular-text" required autocomplete="current-password"></td></tr>';    
+    echo '<td><input name="explm_hp_password" type="password" id="explm_hp_password" value="' . esc_attr(get_option('explm_hp_password_option', '')) . '" class="regular-text" required autocomplete="current-password"></td></tr>';
 
-    $saved_enable = get_option('explm_hp_enable_pickup', '');
     echo '<tr>';
     echo '<th scope="row"><label for="enable_paketomat">' . esc_html__('Pickup station', 'express-label-maker') . '</label></th>';
     echo '<td><input type="checkbox" name="enable_paketomat" id="enable_paketomat" value="1" ' . checked($saved_enable, '1', false) . '></td>';
     echo '</tr>';
-
-    $saved_method = get_option('explm_hp_pickup_shipping_method', '');
 
     $shipping_methods = explm_get_active_shipping_methods();
 
     echo '<tr id="paketomat_shipping_method_row">';
     echo '<th scope="row"><label for="explm_hp_shipping_method">' . esc_html__('Pickup station delivery method', 'express-label-maker') . '</label></th>';
     echo '<td><select name="explm_hp_shipping_method" id="explm_hp_shipping_method" required>';
-
-    if ( !empty($shipping_methods) ) {
-        foreach ( $shipping_methods as $key => $method_obj ) {
-            $title = !empty($method_obj->settings['title'])
-                ? $method_obj->settings['title']
-                : $method_obj->get_title();
+    if (!empty($shipping_methods)) {
+        foreach ($shipping_methods as $key => $method_obj) {
+            $title = !empty($method_obj->settings['title']) ? $method_obj->settings['title'] : $method_obj->get_title();
             echo '<option value="' . esc_attr($key) . '" ' . selected($saved_method, $key, false) . '>' . esc_html($title) . '</option>';
         }
     }
-
     echo '</select></td>';
     echo '</tr>';
+
+    $notif_options = [
+        32 => 'Email',
+        33 => 'SMS',
+    ];
+    echo '<tr>';
+    echo '<th scope="row">' . esc_html__('Recipient Notifications', 'express-label-maker') . '</th>';
+    echo '<td>';
+    foreach ($notif_options as $id => $label) {
+        echo '<label style="margin-right: 15px;">';
+        echo '<input type="checkbox" name="delivery_additional_services[]" value="' . esc_attr($id) . '" ' . (in_array((string)$id, $saved_notifs) ? 'checked' : '') . '> ';
+        echo esc_html($label);
+        echo '</label>';
+    }
+    echo '</td>';
+    echo '</tr>';
+
+    $saved_delivery_service = get_option('explm_hp_delivery_service', '');
+    $delivery_services = [
+        26 => 'Paket 24 D+1',
+        29 => 'Paket 24 D+2',
+        32 => 'Paket 24 D+3',
+        38 => 'Paket 24 D+4',
+        39 => 'EasyReturn D+3 (1st option)',
+        40 => 'EasyReturn D+3 (2nd option)',
+        46 => 'Pallet shipment D+5',
+    ];
+
+    echo '<tr>';
+    echo '<th scope="row"><label for="explm_hp_delivery_service">' . esc_html__('Delivery Service', 'express-label-maker') . '</label></th>';
+    echo '<td><select name="explm_hp_delivery_service" id="explm_hp_delivery_service" required>';
+    foreach ($delivery_services as $id => $label) {
+        echo '<option value="' . esc_attr($id) . '" ' . selected($saved_delivery_service, $id, false) . '>' . esc_html($label) . '</option>';
+    }
+    echo '</select></td>';
+    echo '</tr>';
+
+    $saved_parcel_size = get_option('explm_hp_parcel_size', '');
+
+    $parcel_sizes = [
+        'X' => 'XS – Paket veličine XS',
+        'S' => 'S – Paket veličine S',
+        'M' => 'M – Paket veličine M',
+        'L' => 'L – Paket veličine L',
+    ];
+
+    echo '<tr>';
+    echo '<th scope="row"><label for="explm_hp_parcel_size">' . esc_html__('Base parcel size (valid only for parcel lockers)', 'express-label-maker') . '</label></th>';
+    echo '<td><select name="explm_hp_parcel_size" id="explm_hp_parcel_size">';
+    foreach ($parcel_sizes as $key => $label) {
+        echo '<option value="' . esc_attr($key) . '" ' . selected($saved_parcel_size, $key, false) . '>' . esc_html($label) . '</option>';
+    }
+    echo '</select></td>';
+    echo '</tr>';
+
+    $saved_insured = get_option('explm_hp_insured_value', '');
+
+    echo '<tr>';
+    echo '<th scope="row"><label for="explm_hp_insured_value">' . esc_html__('Insured shipment value', 'express-label-maker') . '</label></th>';
+    echo '<td><input type="checkbox" name="explm_hp_insured_value" id="explm_hp_insured_value" value="1" ' . checked($saved_insured, '1', false) . '></td>';
+    echo '</tr>';
+
     echo '<tr>';
     echo '<th scope="row"><label for="explm_hp_customer_note">' . esc_html__('Customer Note', 'express-label-maker') . ' ';
     echo '<span style="cursor:help;" title="' . esc_attr__('If you enter a note here, it will override the customer\'s note on the shipping label.', 'express-label-maker') . '">ℹ️</span>';
     echo '</label></th>';
-
-    $customer_note = get_option('explm_hp_customer_note', '');
-    
-    echo '<td><textarea name="explm_hp_customer_note" id="explm_hp_customer_note" rows="3" cols="40" maxlength="50">' . esc_textarea($customer_note) . '</textarea></td>';  
+    echo '<td><textarea name="explm_hp_customer_note" id="explm_hp_customer_note" rows="3" cols="40" maxlength="50">' . esc_textarea($customer_note) . '</textarea></td>';
     echo '</tr>';
-    echo '</table>';
 
+    echo '</table>';
     echo '<p class="submit">';
     echo '<input type="submit" name="submit" id="submit-hp-settings" class="button button-primary" value="' . esc_attr__('Save Changes', 'express-label-maker') . '">';
     echo '<input type="submit" name="delete_hp_account" class="button" value="' . esc_attr__('Delete Account', 'express-label-maker') . '" style="background-color: transparent; color: red; border: 1px solid red; margin-left: 10px;">';
