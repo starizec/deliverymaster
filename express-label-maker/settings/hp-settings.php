@@ -159,7 +159,7 @@ function explm_hp_tab_content() {
     echo '<th scope="row"><label for="explm_hp_customer_note">' . esc_html__('Customer Note', 'express-label-maker') . ' ';
     echo '<span style="cursor:help;" title="' . esc_attr__('If you enter a note here, it will override the customer\'s note on the shipping label.', 'express-label-maker') . '">ℹ️</span>';
     echo '</label></th>';
-    echo '<td><textarea name="explm_hp_customer_note" id="explm_hp_customer_note" rows="3" cols="40" maxlength="50">' . esc_textarea($customer_note) . '</textarea></td>';
+    echo '<td><textarea name="explm_hp_customer_note" id="explm_hp_customer_note" rows="3" cols="40" maxlength="99">' . esc_textarea($customer_note) . '</textarea></td>';
     echo '</tr>';
 
     echo '</table>';

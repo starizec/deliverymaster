@@ -40,6 +40,7 @@ class ExplmPrintLabels {
             $weight = 2;
             $payment_method = $order->get_payment_method();
             $parcel_type = '';
+            $currency = $order->get_currency();
     
             if ($saved_service_type === 'DPD Classic') {
                 $parcel_type = $payment_method === 'cod' ? 'D-COD' : 'D';
@@ -51,18 +52,25 @@ class ExplmPrintLabels {
             $house_number = isset($house_number[0]) ? $house_number[0] : '';
             $address_without_house_number = preg_replace('/\d[\w\s-]*$/', '', $shipping['address_1']);
             $courierUpper = strtoupper($courier);
-            $parcel_data = $this->{"set{$courierUpper}ParcelsData"}($shipping, $billing, $order_data, $order_total, $address_without_house_number, $house_number, $weight, $order_id, $parcel_type, 1, $payment_method);
+            $parcel_data = $this->{"set{$courierUpper}ParcelsData"}($shipping, $billing, $order_data, $order_total, $address_without_house_number, $house_number, $weight, $order_id, $parcel_type, 1, $payment_method, $currency);
     
-            $parcels_array[] = array(
-                "order_number" => (string)$order_id,
-                "parcel" => $parcel_data
-            );
+            if ($courier === 'hp') {
+                $parcels_array[] = $parcel_data;
+            } else {
+                $parcels_array[] = array(
+                    "order_number" => (string)$order_id,
+                    "parcel" => $parcel_data
+                );
+            }
+
         }
     
         $body = array(
             "user" => $user_data,
             "parcels" => $parcels_array
         );
+
+        error_log('$body: ' . print_r($body, true));
     
         $args = array(
             'method' => 'POST',
@@ -72,6 +80,8 @@ class ExplmPrintLabels {
         );
     
         $response = wp_remote_request('https://expresslabelmaker.com/api/v1/' . $saved_country . '/' . $courier . '/create/labels', $args);
+
+        error_log(' $response: ' . print_r($response, true));
     
         if (is_wp_error($response)) {
             wp_send_json_error(array('errors' => array(
@@ -83,8 +93,8 @@ class ExplmPrintLabels {
         }
     
         $body_response = json_decode(wp_remote_retrieve_body($response), true);
-/* 
-        error_log('response body: ' . print_r($body_response, true)); */
+
+        error_log('response body: ' . print_r($body_response, true));
     
         $errors = array();
 
@@ -244,7 +254,61 @@ class ExplmPrintLabels {
         }
     
         return $data;
-    }     
+    }
+    
+    public function setHPParcelsData($shipping, $billing, $order_data, $order_total, $address_without_house_number, $house_number, $weight, $order_id, $parcel_type, $package_number, $payment_method, $currency)
+    {
+        $hp_note = get_option('explm_hp_customer_note', '');
+        $sender_remark = !empty($hp_note)
+            ? $hp_note
+            : (!empty($order_data['customer_note']) ? (string)$order_data['customer_note'] : '');
+
+        if (!empty($sender_remark) && mb_strlen($sender_remark) > 100) {
+            $sender_remark = mb_substr($sender_remark, 0, 97) . '...';
+        }
+
+        $parcel_value   = number_format((float)$order_total, 2, '.', '');
+        $parcel_weight  = number_format((float)$weight, 2, '.', '');
+       
+        $locker_id = ExplmLabelMaker::get_order_meta($order_id, 'hp_parcel_locker_location_id', true);
+        $locker_type = ExplmLabelMaker::get_order_meta($order_id, 'hp_parcel_locker_type', true);
+
+        $data = [
+            'recipient_name'        => (string)trim($shipping['first_name'] . ' ' . $shipping['last_name']),
+            'recipient_phone'       => isset($billing['phone']) ? (string)$billing['phone'] : '',
+            'recipient_email'       => isset($billing['email']) ? (string)$billing['email'] : '',
+            'recipient_adress'      => (string)trim($address_without_house_number . ' ' . $house_number),
+            'recipient_city'        => (string)$shipping['city'],
+            'recipient_postal_code' => (string)$shipping['postcode'],
+            'recipient_country'     => strtoupper((string)$shipping['country']),
+
+            'sender_name'           => (string)get_option('explm_hp_company_or_personal_name', ''),
+            'sender_phone'          => (string)get_option('explm_hp_phone', ''),
+            'sender_email'          => (string)get_option('explm_hp_email', ''),
+            'sender_adress'         => (string)trim(get_option('explm_hp_street', '') . ' ' . get_option('explm_hp_property_number', '')),
+            'sender_city'           => (string)get_option('explm_hp_city', ''),
+            'sender_postal_code'    => (string)get_option('explm_hp_postal_code', ''),
+            'sender_country'        => strtoupper((string)get_option('explm_hp_country', '')),
+
+            'order_number'          => (string)$order_id,
+            'parcel_weight'         => (string)$parcel_weight,
+            'parcel_remark'         => (string)$sender_remark,
+            'parcel_value'          => (string)$parcel_value,
+            'parcel_size'           => (string)get_option('explm_hp_parcel_size', ''),
+            'parcel_count'          => (int)$package_number,
+            'cod_amount'            => $payment_method === 'cod' ? (float)$order_total : '',
+            'cod_currency'          => $payment_method === 'cod' ? (string)$currency : '',
+
+            'additional_services'   => (string)get_option('explm_hp_delivery_additional_services', ''),
+            'delivery_sevice'       => (string)get_option('explm_hp_delivery_service', ''),
+            'location_id'   => (string)(!empty($locker_id) ? $locker_id : (isset($_POST['hp_parcel_locker_location_id']) ? sanitize_text_field(wp_unslash($_POST['hp_parcel_locker_location_id'])) : '')),
+            'location_type' => (string)(!empty($locker_type) ? $locker_type : (isset($_POST['hp_parcel_locker_type']) ? sanitize_text_field(wp_unslash($_POST['hp_parcel_locker_type'])) : '')),
+
+        ];
+
+        return $data;
+    }
+
 }
 
 function explm_initialize_print_labels() {

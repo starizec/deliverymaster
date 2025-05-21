@@ -17,6 +17,8 @@
   border-radius: 4px;
   width: 100%;
   max-width: 800px;
+  overflow: auto;
+  max-height: 700px;
 }
 
 .explm-modal-actions {
@@ -33,12 +35,14 @@
 #explm-collection-order-details-form {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
 }
 
 .explm-labels {
   display: flex;
   flex-direction: column;
   padding: 3px;
+  gap: 3px;
 }
 
 .explm-form-columns {
