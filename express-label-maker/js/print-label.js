@@ -230,6 +230,8 @@ jQuery(document).ready(function ($) {
       .get()
       .join(",");
 
+    const insuredChecked = form.find('input[name="insured_value"]').is(':checked');
+
     const data = {
       recipient_name: form.find('input[name="customer_name"]').val() || "",
       recipient_phone: form.find('input[name="phone"]').val() || "",
@@ -265,6 +267,8 @@ jQuery(document).ready(function ($) {
         ? form.find('input[name="cod_amount"]').val()
         : "",
       cod_currency: isCod ? form.find('input[name="hiddenCurrency"]').val() : "",
+
+      value: insuredChecked ? form.find('input[name="order_total"]').val() : "",
 
       additional_services: additional_services,
       delivery_sevice: form.find('select[name="delivery_service"]').val() || "",

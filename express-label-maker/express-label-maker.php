@@ -312,11 +312,39 @@ class ExplmLabelMaker
                     <?php endif; ?>
                     <?php endif; ?>
                     <?php if ($dpd_condition || $overseas_condition || $hp_condition): ?>
-                        <h4 class="explm-custom-order-metabox-title"><?php echo esc_html__('Collection request', 'express-label-maker'); ?></h4>
-                        <div class="explm_collection_request_button">
-                            <button data-order-id="<?php echo esc_attr($order_id); ?>" id="explm_collection_request" class="button button-primary">
-                                <?php echo esc_html__('Collection request', 'express-label-maker'); ?>
-                            </button>
+                        <h4 class="explm-custom-order-metabox-title">
+                            <?php echo esc_html__('Collection request', 'express-label-maker'); ?>
+                        </h4>
+                        <div class="explm_collection_request_buttons">
+                            <?php if ($dpd_condition): ?>
+                                <button
+                                    data-order-id="<?php echo esc_attr($order_id); ?>"
+                                    data-courier="dpd"
+                                    id="explm_collection_request_dpd"
+                                    class="button button-primary explm_collection_request_btn">
+                                    <?php echo esc_html__('DPD Collection request', 'express-label-maker'); ?>
+                                </button>
+                            <?php endif; ?>
+
+                            <?php if ($overseas_condition): ?>
+                                <button
+                                    data-order-id="<?php echo esc_attr($order_id); ?>"
+                                    data-courier="overseas"
+                                    id="explm_collection_request_overseas"
+                                    class="button button-primary explm_collection_request_btn">
+                                    <?php echo esc_html__('Overseas Collection request', 'express-label-maker'); ?>
+                                </button>
+                            <?php endif; ?>
+
+                            <?php if ($hp_condition): ?>
+                                <button
+                                    data-order-id="<?php echo esc_attr($order_id); ?>"
+                                    data-courier="hp"
+                                    id="explm_collection_request_hp"
+                                    class="button button-primary explm_collection_request_btn">
+                                    <?php echo esc_html__('HP Collection request', 'express-label-maker'); ?>
+                                </button>
+                            <?php endif; ?>
                         </div>
                     <?php endif; ?>
             </div>
@@ -389,8 +417,23 @@ class ExplmLabelMaker
             $order_date = $order_data['date_created']->date('Y-m-d');
             $payment_method = $order->get_payment_method();
             $order_total = $order->get_total();
-            $weight = 2;
             $package_number = 1;
+
+            $weight = 2;
+            $total_weight = 0;
+
+            foreach ($order->get_items() as $item) {
+                $product = $item->get_product();
+                if ($product) {
+                    $product_weight = (float) $product->get_weight();
+                    $quantity = $item->get_quantity();
+                    $total_weight += $product_weight * $quantity;
+                }
+            }
+
+            if ($total_weight > 0) {
+                $weight = $total_weight;
+            }
 
             preg_match('/\d[\w\s-]*$/', $shipping['address_1'], $house_number);
             $house_number = isset($house_number[0]) ? $house_number[0] : '';
@@ -410,6 +453,7 @@ class ExplmLabelMaker
     public function explm_show_collection_modal() {
         check_ajax_referer('explm_nonce', 'security');
         $order_id = isset($_POST['order_id']) ? intval($_POST['order_id']) : 0;
+        $courier  = isset($_POST['courier']) ? sanitize_text_field($_POST['courier']) : '';
 
         if ($order_id > 0) {
             $order = wc_get_order($order_id);
@@ -419,8 +463,23 @@ class ExplmLabelMaker
             $order_date = $order_data['date_created']->date('Y-m-d');
             $payment_method = $order->get_payment_method();
             $order_total = $order->get_total();
-            $weight = 2;
             $package_number = 1;
+
+            $weight = 2;
+            $total_weight = 0;
+
+            foreach ($order->get_items() as $item) {
+                $product = $item->get_product();
+                if ($product) {
+                    $product_weight = (float) $product->get_weight();
+                    $quantity = $item->get_quantity();
+                    $total_weight += $product_weight * $quantity;
+                }
+            }
+
+            if ($total_weight > 0) {
+                $weight = $total_weight;
+            }
 
             preg_match('/\d[\w\s-]*$/', $shipping['address_1'], $house_number);
             $house_number = isset($house_number[0]) ? $house_number[0] : '';
@@ -428,7 +487,19 @@ class ExplmLabelMaker
             $address_without_house_number = preg_replace('/\d[\w\s-]*$/', '', $shipping['address_1']);
 
             ob_start();
-            include('forms/express-label-maker-collection-form.php');
+            switch ($courier) {
+            case 'dpd':
+                include plugin_dir_path(__FILE__) . 'forms/express-label-maker-collection-form-dpd.php';
+                break;
+
+            case 'overseas':
+                include plugin_dir_path(__FILE__) . 'forms/express-label-maker-collection-form-overseas.php';
+                break;
+
+            case 'hp':
+                include plugin_dir_path(__FILE__) . 'forms/express-label-maker-collection-form-hp.php';
+                break;
+        }
             $output = ob_get_clean();
             wp_send_json_success($output);
         } else {

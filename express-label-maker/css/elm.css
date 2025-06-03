@@ -1,3 +1,9 @@
+.explm_collection_request_buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
 .explm-modal-wrapper {
   background-color: rgba(0, 0, 0, 0.6);
   position: fixed;
@@ -120,7 +126,7 @@
 .explm-custom-order-wrapper {
   display: flex;
   margin-top: 10px;
-  gap: 10px;
+  gap: 5px;
   flex-wrap: wrap;
 }
 

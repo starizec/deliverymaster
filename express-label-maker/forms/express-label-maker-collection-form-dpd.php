@@ -2,13 +2,6 @@
 if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
-
-$saved_dpd_username = get_option('explm_dpd_username_option', '');
-$saved_dpd_password = get_option('explm_dpd_password_option', '');
-$saved_api_key = get_option('explm_overseas_api_key_option', '');
-
-$dpd_condition = !empty($saved_dpd_username) && !empty($saved_dpd_password);
-$overseas_condition = !empty($saved_api_key);
 ?>
 
 <div class="explm-loading-panel">
@@ -158,27 +151,29 @@ $overseas_condition = !empty($saved_api_key);
                     <?php esc_html_e('Pickup Date:', 'express-label-maker'); ?>
                     <input type="date" name="collection_pickup_date" value="<?php echo esc_attr(gmdate('Y-m-d', strtotime('+1 day'))); ?>">
                 </label>
-                <!-- Courier selection -->
+                    <!-- Hidden courier for api -->
+                <input type="hidden" id="hiddenCountry" value="<?php echo esc_attr(get_option('explm_country_option', '')); ?>" />
+                <input type="hidden" id="hiddenOrderId" value="<?php echo esc_attr($order_data['id']); ?>" />
+                <input type="hidden" id="hiddenCollectionCourier" value="dpd" />
+                </div>
+                <div class="explm-form-columns">      
+                <h3 style="margin: 0 0 5px 0;"><?php esc_html_e('Courier', 'express-label-maker'); ?></h3>          
+                 
+                 <!-- Weight -->
                 <label class="explm-labels">
-                    <?php esc_html_e('Select Courier:', 'express-label-maker'); ?>
-                    <select id="collection_courier" name="collection_courier_selection">
-                        <?php if ($dpd_condition): ?>
-                            <option value="dpd">DPD</option>
-                        <?php endif; ?>
-
-                        <?php if ($overseas_condition): ?>
-                            <option value="overseas">Overseas</option>
-                        <?php endif; ?>
-                    </select>
+                    <?php esc_html_e('Weight:', 'express-label-maker'); ?>
+                    <input type="text" name="weight" value="<?php echo esc_attr($weight); ?>">
                 </label>
-                 <!-- Info for courier -->
+                <!-- Package Number -->
+                <label class="explm-labels">
+                    <?php esc_html_e('Package Number:', 'express-label-maker'); ?>
+                    <input type="text" name="package_number" value="<?php echo esc_attr($package_number); ?>">
+                </label>
+                <!-- Info for courier -->
                  <label class="explm-labels">
                     <?php esc_html_e('Info for courier:', 'express-label-maker'); ?>
                     <textarea name="collection_info_for_courier"></textarea>
                 </label>
-                    <!-- Hidden courier for api -->
-                <input type="hidden" id="hiddenCountry" value="<?php echo esc_attr(get_option('explm_country_option', '')); ?>" />
-                <input type="hidden" id="hiddenOrderId" value="<?php echo esc_attr($order_data['id']); ?>" />
         </form>
         <div class="explm-modal-actions">
             <button class="button button-primary explm_confirm_collection_action">
@@ -187,6 +182,5 @@ $overseas_condition = !empty($saved_api_key);
             <button class="button explm-cancel-action">
                 <?php esc_html_e('Cancel', 'express-label-maker'); ?>
             </button>
-        </div>
     </div>
 </div>

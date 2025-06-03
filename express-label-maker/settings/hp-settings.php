@@ -62,7 +62,7 @@ function explm_hp_tab_content() {
     $saved_enable = get_option('explm_hp_enable_pickup', '');
     $saved_method = get_option('explm_hp_pickup_shipping_method', '');
     $customer_note = get_option('explm_hp_customer_note', '');
-    $saved_notifs = explode(',', get_option('explm_hp_delivery_additional_services', '32,33'));
+    $saved_notifs = explode(',', get_option('explm_hp_delivery_additional_services', '32,30'));
 
     echo '<div style="display:block;">';
     echo '<div style="float: left; width: 48%; padding-right: 2%;">';
@@ -96,7 +96,7 @@ function explm_hp_tab_content() {
 
     $notif_options = [
         32 => 'Email',
-        33 => 'SMS',
+        30 => 'SMS',
     ];
     echo '<tr>';
     echo '<th scope="row">' . esc_html__('Recipient Notifications', 'express-label-maker') . '</th>';
@@ -148,7 +148,7 @@ function explm_hp_tab_content() {
     echo '</select></td>';
     echo '</tr>';
 
-    $saved_insured = get_option('explm_hp_insured_value', '');
+    $saved_insured = get_option('explm_hp_insured_value', '1');
 
     echo '<tr>';
     echo '<th scope="row"><label for="explm_hp_insured_value">' . esc_html__('Insured shipment value', 'express-label-maker') . '</label></th>';

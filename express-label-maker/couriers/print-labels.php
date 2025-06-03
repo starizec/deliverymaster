@@ -37,10 +37,25 @@ class ExplmPrintLabels {
             $billing = $order_data['billing'];
             $shipping = $order_data['shipping'];
             $order_total = $order->get_total();
-            $weight = 2;
             $payment_method = $order->get_payment_method();
             $parcel_type = '';
             $currency = $order->get_currency();
+
+            $weight = 2;
+            $total_weight = 0;
+
+            foreach ($order->get_items() as $item) {
+                $product = $item->get_product();
+                if ($product) {
+                    $product_weight = (float) $product->get_weight();
+                    $quantity = $item->get_quantity();
+                    $total_weight += $product_weight * $quantity;
+                }
+            }
+
+            if ($total_weight > 0) {
+                $weight = $total_weight;
+            }
     
             if ($saved_service_type === 'DPD Classic') {
                 $parcel_type = $payment_method === 'cod' ? 'D-COD' : 'D';
@@ -273,6 +288,9 @@ class ExplmPrintLabels {
         $locker_id = ExplmLabelMaker::get_order_meta($order_id, 'hp_parcel_locker_location_id', true);
         $locker_type = ExplmLabelMaker::get_order_meta($order_id, 'hp_parcel_locker_type', true);
 
+        $insured_option = get_option('explm_hp_insured_value', '0');
+        $value_param = ($insured_option === '1') ? (string)$parcel_value : '';
+
         $data = [
             'recipient_name'        => (string)trim($shipping['first_name'] . ' ' . $shipping['last_name']),
             'recipient_phone'       => isset($billing['phone']) ? (string)$billing['phone'] : '',
@@ -298,6 +316,7 @@ class ExplmPrintLabels {
             'parcel_count'          => (int)$package_number,
             'cod_amount'            => $payment_method === 'cod' ? (float)$order_total : '',
             'cod_currency'          => $payment_method === 'cod' ? (string)$currency : '',
+            'value'                 => $value_param,
 
             'additional_services'   => (string)get_option('explm_hp_delivery_additional_services', ''),
             'delivery_sevice'       => (string)get_option('explm_hp_delivery_service', ''),

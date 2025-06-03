@@ -121,20 +121,26 @@ if (!defined('ABSPATH')) {
             
             <div class="explm-form-columns">
 
-            <?php 
+            <?php
                 $dpd_parcel_locker_location_id = '';
-                $overseas_parcel_locker_location_id = '';
-            
+                $overseas_parcel_locker_location_id = '';    
+                        
             //DODATI KURIRE
 
                 switch ($courier) {
                     case 'dpd':
                     $dpd_parcel_locker_location_id = ExplmLabelMaker::get_order_meta($order_data['id'], 'dpd_parcel_locker_location_id', true);
+                    $dpd_parcel_locker_name = ExplmLabelMaker::get_order_meta($order_data['id'], 'dpd_parcel_locker_name', true);
             ?>
 
                 <!-- Parcel Locker -->
                 <label class="explm-labels">
                     <?php esc_html_e('Parcel Locker:', 'express-label-maker'); ?>
+                    <input type="text" name="parcel_locker_name" value="<?php echo esc_attr($dpd_parcel_locker_name); ?>">
+                </label>
+
+                <label class="explm-labels">
+                    <?php esc_html_e('Parcel Locker ID:', 'express-label-maker'); ?>
                     <input type="text" name="parcel_locker" value="<?php echo esc_attr($dpd_parcel_locker_location_id); ?>">
                 </label>
                 
@@ -143,17 +149,23 @@ if (!defined('ABSPATH')) {
                     break;
 
                     case 'overseas':
-                    $overseas_parcel_locker_location_id = ExplmLabelMaker::get_order_meta($order_data['id'], 'overseas_parcel_locker_location_id', true); 
+                    $overseas_parcel_locker_location_id = ExplmLabelMaker::get_order_meta($order_data['id'], 'overseas_parcel_locker_location_id', true);
+                    $overseas_parcel_locker_name = ExplmLabelMaker::get_order_meta($order_data['id'], 'overseas_parcel_locker_name', true); 
                 ?>
               
                 <!-- Parcel Locker -->
                 <label class="explm-labels">
                     <?php esc_html_e('Parcel Locker:', 'express-label-maker'); ?>
+                    <input type="text" name="parcel_locker_name" value="<?php echo esc_attr($overseas_parcel_locker_name); ?>">
+                </label>
+
+                <label class="explm-labels">
+                    <?php esc_html_e('Parcel Locker ID:', 'express-label-maker'); ?>
                     <input type="text" name="parcel_locker" value="<?php echo esc_attr($overseas_parcel_locker_location_id); ?>">
                 </label>
                 
                 <?php
-
+                break;
                 case 'hp';
 
                 $hp_notifications = explode(',', get_option('explm_hp_delivery_additional_services', '32,33'));
@@ -162,7 +174,14 @@ if (!defined('ABSPATH')) {
                 $hp_insured_value = get_option('explm_hp_insured_value', '');
                 $hp_locker_id = ExplmLabelMaker::get_order_meta($order_data['id'], 'hp_parcel_locker_location_id', true);
                 $hp_locker_type = ExplmLabelMaker::get_order_meta($order_data['id'], 'hp_parcel_locker_type', true);
+                $hp_parcel_locker_name = ExplmLabelMaker::get_order_meta($order_data['id'], 'hp_parcel_locker_name', true);
                 ?>
+
+                <!-- Parcel Locker Name -->
+                <label class="explm-labels">
+                    <?php esc_html_e('Parcel Locker:', 'express-label-maker'); ?>
+                    <input type="text" name="parcel_locker_name" value="<?php echo esc_attr($hp_parcel_locker_name); ?>">
+                </label>
 
                 <!-- Parcel Locker ID -->
                 <label class="explm-labels">
@@ -181,7 +200,7 @@ if (!defined('ABSPATH')) {
                     <?php esc_html_e('Recipient Notifications:', 'express-label-maker'); ?>
                     <div class="notification-options">
                         <?php
-                        $notif_options = [32 => 'Email', 33 => 'SMS'];
+                        $notif_options = [32 => 'Email', 30 => 'SMS'];
                         foreach ($notif_options as $id => $label) {
                             ?>
                             <label style="margin-right: 15px;">

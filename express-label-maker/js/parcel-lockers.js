@@ -171,7 +171,7 @@ jQuery(document).ready(function ($) {
         $('input[name="shipping_postcode"]').val() ||
         $('input[name="billing_postcode"]').val();
       geocodePostcodeAndZoom(postcode);
-    }, 2000);
+    }, 1000);
 
     if (lockers.length > 0) {
       dpdMap.fitBounds(markers.getBounds());
@@ -400,7 +400,7 @@ jQuery(document).ready(function ($) {
         $('input[name="shipping_postcode"]').val() ||
         $('input[name="billing_postcode"]').val();
       geocodePostcodeAndZoom(postcode);
-    }, 2000);
+    }, 1000);
 
     if (lockers.length > 0) {
       overseasMap.fitBounds(markers.getBounds());
@@ -610,7 +610,7 @@ jQuery(document).ready(function ($) {
         $('input[name="shipping_postcode"]').val() ||
         $('input[name="billing_postcode"]').val();
       geocodePostcodeAndZoom(postcode);
-    }, 2000);
+    }, 1000);
 
     if (lockers.length > 0) {
       hpMap.fitBounds(markers.getBounds());

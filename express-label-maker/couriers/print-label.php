@@ -38,7 +38,7 @@ class ExplmPrintLabel
 
         $response = wp_remote_request('https://expresslabelmaker.com/api/v1/' . $saved_country . '/' . $courier . '/create/label', $args);
 
-        error_log('$response: ' . print_r($response, true));
+/*         error_log('$response: ' . print_r($response, true)); */
 
         if (is_wp_error($response)) {
             wp_send_json_error(array(
@@ -51,21 +51,30 @@ class ExplmPrintLabel
         }
         
         $body_response = json_decode(wp_remote_retrieve_body($response), true);
-/* 
-        error_log('response body: ' . print_r($body_response, true)); */
+
+        error_log('response body: ' . print_r($body_response, true));
         
         if ($response['response']['code'] != '201') {
             $errors = array();
         
-            if (!empty($body_response['errors']) && is_array($body_response['errors'])) {
-                foreach ($body_response['errors'] as $error) {
-                    $errors[] = array(
-                        'order_number' => !empty($error['order_number']) ? $error['order_number'] : 'unknown',
-                        'error_code' => !empty($error['error_code']) ? $error['error_code'] : 'unknown',
-                        'error_message' => !empty($error['error_message']) ? $error['error_message'] : 'unknown'
-                    );
-                }
-            } elseif (!empty($body_response['error'])) {
+        if (!empty($body_response['errors'])) {
+        if (isset($body_response['errors']['order_number'])) {
+            $errors[] = array(
+            'order_number' => !empty($body_response['errors']['order_number']) ? $body_response['errors']['order_number'] : 'unknown',
+            'error_code' => !empty($body_response['errors']['error_code']) ? $body_response['errors']['error_code'] : 'unknown',
+            'error_message' => !empty($body_response['errors']['error_message']) ? $body_response['errors']['error_message'] : 'unknown'
+            );
+        } else {
+            foreach ($body_response['errors'] as $error) {
+            $errors[] = array(
+                'order_number' => !empty($error['order_number']) ? $error['order_number'] : 'unknown',
+                'error_code' => !empty($error['error_code']) ? $error['error_code'] : 'unknown',
+                'error_message' => !empty($error['error_message']) ? $error['error_message'] : 'unknown'
+            );
+            }
+        }
+        } elseif (!empty($body_response['error'])) {
+
                 $errors[] = array(
                     'order_number' => 'unknown',
                     'error_code' => 'unknown',
