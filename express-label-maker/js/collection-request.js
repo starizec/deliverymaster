@@ -140,9 +140,6 @@ jQuery(document).ready(function ($) {
             Swal.fire({
               icon: "success",
               title: "Collection request sent",
-              html:
-                "<b>Code:</b> " + response.data.code + "<br>" +
-                "<b>Reference:</b> " + response.data.reference,
               confirmButtonText: "OK",
               customClass: {
                 popup: 'explm-swal-scroll',

@@ -85,8 +85,8 @@ class ExplmPrintLabels {
             "parcels" => $parcels_array
         );
 
-        error_log('$body: ' . print_r($body, true));
-    
+/*         error_log('$body: ' . print_r($body, true));
+     */
         $args = array(
             'method' => 'POST',
             'headers' => array('Content-Type' => 'application/json'),
@@ -96,7 +96,7 @@ class ExplmPrintLabels {
     
         $response = wp_remote_request('https://expresslabelmaker.com/api/v1/' . $saved_country . '/' . $courier . '/create/labels', $args);
 
-        error_log(' $response: ' . print_r($response, true));
+/*         error_log(' $response: ' . print_r($response, true)); */
     
         if (is_wp_error($response)) {
             wp_send_json_error(array('errors' => array(
@@ -109,7 +109,7 @@ class ExplmPrintLabels {
     
         $body_response = json_decode(wp_remote_retrieve_body($response), true);
 
-        error_log('response body: ' . print_r($body_response, true));
+/*         error_log('response body: ' . print_r($body_response, true)); */
     
         $errors = array();
 
