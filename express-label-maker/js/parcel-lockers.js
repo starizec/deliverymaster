@@ -14,7 +14,6 @@ jQuery(document).ready(function ($) {
       $('input[name="billing_city"]').val() ||
       "";
 
-    console.log(city, "city");
     const country =
       $('select[name="shipping_country"]').find(":selected").text() ||
       $('select[name="billing_country"]').find(":selected").text() ||
@@ -55,6 +54,7 @@ jQuery(document).ready(function ($) {
       <div class="parcel-locker-modal dpd-parcel-locker-modal">
           <div class="parcel-locker-modal-content">
               <span class="parcel-locker-close dpd-parcel-locker-close">&times;</span>
+              <div style="overflow-y: auto; overflow-x: hidden;">
               <div id="dpd-parcel-locker-map-container" style="position: relative;">
                   <div id="dpd-parcel-locker-map"></div>
                   <div id="map-loading" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
@@ -69,6 +69,7 @@ jQuery(document).ready(function ($) {
                       <input type="text" id="dpd-parcel-locker-search" placeholder="${parcel_locker_i18n.choose_locker}...">
                   </div>
                   <div class="parcel-locker-list"></div>
+              </div>
               </div>
           </div>
       </div>
@@ -212,7 +213,7 @@ jQuery(document).ready(function ($) {
       $(".explm-no-lockers").remove();
       if (visibleCount === 0) {
         list.append(
-          `<div class="explm-no-lockers">There are no parcel lockers to display.</div>`
+          `<div class="explm-no-lockers">${ parcel_locker_i18n.no_parcel_lockers }</div>`
         );
       }
     });
@@ -234,7 +235,6 @@ jQuery(document).ready(function ($) {
       )
       .show();
     $("#clear-dpd-parcel-locker").show();
-    $(document.body).trigger("update_checkout");
     $(".parcel-locker-modal").fadeOut(function () {
       $(this).remove();
     });
@@ -251,7 +251,6 @@ jQuery(document).ready(function ($) {
     $("#dpd_parcel_locker_city").val("");
     $("#selected-dpd-parcel-locker-info").html("").hide();
     $("#clear-dpd-parcel-locker").hide();
-    $(document.body).trigger("update_checkout");
   }
 
   $(document).on("click", "#clear-dpd-parcel-locker", function (e) {
@@ -269,6 +268,7 @@ jQuery(document).ready(function ($) {
       <div class="parcel-locker-modal overseas-parcel-locker-modal">
           <div class="parcel-locker-modal-content">
               <span class="parcel-locker-close overseas-parcel-locker-close">&times;</span>
+              <div style="overflow-y: auto; overflow-x: hidden;">
               <div id="overseas-parcel-locker-map-container" style="position: relative;">
                   <div id="overseas-parcel-locker-map"></div>
                   <div id="map-loading" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
@@ -283,6 +283,7 @@ jQuery(document).ready(function ($) {
                       <input type="text" id="overseas-parcel-locker-search" placeholder="${parcel_locker_i18n.choose_locker}...">
                   </div>
                   <div class="parcel-locker-list"></div>
+              </div>
               </div>
           </div>
       </div>
@@ -461,7 +462,6 @@ jQuery(document).ready(function ($) {
       )
       .show();
     $("#clear-overseas-parcel-locker").show();
-    $(document.body).trigger("update_checkout");
     $(".parcel-locker-modal").fadeOut(function () {
       $(this).remove();
     });
@@ -478,7 +478,6 @@ jQuery(document).ready(function ($) {
     $("#overseas_parcel_locker_city").val("");
     $("#selected-overseas-parcel-locker-info").html("").hide();
     $("#clear-overseas-parcel-locker").hide();
-    $(document.body).trigger("update_checkout");
   }
 
   $(document).on("click", "#clear-overseas-parcel-locker", function (e) {
@@ -496,6 +495,7 @@ jQuery(document).ready(function ($) {
       <div class="parcel-locker-modal hp-parcel-locker-modal">
           <div class="parcel-locker-modal-content">
               <span class="parcel-locker-close hp-parcel-locker-close">&times;</span>
+              <div style="overflow-y: auto; overflow-x: hidden;">
               <div id="hp-parcel-locker-map-container" style="position: relative;">
                   <div id="hp-parcel-locker-map"></div>
                   <div id="map-loading" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
@@ -510,6 +510,7 @@ jQuery(document).ready(function ($) {
                       <input type="text" id="hp-parcel-locker-search" placeholder="${parcel_locker_i18n.choose_locker}...">
                   </div>
                   <div class="parcel-locker-list"></div>
+              </div>
               </div>
           </div>
       </div>
@@ -651,7 +652,7 @@ jQuery(document).ready(function ($) {
       $(".explm-no-lockers").remove();
       if (visibleCount === 0) {
         list.append(
-          `<div class="explm-no-lockers">There are no parcel lockers to display.</div>`
+          `<div class="explm-no-lockers">${ parcel_locker_i18n.no_parcel_lockers }</div>`
         );
       }
     });
@@ -673,7 +674,6 @@ jQuery(document).ready(function ($) {
       )
       .show();
     $("#clear-hp-parcel-locker").show();
-    $(document.body).trigger("update_checkout");
     $(".parcel-locker-modal").fadeOut(function () {
       $(this).remove();
     });
@@ -690,7 +690,6 @@ jQuery(document).ready(function ($) {
     $("#hp_parcel_locker_city").val("");
     $("#selected-hp-parcel-locker-info").html("").hide();
     $("#clear-hp-parcel-locker").hide();
-    $(document.body).trigger("update_checkout");
   }
 
   $(document).on("click", "#clear-hp-parcel-locker", function (e) {

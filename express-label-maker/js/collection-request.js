@@ -129,7 +129,6 @@ jQuery(document).ready(function ($) {
           country: country,
         },
         success: function (response) {
-          console.log(response, 'res1232132')
           if (response.success) {
             jQuery(".explm-modal-wrapper").fadeOut(300, function () {
               jQuery(this).remove();
@@ -279,7 +278,7 @@ jQuery(document).ready(function ($) {
       value: insuredChecked ? form.find('input[name="order_total"]').val() : "",
 
       additional_services: additional_services,
-      delivery_sevice: form.find('select[name="delivery_service"]').val() || "",
+      delivery_service: form.find('select[name="delivery_service"]').val() || "",
 
       location_id: form.find('input[name="hp_parcel_locker_location_id"]').val() || "",
       location_type: form.find('input[name="hp_parcel_locker_type"]').val() || "",

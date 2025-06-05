@@ -5,7 +5,7 @@
  * Plugin URI: https://expresslabelmaker.com/
  * Description: Print shipping labels and track parcels for multiple couriers directly from WooCommerce.
  * Tags: woocommerce, shipping, label printing, DPD, Overseas, Hrvatska pošta
- * Version: 25.4.6.1
+ * Version: 25.5.6.1
  * Author: expresslabelmaker
  * Tested up to: 6.8
  * License: GPLv2 or later
@@ -16,20 +16,24 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-require_once 'settings/general-settings.php';
-require_once 'settings/licence-settings.php';
-require_once 'settings/dpd-settings.php';
-require_once 'settings/overseas-settings.php';
-require_once 'settings/hp-settings.php';
-require_once 'settings/user-data.php';
-require_once 'settings/licence.php';
-require_once 'couriers/print-label.php';
-require_once 'couriers/print-labels.php';
-require_once 'couriers/all-couriers.php';
-require_once 'couriers/user-status-data.php';
-require_once 'couriers/parcel-statuses.php';
-require_once 'couriers/collection-request.php';
-require_once 'couriers/parcel-lockers.php';
+foreach ([
+    'settings/general-settings.php',
+    'settings/licence-settings.php',
+    'settings/dpd-settings.php',
+    'settings/overseas-settings.php',
+    'settings/hp-settings.php',
+    'settings/user-data.php',
+    'settings/licence.php',
+    'couriers/print-label.php',
+    'couriers/print-labels.php',
+    'couriers/all-couriers.php',
+    'couriers/user-status-data.php',
+    'couriers/parcel-statuses.php',
+    'couriers/collection-request.php',
+    'couriers/parcel-lockers.php',
+] as $file) {
+    require_once plugin_dir_path(__FILE__) . $file;
+}
 
 class ExplmLabelMaker
 {
@@ -547,19 +551,34 @@ class ExplmLabelMaker
     
 }
 
-function explm_initialize_express_label_maker() {
+function explm_initialize_express_label_maker(): void {
+    if (get_transient('explm_force_update_parcelshops')) {
+        delete_transient('explm_force_update_parcelshops');
+        $locker_handler = new ExplmParcelLockers();
+        $locker_handler->explm_update_hp_parcelshops_cron_callback();
+        $locker_handler->explm_update_dpd_parcelshops_cron_callback();
+        $locker_handler->explm_update_overseas_parcelshops_cron_callback();
+    }
     new ExplmLabelMaker();
 }
 add_action('plugins_loaded', 'explm_initialize_express_label_maker');
 
-add_action('before_woocommerce_init', function() {
-    if (class_exists('\Automattic\WooCommerce\Utilities\FeaturesUtil')) {
+add_action('before_woocommerce_init', static function() {
+    if (class_exists('\\Automattic\\WooCommerce\\Utilities\\FeaturesUtil')) {
         \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility('custom_order_tables', __FILE__, true);
     }
 });
 
-register_deactivation_hook(__FILE__, function() {
-    wp_clear_scheduled_hook('explm_update_overseas_parcelshops_cron');
-    wp_clear_scheduled_hook('explm_update_dpd_parcelshops_cron');
-    wp_clear_scheduled_hook('explm_update_hp_parcelshops_cron');
+register_activation_hook(__FILE__, static function() {
+    set_transient('explm_force_update_parcelshops', true, 60);
+});
+
+register_deactivation_hook(__FILE__, static function() {
+    foreach ([
+        'explm_update_overseas_parcelshops_cron',
+        'explm_update_dpd_parcelshops_cron',
+        'explm_update_hp_parcelshops_cron'
+    ] as $hook) {
+        wp_clear_scheduled_hook($hook);
+    }
 });

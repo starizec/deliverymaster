@@ -41,8 +41,8 @@ function explm_overseas_tab_content() {
     $saved_api_key = get_option('explm_overseas_api_key_option', '');
     $saved_country = strtoupper(get_option('explm_country_option', ''));
 
-    echo '<div style="display:block;">';
-    echo '<div style="float: left; width: 48%; padding-right: 2%;">';
+    echo '<div style="display:flex;flex-wrap:wrap;gap:20px;">';
+    echo '<div style="flex: 1 1 auto;">';
     echo '<h3>' . esc_html__('Overseas Settings', 'express-label-maker') . '</h3>';
     echo '<form method="post" action="">';
     echo '<table class="form-table">';
@@ -92,7 +92,6 @@ function explm_overseas_tab_content() {
     wp_nonce_field('explm_save_overseas_settings', 'explm_overseas_nonce');
     echo '</form>';
     echo '</div>';
-    echo '</div>';
 
     if (isset($_POST['explm_collection_request_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['explm_collection_request_nonce'])), 'explm_save_collection_request_settings')) {
         $company_or_personal_name = isset($_POST['company_or_personal_name']) ? sanitize_text_field(wp_unslash($_POST['company_or_personal_name'])) : '';
@@ -115,13 +114,13 @@ function explm_overseas_tab_content() {
             update_option('explm_overseas_phone', $phone);
             update_option('explm_overseas_email', $email);
             update_option('explm_overseas_country', $country);
-            echo '<div style="display: flex;" class="updated"><p>' . esc_html__('Collection Request Data saved.', 'express-label-maker') . '</p></div>';
+            echo '<div style="position:absolute;width:95%;" style="display: flex;" class="updated"><p>' . esc_html__('Collection Request Data saved.', 'express-label-maker') . '</p></div>';
         } else {
-            echo '<div style="display: flex;" class="error"><p>' . esc_html__('All fields are required.', 'express-label-maker') . '</p></div>';
+            echo '<div style="position:absolute;width:95%;" style="display: flex;" class="error"><p>' . esc_html__('All fields are required.', 'express-label-maker') . '</p></div>';
         }
     }
 
-    echo '<div style="float: right; width: 48%;">';
+    echo '<div style="flex: 1 1 auto;">';
     echo '<h3>' . esc_html__('Collection Request Data', 'express-label-maker') . '</h3>';
     echo '<form method="post" action="">';
     echo '<table class="form-table">';

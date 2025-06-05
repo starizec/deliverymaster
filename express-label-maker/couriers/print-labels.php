@@ -319,7 +319,7 @@ class ExplmPrintLabels {
             'value'                 => $value_param,
 
             'additional_services'   => (string)get_option('explm_hp_delivery_additional_services', ''),
-            'delivery_sevice'       => (string)get_option('explm_hp_delivery_service', ''),
+            'delivery_service'       => (string)get_option('explm_hp_delivery_service', ''),
             'location_id'   => (string)(!empty($locker_id) ? $locker_id : (isset($_POST['hp_parcel_locker_location_id']) ? sanitize_text_field(wp_unslash($_POST['hp_parcel_locker_location_id'])) : '')),
             'location_type' => (string)(!empty($locker_type) ? $locker_type : (isset($_POST['hp_parcel_locker_type']) ? sanitize_text_field(wp_unslash($_POST['hp_parcel_locker_type'])) : '')),
 

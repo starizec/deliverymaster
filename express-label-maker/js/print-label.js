@@ -271,7 +271,7 @@ jQuery(document).ready(function ($) {
       value: insuredChecked ? form.find('input[name="order_total"]').val() : "",
 
       additional_services: additional_services,
-      delivery_sevice: form.find('select[name="delivery_service"]').val() || "",
+      delivery_service: form.find('select[name="delivery_service"]').val() || "",
 
       location_id: parcelLockerId,
       location_type: parcelLockerType,

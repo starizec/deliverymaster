@@ -26,9 +26,9 @@ class ExplmPrintLabel
             "user" => $user_data,
             "parcel" => $parcel_data
         );
-/* 
-         error_log('$body: ' . print_r($body, true));
- */
+
+/*          error_log('$body: ' . print_r($body, true)); */
+
         $args = array(
             'method' => 'POST',
             'headers' => array('Content-Type' => 'application/json'),
@@ -38,7 +38,7 @@ class ExplmPrintLabel
 
         $response = wp_remote_request('https://expresslabelmaker.com/api/v1/' . $saved_country . '/' . $courier . '/create/label', $args);
 
-/*         error_log('$response: ' . print_r($response, true)); */
+     /*    error_log('$response: ' . print_r($response, true)); */
 
         if (is_wp_error($response)) {
             wp_send_json_error(array(

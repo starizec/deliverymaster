@@ -454,13 +454,13 @@ class ExplmParcelLockers {
             ));
 
             wp_localize_script('parcel-lockers-js', 'parcel_locker_i18n', array(
-                'loading'             => __('Loading...', 'express-label-maker'),
-                'choose_locker'       => __('Choose parcel locker', 'express-label-maker'),
-                'no_lockers'          => __('There are no parcel lockers to display.', 'express-label-maker'),
-                'search_placeholder'  => __('Search parcel lockers...', 'express-label-maker'),
-                'selected_locker'     => __('Selected parcel locker', 'express-label-maker'),
-                'clear'               => __('Delete parcel locker', 'express-label-maker'),
-                'no_parcel_lockers'   => __('There are no parcel lockers to display...', 'express-label-maker'),
+                'loading'             => esc_html__('Loading...', 'express-label-maker'),
+                'choose_locker'       => esc_html__('Choose parcel locker', 'express-label-maker'),
+                'no_lockers'          => esc_html__('There are no parcel lockers to display.', 'express-label-maker'),
+                'search_placeholder'  => esc_html__('Search parcel lockers...', 'express-label-maker'),
+                'selected_locker'     => esc_html__('Selected parcel locker', 'express-label-maker'),
+                'clear'               => esc_html__('Delete parcel locker', 'express-label-maker'),
+                'no_parcel_lockers'   => esc_html__('There are no parcel lockers to display...', 'express-label-maker'),
             ));
         }
     }

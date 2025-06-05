@@ -178,5 +178,12 @@
 }
 
 .explm-no-lockers {
-    font-size: 0.7em;
+  font-size: 0.7em;
+}
+
+.hp-parcel-locker-container,
+.dpd-parcel-locker-container,
+.overseas-parcel-locker-container {
+  margin-top: 5px;
+  margin-bottom: 5px;
 }

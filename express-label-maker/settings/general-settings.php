@@ -46,8 +46,8 @@ function explm_settings_tab_content()
 
     $save_pdf_on_server = get_option('explm_save_pdf_on_server_option', 'true');
 
-    echo '<div style="display:block;">';
-    echo '<div style="float: left; width: 48%; padding-right: 2%;">';
+    echo '<div style="display:flex;flex-wrap:wrap;gap:20px;">';
+    echo '<div style="flex: 1 1 auto;">';
     echo '<table class="form-table delete-form-table">';
     echo '<tr>';
     echo '<th scope="row"><label>' . esc_html__('Delete all labels from server', 'express-label-maker') . '</label></th>';
@@ -70,9 +70,6 @@ function explm_settings_tab_content()
     echo '</p>';
     wp_nonce_field('explm_save_settings', 'explm_settings_nonce');
     echo '</form>';
-    echo '</div>';
-
-    echo '<div style="float: right; width: 48%;">';
     echo '</div>';
     echo '</div>';
 }

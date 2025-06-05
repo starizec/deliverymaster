@@ -31,8 +31,8 @@ function explm_licence_tab_content()
     $saved_licence_key = get_option('explm_licence_option', '');
     $saved_country = get_option('explm_country_option', '');
 
-    echo '<div style="display:block;">';
-    echo '<div style="float: left; width: 48%; padding-right: 2%;">';
+    echo '<div style="display:flex;">';
+    echo '<div>';
     echo '<form method="post" action="">';
     echo '<table class="form-table">';
     echo '<tr>';
@@ -77,6 +77,10 @@ function explm_licence_tab_content()
     echo '</tr>';
     echo '</table>';
     echo '</div>';
+
+    $plugin_version = ExplmLabelMaker::get_plugin_version();
+
+    echo '<div style="margin-top:20px;"> v'.$plugin_version.'</div>';
 
     echo '</div>';
 }

@@ -64,8 +64,8 @@ function explm_hp_tab_content() {
     $customer_note = get_option('explm_hp_customer_note', '');
     $saved_notifs = explode(',', get_option('explm_hp_delivery_additional_services', '32,30'));
 
-    echo '<div style="display:block;">';
-    echo '<div style="float: left; width: 48%; padding-right: 2%;">';
+    echo '<div style="display:flex;flex-wrap:wrap;gap:20px;">';
+    echo '<div style="flex: 1 1 auto;">';
     echo '<h3>' . esc_html__('HP Settings', 'express-label-maker') . '</h3>';
     echo '<form method="post" action="">';
     echo '<table class="form-table">';
@@ -170,7 +170,6 @@ function explm_hp_tab_content() {
     wp_nonce_field('explm_save_hp_settings', 'explm_hp_nonce');
     echo '</form>';
     echo '</div>';
-    echo '</div>';
 
     if (isset($_POST['explm_collection_request_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['explm_collection_request_nonce'])), 'explm_save_collection_request_settings')) {
         $company_or_personal_name = isset($_POST['company_or_personal_name']) ? sanitize_text_field(wp_unslash($_POST['company_or_personal_name'])) : '';
@@ -193,13 +192,13 @@ function explm_hp_tab_content() {
             update_option('explm_hp_phone', $phone);
             update_option('explm_hp_email', $email);
             update_option('explm_hp_country', $country);
-            echo '<div class="updated"><p>' . esc_html__('Sender information saved.', 'express-label-maker') . '</p></div>';
+            echo '<div style="position:absolute;width:95%;" class="updated"><p>' . esc_html__('Sender information saved.', 'express-label-maker') . '</p></div>';
         } else {
-            echo '<div class="error"><p>' . esc_html__('All fields are required.', 'express-label-maker') . '</p></div>';
+            echo '<div style="position:absolute;width:95%;" class="error"><p>' . esc_html__('All fields are required.', 'express-label-maker') . '</p></div>';
         }
     }
 
-    echo '<div style="float: right; width: 48%;">';
+    echo '<div style="flex: 1 1 auto;">';
     echo '<h3>' . esc_html__('Sender information', 'express-label-maker') . '</h3>';
     echo '<form method="post" action="">';
     echo '<table class="form-table">';
