@@ -7,17 +7,12 @@ var hpLockers;
 
 jQuery(document).ready(function ($) {
   function geocodePostcodeAndZoom(postcode) {
+    
     if (!postcode) return;
 
-    const city =
-      $('input[name="shipping_city"]').val() ||
-      $('input[name="billing_city"]').val() ||
-      "";
+    const city = $('input[name="billing_city"]').val() || "";
 
-    const country =
-      $('select[name="shipping_country"]').find(":selected").text() ||
-      $('select[name="billing_country"]').find(":selected").text() ||
-      "";
+    const country = $('input[name="billing_country"]').val() || "";
 
     const query = `${postcode} ${city} ${country}`.trim();
 
@@ -167,12 +162,10 @@ jQuery(document).ready(function ($) {
       markers.addLayer(marker);
     });
     dpdMap.addLayer(markers);
-    setTimeout(function () {
-      const postcode =
-        $('input[name="shipping_postcode"]').val() ||
-        $('input[name="billing_postcode"]').val();
-      geocodePostcodeAndZoom(postcode);
-    }, 1000);
+
+    const postcode =
+    $('input[name="billing_postcode"]').val();
+    geocodePostcodeAndZoom(postcode);
 
     if (lockers.length > 0) {
       dpdMap.fitBounds(markers.getBounds());
@@ -396,12 +389,9 @@ jQuery(document).ready(function ($) {
 
     overseasMap.addLayer(markers);
 
-    setTimeout(function () {
-      const postcode =
-        $('input[name="shipping_postcode"]').val() ||
-        $('input[name="billing_postcode"]').val();
-      geocodePostcodeAndZoom(postcode);
-    }, 1000);
+    const postcode =
+    $('input[name="billing_postcode"]').val();
+    geocodePostcodeAndZoom(postcode);
 
     if (lockers.length > 0) {
       overseasMap.fitBounds(markers.getBounds());
@@ -606,12 +596,9 @@ jQuery(document).ready(function ($) {
     });
     hpMap.addLayer(markers);
 
-    setTimeout(function () {
-      const postcode =
-        $('input[name="shipping_postcode"]').val() ||
-        $('input[name="billing_postcode"]').val();
-      geocodePostcodeAndZoom(postcode);
-    }, 1000);
+    const postcode =
+    $('input[name="billing_postcode"]').val();
+    geocodePostcodeAndZoom(postcode);
 
     if (lockers.length > 0) {
       hpMap.fitBounds(markers.getBounds());
