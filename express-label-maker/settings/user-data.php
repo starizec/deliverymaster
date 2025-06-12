@@ -62,6 +62,23 @@ class ExplmUser
             'language' => get_user_locale() 
         ];
     }
+
+    public function HrGLS() {
+        $plugin_version = ExplmLabelMaker::get_plugin_version();
+
+        $server_name = isset($_SERVER['SERVER_NAME']) ? sanitize_text_field(wp_unslash($_SERVER['SERVER_NAME'])) : '';
+        return [
+            'domain' => $server_name, //DODATI EVENTUALNO ZA TEST
+            'licence' => get_option('explm_licence_option', ''),
+            'email' => get_option('explm_email_option', ''),
+            'username' => get_option("explm_gls_username_option", ''),
+            'password' => get_option("explm_gls_password_option", ''),
+            'client_number' => get_option("explm_gls_client_number_option", ''),
+            'platform' => 'wordpress',
+            'version'   => $plugin_version,
+            'language' => get_user_locale() 
+        ];
+    }
 }
 
 function explm_initialize_user_data()

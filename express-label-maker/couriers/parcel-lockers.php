@@ -599,7 +599,7 @@ class ExplmParcelLockers {
     }
 
     
-    // DPD OVERSEAS
+    // DPD OVERSEAS HP
     public function explm_save_parcel_locker_to_order($order, $data) {
         if (!empty($_POST['dpd_parcel_locker_location_id'])) {
             $locker_data = array(
@@ -617,9 +617,12 @@ class ExplmParcelLockers {
                 $order->update_meta_data($key, $value);
             }
     
-            $order->set_shipping_address_1($locker_data['dpd_parcel_locker_street'] . ' ' . $locker_data['dpd_parcel_locker_house_number'] . ' (' . $locker_data['dpd_parcel_locker_location_id'] . ')');
+            $order->set_shipping_address_1($locker_data['dpd_parcel_locker_street'] . ' ' . $locker_data['dpd_parcel_locker_house_number']);
             $order->set_shipping_postcode($locker_data['dpd_parcel_locker_postal_code']);
             $order->set_shipping_city($locker_data['dpd_parcel_locker_city']);
+
+            $formatted = $locker_data['overseas_parcel_locker_name'] . ' (' . $locker_data['overseas_parcel_locker_location_id'] . ')';
+            $order->update_meta_data('parcel_locker_formatted', $formatted);
     
         } elseif (!empty($_POST['overseas_parcel_locker_location_id'])) {
             $locker_data = array(
@@ -637,9 +640,12 @@ class ExplmParcelLockers {
                 $order->update_meta_data($key, $value);
             }
     
-            $order->set_shipping_address_1($locker_data['overseas_parcel_locker_street'] . ' ' . $locker_data['overseas_parcel_locker_house_number'] . ' (' . $locker_data['overseas_parcel_locker_location_id'] . ')');
+            $order->set_shipping_address_1($locker_data['overseas_parcel_locker_street'] . ' ' . $locker_data['overseas_parcel_locker_house_number']);
             $order->set_shipping_postcode($locker_data['overseas_parcel_locker_postal_code']);
             $order->set_shipping_city($locker_data['overseas_parcel_locker_city']);
+
+            $formatted = $locker_data['overseas_parcel_locker_name'] . ' (' . $locker_data['overseas_parcel_locker_location_id'] . ')';
+            $order->update_meta_data('parcel_locker_formatted', $formatted);
         
         } elseif (!empty($_POST['hp_parcel_locker_location_id'])) {
             $locker_data = array(
@@ -657,9 +663,12 @@ class ExplmParcelLockers {
                 $order->update_meta_data($key, $value);
             }
     
-            $order->set_shipping_address_1($locker_data['hp_parcel_locker_street'] . ' ' . $locker_data['hp_parcel_locker_house_number'] . ' (' . $locker_data['hp_parcel_locker_location_id'] . ')');
+            $order->set_shipping_address_1($locker_data['hp_parcel_locker_street'] . ' ' . $locker_data['hp_parcel_locker_house_number']);
             $order->set_shipping_postcode($locker_data['hp_parcel_locker_postal_code']);
             $order->set_shipping_city($locker_data['hp_parcel_locker_city']);
+
+            $formatted = $locker_data['hp_parcel_locker_name'] . ' (' . $locker_data['hp_parcel_locker_location_id'] . ')';
+            $order->update_meta_data('parcel_locker_formatted', $formatted);
         }
     }    
 

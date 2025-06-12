@@ -25,6 +25,12 @@ class ExpmlCouriers {
             'ajax_action' => 'explm_show_confirm_modal',
             'button_text' => 'HP Print',
         ),
+        'gls' => array(
+            'url' => 'assets/gls-logo.png',
+            'alt' => 'GLS Logo',
+            'ajax_action' => 'explm_show_confirm_modal',
+            'button_text' => 'GLS Print',
+        ),
     );
 
     public function get_courier_icons() {
@@ -49,6 +55,14 @@ class ExpmlCouriers {
         $saved_password = get_option('explm_hp_password_option', '');
         if (!empty($saved_username) && !empty($saved_password)) {
             $available_icons['hp'] = $icons['hp'];
+        }
+
+        // Provjera za GLS
+        $saved_username = get_option('explm_gls_username_option', '');
+        $saved_password = get_option('explm_gls_password_option', '');
+        $saved_client_number = get_option('explm_gls_client_number_option', '');
+        if (!empty($saved_username) && !empty($saved_password) && !empty($saved_client_number)) {
+            $available_icons['gls'] = $icons['gls'];
         }
 
         return $available_icons;

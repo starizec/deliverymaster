@@ -258,6 +258,98 @@ if (!defined('ABSPATH')) {
 
                 <?php 
                     break;
+                ?>
+
+                <?php
+                    break;
+                case 'gls';
+
+                $gls_notifications = explode(',', get_option('explm_gls_delivery_additional_services', '32,33'));
+                $gls_printer_type = get_option('explm_gls_printer_type', '');
+                $gls_print_position = get_option('explm_gls_print_position', '');
+                $gls_locker_id = ExplmLabelMaker::get_order_meta($order_data['id'], 'gls_parcel_locker_location_id', true);
+                $gls_locker_type = ExplmLabelMaker::get_order_meta($order_data['id'], 'gls_parcel_locker_type', true);
+                $gls_parcel_locker_name = ExplmLabelMaker::get_order_meta($order_data['id'], 'gls_parcel_locker_name', true);
+                ?>
+
+                <!-- Parcel Locker Name -->
+                <label class="explm-labels">
+                    <?php esc_html_e('Parcel Locker:', 'express-label-maker'); ?>
+                    <input type="text" name="parcel_locker_name" value="<?php echo esc_attr($gls_parcel_locker_name); ?>">
+                </label>
+
+                <!-- Parcel Locker ID -->
+                <label class="explm-labels">
+                    <?php esc_html_e('Parcel Locker ID:', 'express-label-maker'); ?>
+                    <input type="text" name="gls_parcel_locker_location_id" value="<?php echo esc_attr($gls_locker_id); ?>">
+                </label>
+
+                <!-- Parcel Locker Type -->
+                <label class="explm-labels">
+                    <?php esc_html_e('Parcel Locker Type:', 'express-label-maker'); ?>
+                    <input type="text" name="gls_parcel_locker_type" value="<?php echo esc_attr($gls_locker_type); ?>">
+                </label>
+
+                <!-- Additional services -->
+                <label class="explm-labels">
+                    <?php esc_html_e('Additional services:', 'express-label-maker'); ?>
+                    <div class="additional-services-options">
+                        <?php
+                        $notif_options = [
+                            'INS' => esc_html__('Osiguranje pošiljke', 'express-label-maker'),
+                            'FDS' => esc_html__('Email obavijest primatelju', 'express-label-maker'),
+                            'FSS' => esc_html__('SMS obavijest primatelju', 'express-label-maker'),
+                        ];
+
+                        foreach ($notif_options as $id => $label) {
+                            ?>
+                            <label style="margin-right: 15px; margin-bottom: 3px; display:block;">
+                                <input type="checkbox" name="delivery_additional_services[]" value="<?php echo esc_attr($id); ?>" <?php checked(in_array((string)$id, $gls_notifications)); ?>>
+                                <?php echo esc_html($label); ?>
+                            </label>
+                        <?php } ?>
+                    </div>
+                </label>
+
+                <!-- Printer type -->
+                <label class="explm-labels">
+                    <?php esc_html_e('Printer type:', 'express-label-maker'); ?>
+                    <select name="printer_type">
+                        <?php
+                        $services = [
+                            'A4_2x2' => 'A4_2x2',
+                            'A4_4x1' => 'A4_4x1',
+                            'Connect' => 'Connect',
+                            'Thermo' => 'Thermo',
+                            'ThermoZPL' => 'ThermoZPL',
+                        ];
+                        foreach ($services as $id => $label) {
+                            echo '<option value="' . esc_attr($id) . '" ' . selected($gls_printer_type, $id, false) . '>' . esc_html($label) . '</option>';
+                        }
+                        ?>
+                    </select>
+                </label>
+
+                <!-- Print position -->
+                <label class="explm-labels">
+                    <?php esc_html_e('Print position (Accepted only for A4-Format):', 'express-label-maker'); ?>
+                    <select name="print_position">
+                        <?php
+                        $print_positions = [
+                            '1' => '1',
+                            '2' => '2',
+                            '3' => '3',
+                            '4' => '4',
+                        ];
+                        foreach ($print_positions as $key => $label) {
+                            echo '<option value="' . esc_attr($key) . '" ' . selected($gls_print_position, $key, false) . '>' . esc_html($label) . '</option>';
+                        }
+                        ?>
+                    </select>
+                </label>
+
+                <?php 
+                    break;
 
                     default: 
                 ?>

@@ -79,6 +79,9 @@ jQuery(document).ready(function ($) {
       case "hp":
         parcelData = setHPParcelData(form);
         break;
+      case "gls":
+        parcelData = setGLSParcelData(form);
+        break;
       default:
         parcelData = {};
     }
@@ -272,6 +275,81 @@ jQuery(document).ready(function ($) {
 
       additional_services: additional_services,
       delivery_service: form.find('select[name="delivery_service"]').val() || "",
+
+      location_id: parcelLockerId,
+      location_type: parcelLockerType,
+    };
+
+    return data;
+  }
+
+    function setGLSParcelData(form) {
+    const isCod =
+      form.find('input[name="parcel_type"]:checked').val() === "cod";
+    const parcelLockerId =
+      form.find('input[name="gls_parcel_locker_location_id"]').val() || "";
+    const parcelLockerType =
+      form.find('input[name="gls_parcel_locker_type"]').val() || "";
+
+    const glsNote = (explm_ajax.gls_note || "").trim();
+    const customerNote = (
+      form.find('textarea[name="note"]').val() || ""
+    ).trim();
+
+    let sender_remark = glsNote !== "" ? glsNote : customerNote;
+    if (sender_remark.length > 100) {
+      sender_remark = sender_remark.substring(0, 97) + "...";
+    }
+
+    const additional_services = form
+      .find('input[name="delivery_additional_services[]"]:checked')
+      .map(function () {
+        return this.value;
+      })
+      .get()
+      .join(",");
+
+    const data = {
+      recipient_name: form.find('input[name="customer_name"]').val() || "",
+      recipient_phone: form.find('input[name="phone"]').val() || "",
+      recipient_email: form.find('input[name="email"]').val() || "",
+      recipient_adress:
+        (form.find('input[name="customer_address"]').val() || "") +
+        " " +
+        (form.find('input[name="house_number"]').val() || ""),
+      recipient_city: form.find('input[name="city"]').val() || "",
+      recipient_postal_code: form.find('input[name="zip_code"]').val() || "",
+      recipient_country: form.find('input[name="country"]').val() || "",
+
+      sender_name: explm_ajax.gls_sender_name || "",
+      sender_phone: explm_ajax.gls_sender_phone || "",
+      sender_email: explm_ajax.gls_sender_email || "",
+      sender_adress:
+        (explm_ajax.gls_sender_street || "") +
+        " " +
+        (explm_ajax.gls_sender_number || ""),
+      sender_city: explm_ajax.gls_sender_city || "",
+      sender_postal_code: explm_ajax.gls_sender_postcode || "",
+      sender_country: explm_ajax.gls_sender_country || "",
+
+      order_number: form.find('input[name="reference"]').val() || "",
+      parcel_weight: form.find('input[name="weight"]').val() || "2.00",
+      parcel_remark: sender_remark,
+      parcel_value: form.find('input[name="order_total"]').val() || "",
+
+      parcel_size: form.find('select[name="parcel_size"]').val() || "",
+      parcel_count: form.find('select[name="package_number"]').val() || 1,
+
+      cod_amount: isCod
+        ? form.find('input[name="cod_amount"]').val()
+        : "",
+      cod_currency: isCod ? form.find('input[name="hiddenCurrency"]').val() : "",
+
+      value: "",
+
+      additional_services: additional_services,
+      printer_type: form.find('select[name="printer_type"]').val() || "",
+      print_position: form.find('select[name="print_position"]').val() || "",
 
       location_id: parcelLockerId,
       location_type: parcelLockerType,
