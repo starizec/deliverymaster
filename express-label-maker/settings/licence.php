@@ -19,6 +19,7 @@ class ExplmLicence
         $email = isset($_POST['email']) ? sanitize_email(wp_unslash($_POST['email'])) : '';
         $domain = isset($_POST['domain']) ? sanitize_text_field(wp_unslash($_POST['domain'])) : '';
         $licence = isset($_POST['licence']) ? sanitize_text_field(wp_unslash($_POST['licence'])) : '';
+        $country = isset($_POST['country']) ? sanitize_text_field(wp_unslash($_POST['country'])) : '';
 
         $body = array(
             "user" => array(
@@ -70,6 +71,9 @@ class ExplmLicence
 
         update_option('explm_email_option', $body_response['email']);
         update_option('explm_licence_option', $body_response['licence']);
+        if (!empty($country)) {
+            update_option('explm_country_option', $country);
+        }
 
         wp_send_json_success(array(
             'email' => $body_response['email'],

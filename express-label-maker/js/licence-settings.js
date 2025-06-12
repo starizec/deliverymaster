@@ -49,6 +49,7 @@ jQuery(document).ready(function ($) {
               email: $("#explm_email").val(),
               domain: window.location.hostname,
               licence: "trial",
+              country: $("#explm_country").val()
           },
           success: function (response) {
               $(".explm-loading-panel").fadeOut(300);

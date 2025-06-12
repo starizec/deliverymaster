@@ -5,11 +5,13 @@
  * Plugin URI: https://expresslabelmaker.com/
  * Description: Print shipping labels and track parcels for multiple couriers directly from WooCommerce.
  * Tags: woocommerce, shipping, label printing, DPD, Overseas, Hrvatska pošta
- * Version: 25.5.6.1
+ * Version: 25.6.12.1
  * Author: expresslabelmaker
  * Tested up to: 6.8
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain: express-label-maker
+ * Domain Path: /languages
  */
 
 if (!defined('ABSPATH')) {
