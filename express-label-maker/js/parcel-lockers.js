@@ -163,9 +163,11 @@ jQuery(document).ready(function ($) {
     });
     dpdMap.addLayer(markers);
 
-    const postcode =
-    $('input[name="billing_postcode"]').val();
-    geocodePostcodeAndZoom(postcode);
+    setTimeout(function () {
+      const postcode =
+        $('input[name="billing_postcode"]').val();
+      geocodePostcodeAndZoom(postcode);
+    }, 500);
 
     if (lockers.length > 0) {
       dpdMap.fitBounds(markers.getBounds());
@@ -389,9 +391,11 @@ jQuery(document).ready(function ($) {
 
     overseasMap.addLayer(markers);
 
-    const postcode =
-    $('input[name="billing_postcode"]').val();
-    geocodePostcodeAndZoom(postcode);
+    setTimeout(function () {
+      const postcode =
+        $('input[name="billing_postcode"]').val();
+      geocodePostcodeAndZoom(postcode);
+    }, 500);
 
     if (lockers.length > 0) {
       overseasMap.fitBounds(markers.getBounds());
@@ -596,9 +600,11 @@ jQuery(document).ready(function ($) {
     });
     hpMap.addLayer(markers);
 
-    const postcode =
-    $('input[name="billing_postcode"]').val();
-    geocodePostcodeAndZoom(postcode);
+    setTimeout(function () {
+      const postcode =
+        $('input[name="billing_postcode"]').val();
+      geocodePostcodeAndZoom(postcode);
+    }, 500);
 
     if (lockers.length > 0) {
       hpMap.fitBounds(markers.getBounds());
