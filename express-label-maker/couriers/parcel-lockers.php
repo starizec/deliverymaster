@@ -509,9 +509,9 @@ class ExplmParcelLockers {
             echo '<input type="hidden" name="dpd_parcel_locker_city" id="dpd_parcel_locker_city" value="">';
 
             echo '<div id="selected-dpd-parcel-locker-info" style="display:none; margin-top:10px;"></div>';
-            echo '<button type="button" id="clear-dpd-parcel-locker" class="button" style="display:none;">' 
-                . __('Delete parcel locker', 'express-label-maker') 
-            . '</button>';
+            echo '<button type="button" id="clear-dpd-parcel-locker" class="button" style="display:none;">
+                    <span class="dashicons dashicons-trash"></span> ' . __('Delete parcel locker', 'express-label-maker') . '
+                    </button>';
             echo '</div>';
 
             
@@ -531,7 +531,9 @@ class ExplmParcelLockers {
             echo '<input type="hidden" name="overseas_parcel_locker_postal_code" id="overseas_parcel_locker_postal_code" value="">';
             echo '<input type="hidden" name="overseas_parcel_locker_city" id="overseas_parcel_locker_city" value="">';
             echo '<div id="selected-overseas-parcel-locker-info" style="display:none; margin-top:10px;"></div>';
-            echo '<button type="button" id="clear-overseas-parcel-locker" class="button" style="display:none;">' . __('Delete parcel locker', 'express-label-maker') . '</button>';
+            echo '<button type="button" id="clear-overseas-parcel-locker" class="button" style="display:none;">
+                    <span class="dashicons dashicons-trash"></span> ' . __('Delete parcel locker', 'express-label-maker') . '
+                    </button>';
             echo '</div>';
         
         } else if ($hp_enabled === '1' && 
@@ -550,7 +552,9 @@ class ExplmParcelLockers {
             echo '<input type="hidden" name="hp_parcel_locker_postal_code" id="hp_parcel_locker_postal_code" value="">';
             echo '<input type="hidden" name="hp_parcel_locker_city" id="hp_parcel_locker_city" value="">';
             echo '<div id="selected-hp-parcel-locker-info" style="display:none; margin-top:10px;"></div>';
-            echo '<button type="button" id="clear-hp-parcel-locker" class="button" style="display:none;">' . __('Delete parcel locker', 'express-label-maker') . '</button>';
+            echo '<button type="button" id="clear-hp-parcel-locker" class="button" style="display:none;">
+                    <span class="dashicons dashicons-trash"></span> ' . __('Delete parcel locker', 'express-label-maker') . '
+                    </button>';
             echo '</div>';
         }
     }
