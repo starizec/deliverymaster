@@ -302,8 +302,8 @@ class ExplmLabelMaker
         if ($gls_parcels_value && $gls_condition) {
                     $pl_number_parts = array_filter(explode(',', $gls_parcels_value));
                     $first_value = trim(end($pl_number_parts));
-                    if ($first_value) {
-                        $gls_parcel_link = 'https://gls-group.com/' . esc_attr(strtoupper($saved_country)) . '/' . esc_attr($saved_country) . '/?match=' . esc_attr($first_value);
+                    if ($first_value) { //ISPRAVITI ZA DRUGE DRŽAVE
+                        $gls_parcel_link = 'https://gls-group.com/' . esc_attr(strtoupper($saved_country)) . '/' . esc_attr($saved_country) . '/pracenje-posiljke/?match=' . esc_attr($first_value);
                     }
                 }
         ?>
@@ -624,7 +624,7 @@ function explm_initialize_express_label_maker(): void {
         $locker_handler->explm_update_hp_parcelshops_cron_callback();
         $locker_handler->explm_update_dpd_parcelshops_cron_callback();
         $locker_handler->explm_update_overseas_parcelshops_cron_callback();
-/*         $locker_handler->explm_update_gls_parcelshops_cron_callback(); */
+        $locker_handler->explm_update_gls_parcelshops_cron_callback();
     }
     new ExplmLabelMaker();
 }

@@ -4,6 +4,8 @@ var overseasMap;
 var overseasLockers;
 var hpMap;
 var hpLockers;
+var glsMap;
+var glsLockers;
 
 jQuery(document).ready(function ($) {
   function geocodePostcodeAndZoom(postcode) {
@@ -35,6 +37,11 @@ jQuery(document).ready(function ($) {
         const lat = parseFloat(data[0].lat);
         const lon = parseFloat(data[0].lon);
         hpMap.setView([lat, lon], 14);
+      }
+      if (data.length > 0 && glsMap) {
+        const lat = parseFloat(data[0].lat);
+        const lon = parseFloat(data[0].lon);
+        glsMap.setView([lat, lon], 14);
       }
     });
   }
@@ -688,5 +695,217 @@ jQuery(document).ready(function ($) {
   $(document).on("click", "#clear-hp-parcel-locker", function (e) {
     e.preventDefault();
     clearHpLockerSelection();
+  });
+
+
+ // GLS
+  $(document).on("click", "#select-gls-parcel-locker", function (e) {
+    e.preventDefault();
+    var $glsButton = $(this);
+    $glsButton.prop("disabled", true).text(parcel_locker_i18n.loading);
+
+    var glsModal = $(`
+      <div class="parcel-locker-modal gls-parcel-locker-modal">
+          <div class="parcel-locker-modal-content">
+              <span class="parcel-locker-close gls-parcel-locker-close">&times;</span>
+              <div style="overflow-y: auto; overflow-x: hidden;">
+              <div id="gls-parcel-locker-map-container" style="position: relative;">
+                  <div id="gls-parcel-locker-map"></div>
+                  <div id="map-loading" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+                        background: rgba(255,255,255,0.8); display: flex; align-items: center; justify-content: center; 
+                        z-index: 9999;">
+                      <div class="loader"></div>
+                  </div>
+              </div>
+              <div class="parcel-locker-list-container">
+                  <h3>${parcel_locker_i18n.choose_locker}</h3>
+                  <div class="parcel-locker-search">
+                      <input type="text" id="gls-parcel-locker-search" placeholder="${parcel_locker_i18n.choose_locker}...">
+                  </div>
+                  <div class="parcel-locker-list"></div>
+              </div>
+              </div>
+          </div>
+      </div>
+    `);
+
+    $("body").append(glsModal);
+    glsModal.fadeIn();
+
+    $.ajax({
+      url: gls_parcel_lockers_vars.ajax_url,
+      type: "POST",
+      data: {
+        action: "get_gls_parcel_lockers",
+        nonce: gls_parcel_lockers_vars.nonce,
+      },
+      success: function (response) {
+        if (response.success) {
+          glsLockers = response.data.lockers;
+          initGlsMap(glsLockers);
+          populateGlsLockerList(glsLockers);
+
+          $("#gls-parcel-locker-search").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $(".gls-parcel-locker-item").filter(function () {
+              $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+            });
+            if (glsLockers && glsMap) {
+              var matchingLockers = glsLockers.filter(function (locker) {
+                return (
+                  locker.name.toLowerCase().indexOf(value) > -1 ||
+                  locker.address.toLowerCase().indexOf(value) > -1
+                );
+              });
+              if (matchingLockers.length > 0) {
+                var bounds = L.latLngBounds([]);
+                matchingLockers.forEach(function (locker) {
+                  bounds.extend([locker.lat, locker.lng]);
+                });
+                var computedZoom = glsMap.getBoundsZoom(bounds);
+                if (computedZoom > 16) {
+                  glsMap.setView(bounds.getCenter(), 16);
+                } else {
+                  glsMap.fitBounds(bounds, { padding: [50, 50], maxZoom: 16 });
+                }
+              }
+            }
+          });
+        }
+      },
+      complete: function () {
+        $glsButton
+          .prop("disabled", false)
+          .text(parcel_locker_i18n.choose_locker);
+      },
+    });
+
+    glsModal.find(".gls-parcel-locker-close").on("click", function () {
+      glsModal.fadeOut(function () {
+        $(this).remove();
+      });
+    });
+  });
+
+  // GLS
+  function initGlsMap(lockers) {
+    if (!Array.isArray(lockers) || lockers.length === 0) {
+      $("#map-loading").fadeOut();
+      return;
+    }
+    glsMap = L.map("gls-parcel-locker-map").setView(
+      [gls_parcel_lockers_vars.default_lat, gls_parcel_lockers_vars.default_lng],
+      8
+    );
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    }).addTo(glsMap);
+    var markers = L.markerClusterGroup();
+    lockers.forEach(function (locker) {
+      var marker = L.marker([locker.lat, locker.lng]).bindPopup(
+        `<strong>${locker.name}</strong><br>${locker.address}`
+      );
+      marker.on("mouseover", function () {
+        this.openPopup();
+      });
+      marker.on("mouseout", function () {
+        this.closePopup();
+      });
+      marker.on("click", function () {
+        selectGlsLocker(locker);
+      });
+      markers.addLayer(marker);
+    });
+    glsMap.addLayer(markers);
+
+    setTimeout(function () {
+      const postcode =
+        $('input[name="billing_postcode"]').val();
+      geocodePostcodeAndZoom(postcode);
+    }, 500);
+
+    if (lockers.length > 0) {
+      glsMap.fitBounds(markers.getBounds());
+    }
+    $("#map-loading").fadeOut();
+  }
+
+  // GLS
+  function populateGlsLockerList(lockers) {
+    var list = $(".parcel-locker-list");
+    list.empty();
+
+    $(".explm-no-lockers").remove();
+
+    if (lockers.length === 0) {
+      list.after(
+        `<div class="explm-no-lockers">${parcel_locker_i18n.no_parcel_lockers}</div>`
+      );
+      return;
+    }
+
+    lockers.forEach(function (locker) {
+      var item = $(`
+        <div class="gls-parcel-locker-item parcel-locker-item" data-locker-id="${locker.location_id}">
+          <h4>${locker.name}</h4>
+          <p>${locker.address}</p>
+        </div>
+      `);
+      item.on("click", function () {
+        selectGlsLocker(locker);
+      });
+      list.append(item);
+    });
+    $("#gls-parcel-locker-search").on("keyup", function () {
+      var visibleCount = $(
+        ".parcel-locker-list .parcel-locker-item:visible"
+      ).length;
+      $(".explm-no-lockers").remove();
+      if (visibleCount === 0) {
+        list.append(
+          `<div class="explm-no-lockers">${ parcel_locker_i18n.no_parcel_lockers }</div>`
+        );
+      }
+    });
+  }
+
+  // Odabir GLS paketomata
+  function selectGlsLocker(locker) {
+    $("#gls_parcel_locker_location_id").val(locker.location_id);
+    $("#gls_parcel_locker_name").val(locker.name);
+    $("#gls_parcel_locker_type").val(locker.type);
+    $("#gls_parcel_locker_address").val(locker.address);
+    $("#gls_parcel_locker_street").val(locker.street);
+    $("#gls_parcel_locker_house_number").val(locker.house_number);
+    $("#gls_parcel_locker_postal_code").val(locker.postal_code);
+    $("#gls_parcel_locker_city").val(locker.city);
+    $("#selected-gls-parcel-locker-info")
+      .html(
+        `<strong>${parcel_locker_i18n.selected_locker}</strong><p>${locker.name}<br>${locker.address}</p>`
+      )
+      .show();
+    $("#clear-gls-parcel-locker").show();
+    $(".parcel-locker-modal").fadeOut(function () {
+      $(this).remove();
+    });
+  }
+
+  function clearGlsLockerSelection() {
+    $("#gls_parcel_locker_location_id").val("");
+    $("#gls_parcel_locker_name").val("");
+    $("#gls_parcel_locker_type").val("");
+    $("#gls_parcel_locker_address").val("");
+    $("#gls_parcel_locker_street").val("");
+    $("#gls_parcel_locker_house_number").val("");
+    $("#gls_parcel_locker_postal_code").val("");
+    $("#gls_parcel_locker_city").val("");
+    $("#selected-gls-parcel-locker-info").html("").hide();
+    $("#clear-gls-parcel-locker").hide();
+  }
+
+  $(document).on("click", "#clear-gls-parcel-locker", function (e) {
+    e.preventDefault();
+    clearGlsLockerSelection();
   });
 });

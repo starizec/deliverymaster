@@ -5,8 +5,7 @@ if (!defined('ABSPATH')) {
 
 class ExplmParcelStatuses
 {
-    public function __construct()
-    {
+    public function __construct() {
         add_action('wp_ajax_explm_parcel_statuses', array($this, 'explm_parcel_statuses'));
         add_action('wp_ajax_get_orders', array($this, 'get_orders'));
 
@@ -18,12 +17,19 @@ class ExplmParcelStatuses
             return $schedules;
         });
 
+        // HP
         if (!wp_next_scheduled('explm_cron_hp_status_update')) {
             wp_schedule_event(time(), 'every_hour', 'explm_cron_hp_status_update');
         }
-
         add_action('explm_cron_hp_status_update', array($this, 'update_hp_parcel_statuses'));
+
+        // GLS
+        if (!wp_next_scheduled('explm_cron_gls_status_update')) {
+            wp_schedule_event(time(), 'every_hour', 'explm_cron_gls_status_update');
+        }
+        add_action('explm_cron_gls_status_update', array($this, 'update_gls_parcel_statuses'));
     }
+
 
     public function explm_parcel_statuses()
     {
@@ -133,17 +139,20 @@ class ExplmParcelStatuses
             'return' => 'ids'
         ));
 
-/*         $two_weeks_ago = strtotime('-14 days'); */
+        $two_weeks_ago = strtotime('-14 days');
+
+        $parcel_requests = array();
+        $order_number_to_id = array();
+        $userStatusObj = new ExplmUserStatusData();
 
         foreach ($orders as $order_id) {
             $order = wc_get_order($order_id);
-
             if (!$order) continue;
 
-/*             $status_date = $order->get_meta('explm_parcel_status_date');
+            $status_date = $order->get_meta('explm_parcel_status_date');
             if ($status_date && strtotime($status_date) > $two_weeks_ago) {
                 continue;
-            } */
+            }
 
             $pl_number = $order->get_meta('hr_hp_parcels');
             if (empty($pl_number)) continue;
@@ -151,42 +160,170 @@ class ExplmParcelStatuses
             $pl_number_parts = explode(',', $pl_number);
             $parcel_number = trim(end($pl_number_parts));
 
-            $userStatusObj = new ExplmUserStatusData();
             $user_data_status = $userStatusObj->explm_getUserStatusData('hp_parcels', $parcel_number);
+            if (empty($user_data_status['user']) || empty($user_data_status['parcel_number'])) continue;
 
-            $body = array(
-                'user' => $user_data_status['user'],
-                'parcels' => array(
-                    array(
-                        'order_number' => (string) $order->get_order_number(),
-                        'parcel_number' => $user_data_status['parcel_number']
-                    )
-                )
+            $order_number = (string) $order->get_order_number();
+            $parcel_requests[] = array(
+                'order_number' => $order_number,
+                'parcel_number' => $user_data_status['parcel_number']
             );
 
-/*             error_log('response body: ' . print_r($body, true));  */
+            $order_number_to_id[$order_number] = $order_id;
+            $url = $user_data_status['url'];
+            $user = $user_data_status['user'];
+        }
 
-            $args = array(
-                'method' => 'POST',
-                'headers' => array('Content-Type' => 'application/json'),
-                'body' => wp_json_encode($body),
-                'timeout' => 20,
+        if (empty($parcel_requests)) {
+            return;
+        }
+
+        $body = array(
+            'user' => $user,
+            'parcels' => $parcel_requests
+        );
+
+  /*       error_log('response body: ' . print_r($body, true)); */
+
+        $args = array(
+            'method' => 'POST',
+            'headers' => array('Content-Type' => 'application/json'),
+            'body' => wp_json_encode($body),
+            'timeout' => 20,
+        );
+
+        $remote_response = wp_remote_request($url, $args);
+
+        if (!is_wp_error($remote_response)) {
+            $response_body = json_decode(wp_remote_retrieve_body($remote_response), true);
+
+            error_log('response body: ' . print_r($response_body, true));
+
+            if (!empty($response_body['data']['statuses']) && is_array($response_body['data']['statuses'])) {
+                $grouped_statuses = [];
+                foreach ($response_body['data']['statuses'] as $status) {
+                    $order_number = $status['order_number'] ?? null;
+                    if (!$order_number) continue;
+
+                    if (!isset($grouped_statuses[$order_number])) {
+                        $grouped_statuses[$order_number] = [];
+                    }
+
+                    $grouped_statuses[$order_number][] = $status;
+                }
+
+                foreach ($grouped_statuses as $order_number => $statuses) {
+                    $last_status = end($statuses);
+                    $order_id = $order_number_to_id[$order_number] ?? null;
+
+                    if ($order_id && $last_status) {
+                        ExplmLabelMaker::update_order_meta($order_id, 'explm_parcel_status', $last_status['status_message'] ?? '');
+                        ExplmLabelMaker::update_order_meta($order_id, 'explm_parcel_status_date', $last_status['status_date'] ?? '');
+                        ExplmLabelMaker::update_order_meta($order_id, 'explm_parcel_status_code', $last_status['status_code'] ?? '');
+                        ExplmLabelMaker::update_order_meta($order_id, 'explm_parcel_status_color', $last_status['color'] ?? '');
+                    }
+                }
+            }
+        }
+    }
+
+    public function update_gls_parcel_statuses() {
+        $saved_gls_username = get_option('explm_gls_username_option', '');
+        $saved_gls_password = get_option('explm_gls_password_option', '');
+        $saved_gls_client_number = get_option('explm_gls_client_number_option', '');
+
+        if ( empty($saved_gls_username) || empty($saved_gls_password) || empty($saved_gls_client_number) ) {
+            return;
+        }
+
+        $orders = wc_get_orders(array(
+            'limit' => -1,
+            'return' => 'ids'
+        ));
+
+        $two_weeks_ago = strtotime('-14 days');
+
+        $parcel_requests = array();
+        $order_number_to_id = array();
+        $userStatusObj = new ExplmUserStatusData();
+
+        foreach ($orders as $order_id) {
+            $order = wc_get_order($order_id);
+            if (!$order) continue;
+
+            $status_date = $order->get_meta('explm_parcel_status_date');
+            if ($status_date && strtotime($status_date) > $two_weeks_ago) {
+                continue;
+            }
+
+            $pl_number = $order->get_meta('hr_gls_parcels');
+            if (empty($pl_number)) continue;
+
+            $pl_number_parts = explode(',', $pl_number);
+            $parcel_number = trim(end($pl_number_parts));
+
+            $user_data_status = $userStatusObj->explm_getUserStatusData('gls_parcels', $parcel_number);
+            if (empty($user_data_status['user']) || empty($user_data_status['parcel_number'])) continue;
+
+            $order_number = (string) $order->get_order_number();
+            $parcel_requests[] = array(
+                'order_number' => $order_number,
+                'parcel_number' => $user_data_status['parcel_number']
             );
 
-            $remote_response = wp_remote_request($user_data_status['url'], $args);
+            $order_number_to_id[$order_number] = $order_id;
+            $url = $user_data_status['url'];
+            $user = $user_data_status['user'];
+        }
 
-            if (!is_wp_error($remote_response)) {
-                $response_body = json_decode(wp_remote_retrieve_body($remote_response), true);
+        if (empty($parcel_requests)) {
+            return;
+        }
 
-   /*                        error_log('response body: ' . print_r($response_body, true));  */
+        $body = array(
+            'user' => $user,
+            'parcels' => $parcel_requests
+        );
 
-                if (!empty($response_body['data']['statuses'][0])) {
-                    $status = $response_body['data']['statuses'][0];
+  /*       error_log('GLS request body: ' . print_r($body, true)); */
 
-                    ExplmLabelMaker::update_order_meta($order_id, 'explm_parcel_status', $status['status_message'] ?? '');
-                    ExplmLabelMaker::update_order_meta($order_id, 'explm_parcel_status_date', $status['status_date'] ?? '');
-                    ExplmLabelMaker::update_order_meta($order_id, 'explm_parcel_status_code', $status['status_code'] ?? '');
-                    ExplmLabelMaker::update_order_meta($order_id, 'explm_parcel_status_color', $status['color'] ?? '');
+        $args = array(
+            'method' => 'POST',
+            'headers' => array('Content-Type' => 'application/json'),
+            'body' => wp_json_encode($body),
+            'timeout' => 20,
+        );
+
+        $remote_response = wp_remote_request($url, $args);
+
+        if (!is_wp_error($remote_response)) {
+            $response_body = json_decode(wp_remote_retrieve_body($remote_response), true);
+
+         /*    error_log('GLS response body: ' . print_r($response_body, true)); */
+
+            if (!empty($response_body['data']) && is_array($response_body['data'])) {
+                $grouped_statuses = [];
+                foreach ($response_body['data'] as $status) {
+                    $order_number = $status['order_number'] ?? null;
+                    if (!$order_number) continue;
+
+                    if (!isset($grouped_statuses[$order_number])) {
+                        $grouped_statuses[$order_number] = [];
+                    }
+
+                    $grouped_statuses[$order_number][] = $status;
+                }
+
+                foreach ($grouped_statuses as $order_number => $statuses) {
+                    $last_status = end($statuses);
+                    $order_id = $order_number_to_id[$order_number] ?? null;
+
+                    if ($order_id && $last_status) {
+                        ExplmLabelMaker::update_order_meta($order_id, 'explm_parcel_status', $last_status['status_message'] ?? '');
+                        ExplmLabelMaker::update_order_meta($order_id, 'explm_parcel_status_date', $last_status['status_date'] ?? '');
+                        ExplmLabelMaker::update_order_meta($order_id, 'explm_parcel_status_code', $last_status['status_code'] ?? '');
+                        ExplmLabelMaker::update_order_meta($order_id, 'explm_parcel_status_color', $last_status['color'] ?? '');
+                    }
                 }
             }
         }

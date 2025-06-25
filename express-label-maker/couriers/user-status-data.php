@@ -43,6 +43,17 @@ class ExplmUserStatusData
             'parcel_number' => $pl_number
         ];
     }
+    public function gls_parcels($pl_number) {
+        $saved_country = get_option("explm_country_option", '');
+        $userObj = new ExplmUser();
+        $user_data = $userObj->getData($saved_country . 'gls');
+
+        return [
+            'url' => "https://expresslabelmaker.com/api/v1/{$saved_country}/gls/get/parcel-status",
+            'user' => $user_data,
+            'parcel_number' => $pl_number
+        ];
+    }
 }
 
 function explm_initialize_user_status_data()

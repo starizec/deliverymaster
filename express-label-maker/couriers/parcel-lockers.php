@@ -7,6 +7,7 @@ class ExplmParcelLockers {
     private $dpd_lockers = array();          // DPD
     private $overseas_lockers = array();   // Overseas
     private $hp_lockers = array();         // HP
+    private $gls_lockers = array();         // GLS
 
     public function __construct() {
         add_action('wp_enqueue_scripts', array($this, 'explm_enqueue_scripts'));
@@ -17,6 +18,8 @@ class ExplmParcelLockers {
         add_action('wp_ajax_nopriv_get_overseas_parcel_lockers', array($this, 'explm_get_overseas_parcel_lockers'));
         add_action('wp_ajax_get_hp_parcel_lockers', array($this, 'explm_get_hp_parcel_lockers'));
         add_action('wp_ajax_nopriv_get_hp_parcel_lockers', array($this, 'explm_get_hp_parcel_lockers'));
+        add_action('wp_ajax_get_gls_parcel_lockers', array($this, 'explm_get_gls_parcel_lockers'));
+        add_action('wp_ajax_nopriv_get_gls_parcel_lockers', array($this, 'explm_get_gls_parcel_lockers'));
         add_action('woocommerce_checkout_create_order', array($this, 'explm_save_parcel_locker_to_order'), 20, 2);
         add_filter('woocommerce_checkout_posted_data', array($this, 'explm_include_parcel_locker_data'));
         add_action('woocommerce_checkout_process', array($this, 'explm_validate_parcel_locker_selection'));
@@ -41,6 +44,13 @@ class ExplmParcelLockers {
             wp_schedule_event(time(), 'daily', 'explm_update_hp_parcelshops_cron');
         }
         add_action('explm_update_hp_parcelshops_cron', array($this, 'explm_update_hp_parcelshops_cron_callback'));    
+
+        // GLS Cron
+
+         if (!wp_next_scheduled('explm_update_gls_parcelshops_cron')) {
+            wp_schedule_event(time(), 'daily', 'explm_update_gls_parcelshops_cron');
+        }
+        add_action('explm_update_gls_parcelshops_cron', array($this, 'explm_update_gls_parcelshops_cron_callback'));    
     }
     
         // Overseas
@@ -291,6 +301,15 @@ class ExplmParcelLockers {
             'hp_parcel_locker_house_number',
             'hp_parcel_locker_postal_code',
             'hp_parcel_locker_city',
+            // GLS
+            'gls_parcel_locker_location_id',
+            'gls_parcel_locker_name',
+            'gls_parcel_locker_type',
+            'gls_parcel_locker_address',
+            'gls_parcel_locker_street',
+            'gls_parcel_locker_house_number',
+            'gls_parcel_locker_postal_code',
+            'gls_parcel_locker_city',
         ];
 
         foreach ( $fields as $field ) {
@@ -411,6 +430,117 @@ class ExplmParcelLockers {
                 }
             }
         }
+
+         // GLS
+
+    public function explm_update_gls_parcelshops_cron_callback() {
+        $saved_gls_username = get_option('explm_gls_username_option', '');
+        $saved_gls_password = get_option('explm_gls_password_option', '');
+        $saved_gls_client_number = get_option('explm_gls_client_number_option', '');
+        $enable_paketomat = get_option('explm_gls_enable_pickup', '');
+        $shipping_method = get_option('explm_gls_pickup_shipping_method', '');
+    
+        if ( empty($saved_gls_username) || empty($saved_gls_password) || empty($saved_gls_client_number) || $enable_paketomat !== '1' || empty($shipping_method) ) {
+            return;
+        }
+    
+        $saved_country = get_option("explm_country_option", '');
+        $courier = 'gls';
+        $api_url = "https://expresslabelmaker.com/api/v1/{$saved_country}/{$courier}/delivery-locations";
+    
+        $userObj = new ExplmUser();
+        $user_data = $userObj->getData($saved_country . $courier);
+    
+        $body = array(
+            'user' => $user_data
+        );
+    
+        $args = array(
+            'method' => 'POST',
+            'headers' => array('Content-Type' => 'application/json'),
+            'body' => wp_json_encode($body),
+            'timeout' => 120
+        );
+    
+        $response = wp_remote_request($api_url, $args);
+    
+        if (is_wp_error($response)) {
+            error_log('GLS ParcelShops API error: ' . $response->get_error_message());
+            return;
+        }
+    
+        $body_response = json_decode(wp_remote_retrieve_body($response), true);
+
+        if ($response['response']['code'] != '201') {
+            $errors = array();
+        
+            if (!empty($body_response['errors']) && is_array($body_response['errors'])) {
+                foreach ($body_response['errors'] as $error) {
+                    $errors[] = array(
+                        'error_code' => !empty($error['error_code']) ? $error['error_code'] : 'unknown',
+                        'error_message' => !empty($error['error_message']) ? $error['error_message'] : 'unknown'
+                    );
+                }
+            } elseif (!empty($body_response['error'])) {
+                $errors[] = array(
+                    'error_code' => 'unknown',
+                    'error_message' => $body_response['error']
+                );
+            }
+        
+            wp_send_json_error(array('errors' => $errors));
+        }        
+    
+        if (isset($body_response['data']['geojson'])) {
+            $file = plugin_dir_path(__FILE__) . '../json/gls-parcelshops.geojson';
+            file_put_contents($file, wp_json_encode( $body_response['data']['geojson']));
+        } else {
+            error_log('GLS ParcelShops API missing geojson: ' . print_r( $body_response, true));
+        }
+    }
+    
+        private function load_gls_parcel_lockers() {
+            $this->gls_lockers = [];
+            $file = plugin_dir_path(__FILE__) . '../json/gls-parcelshops.geojson';
+
+            if ( file_exists( $file ) ) {
+                $geo_json = file_get_contents( $file );
+                $data     = json_decode( $geo_json, true );
+
+                if ( json_last_error() === JSON_ERROR_NONE && ! empty( $data['features'] ) ) {
+                    foreach ( $data['features'] as $feature ) {
+                        $props  = $feature['properties'] ?? null;
+                        $coords = $feature['geometry']['coordinates'] ?? null;
+
+                        if ( $props && is_array( $coords ) && count( $coords ) >= 2 ) {
+                            $lat = (float) $coords[1];
+                            $lng = (float) $coords[0];
+
+                            $this->gls_lockers[] = [
+                                'id'            => $props['id'] ?? '',
+                                'location_id'   => $props['location_id'] ?? '',
+                                'name'          => $props['name'] ?? '',
+                                'type'          => $props['type'] ?? '',
+                                'active'        => ! empty( $props['active'] ),
+                                'street'        => $props['street'] ?? '',
+                                'house_number'  => $props['house_number'] ?? '',
+                                'postal_code'   => $props['postal_code'] ?? '',
+                                'city'          => $props['place'] ?? '',
+                                'address'       => trim(
+                                    ($props['street'] ?? '') .
+                                    ($props['house_number'] ? ' ' . $props['house_number'] : '') .
+                                    ', ' .
+                                    ($props['postal_code'] ?? '') . ' ' .
+                                    ($props['place'] ?? '')
+                                ),
+                                'lat'           => $lat,
+                                'lng'           => $lng,
+                            ];
+                        }
+                    }
+                }
+            }
+        }
   
 
     public function explm_enqueue_scripts() {
@@ -445,13 +575,22 @@ class ExplmParcelLockers {
                 'default_lng' => !empty($this->overseas_lockers) ? $this->overseas_lockers[0]['lng'] : '15.9819'
             ));
 
-            // DPD
+            // HP
             wp_localize_script('parcel-lockers-js', 'hp_parcel_lockers_vars', array(
                 'ajax_url'    => admin_url('admin-ajax.php'),
                 'nonce'       => wp_create_nonce('hp_parcel_lockers_nonce'),
                 'default_lat' => !empty($this->hp_lockers) ? $this->hp_lockers[0]['lat'] : '45.8150',
                 'default_lng' => !empty($this->hp_lockers) ? $this->hp_lockers[0]['lng'] : '15.9819'
             ));
+
+           // GLS
+            wp_localize_script('parcel-lockers-js', 'gls_parcel_lockers_vars', array(
+                'ajax_url'    => admin_url('admin-ajax.php'),
+                'nonce'       => wp_create_nonce('gls_parcel_lockers_nonce'),
+                'default_lat' => !empty($this->gls_lockers) ? $this->gls_lockers[0]['lat'] : '45.8150',
+                'default_lng' => !empty($this->gls_lockers) ? $this->gls_lockers[0]['lng'] : '15.9819'
+            ));
+
 
             wp_localize_script('parcel-lockers-js', 'parcel_locker_i18n', array(
                 'loading'             => esc_html__('Loading...', 'express-label-maker'),
@@ -465,7 +604,7 @@ class ExplmParcelLockers {
         }
     }
     
-    // DPD OVERSEAS
+    // DPD OVERSEAS HP GLS
     public function explm_add_parcel_locker_button($method, $index) {
         if (!is_checkout()) {
             return;
@@ -479,6 +618,9 @@ class ExplmParcelLockers {
 
         $hp_enabled = get_option('explm_hp_enable_pickup', '');
         $hp_shipping_method = get_option('explm_hp_pickup_shipping_method', '');
+
+        $gls_enabled = get_option('explm_gls_enable_pickup', '');
+        $gls_shipping_method = get_option('explm_gls_pickup_shipping_method', '');
         
         $current_method_id = str_replace(":", "-", $method->id);
         
@@ -488,6 +630,7 @@ class ExplmParcelLockers {
         $dpd_shipping_method = str_replace(":", "-", $dpd_shipping_method);
         $overseas_shipping_method = str_replace(":", "-", $overseas_shipping_method);
         $hp_shipping_method = str_replace(":", "-", $hp_shipping_method);
+        $gls_shipping_method = str_replace(":", "-", $gls_shipping_method);
         
         if ($dpd_enabled === '1' && 
             $current_method_id === $dpd_shipping_method && 
@@ -556,6 +699,27 @@ class ExplmParcelLockers {
                     <span class="dashicons dashicons-trash"></span> ' . __('Delete parcel locker', 'express-label-maker') . '
                     </button>';
             echo '</div>';
+
+        } else if ($gls_enabled === '1' && 
+            $current_method_id === $gls_shipping_method && 
+            $current_method_id === $chosen_method) {
+            
+            // GLS
+            echo '<div class="gls-parcel-locker-container">';
+            echo '<button type="button" class="button alt" id="select-gls-parcel-locker">' . __('Choose parcel locker', 'express-label-maker') . '</button>';
+            echo '<input type="hidden" name="gls_parcel_locker_location_id" id="gls_parcel_locker_location_id" value="">';
+            echo '<input type="hidden" name="gls_parcel_locker_name" id="gls_parcel_locker_name" value="">';
+            echo '<input type="hidden" name="gls_parcel_locker_type" id="gls_parcel_locker_type" value="">';
+            echo '<input type="hidden" name="gls_parcel_locker_address" id="gls_parcel_locker_address" value="">';
+            echo '<input type="hidden" name="gls_parcel_locker_street" id="gls_parcel_locker_street" value="">';
+            echo '<input type="hidden" name="gls_parcel_locker_house_number" id="gls_parcel_locker_house_number" value="">';
+            echo '<input type="hidden" name="gls_parcel_locker_postal_code" id="gls_parcel_locker_postal_code" value="">';
+            echo '<input type="hidden" name="gls_parcel_locker_city" id="gls_parcel_locker_city" value="">';
+            echo '<div id="selected-gls-parcel-locker-info" style="display:none; margin-top:10px;"></div>';
+            echo '<button type="button" id="clear-gls-parcel-locker" class="button" style="display:none;">
+                    <span class="dashicons dashicons-trash"></span> ' . __('Delete parcel locker', 'express-label-maker') . '
+                    </button>';
+            echo '</div>';
         }
     }
     
@@ -598,8 +762,21 @@ class ExplmParcelLockers {
         ));
     }
 
+    // GLS
+    public function explm_get_gls_parcel_lockers() {
+        check_ajax_referer('gls_parcel_lockers_nonce', 'nonce');
+
+        if (empty($this->gls_lockers)) {
+            $this->load_gls_parcel_lockers();
+        }
+
+        wp_send_json_success(array(
+            'lockers' => $this->gls_lockers
+        ));
+    }
+
     
-    // DPD OVERSEAS HP
+    // DPD OVERSEAS HP GLS
     public function explm_save_parcel_locker_to_order($order, $data) {
         if (!empty($_POST['dpd_parcel_locker_location_id'])) {
             $locker_data = array(
@@ -669,6 +846,29 @@ class ExplmParcelLockers {
 
             $formatted = $locker_data['hp_parcel_locker_name'] . ' (' . $locker_data['hp_parcel_locker_location_id'] . ')';
             $order->update_meta_data('parcel_locker_formatted', $formatted);
+
+        } elseif (!empty($_POST['gls_parcel_locker_location_id'])) {
+            $locker_data = array(
+                'gls_parcel_locker_location_id'   => sanitize_text_field($_POST['gls_parcel_locker_location_id']),
+                'gls_parcel_locker_name'          => sanitize_text_field($_POST['gls_parcel_locker_name']),
+                'gls_parcel_locker_type'          => sanitize_text_field($_POST['gls_parcel_locker_type']),
+                'gls_parcel_locker_address'       => sanitize_text_field($_POST['gls_parcel_locker_address']),
+                'gls_parcel_locker_street'        => sanitize_text_field($_POST['gls_parcel_locker_street']),
+                'gls_parcel_locker_house_number'  => sanitize_text_field($_POST['gls_parcel_locker_house_number']),
+                'gls_parcel_locker_postal_code'   => sanitize_text_field($_POST['gls_parcel_locker_postal_code']),
+                'gls_parcel_locker_city'          => sanitize_text_field($_POST['gls_parcel_locker_city']),
+            );
+    
+            foreach ($locker_data as $key => $value) {
+                $order->update_meta_data($key, $value);
+            }
+    
+            $order->set_shipping_address_1($locker_data['gls_parcel_locker_street'] . ' ' . $locker_data['gls_parcel_locker_house_number']);
+            $order->set_shipping_postcode($locker_data['gls_parcel_locker_postal_code']);
+            $order->set_shipping_city($locker_data['gls_parcel_locker_city']);
+
+            $formatted = $locker_data['gls_parcel_locker_name'] . ' (' . $locker_data['gls_parcel_locker_location_id'] . ')';
+            $order->update_meta_data('parcel_locker_formatted', $formatted);
         }
     }    
 
@@ -706,6 +906,17 @@ class ExplmParcelLockers {
         if ($hp_enabled === '1' && $chosen_method === $hp_shipping_method) {
             if (empty($_POST['hp_parcel_locker_location_id'])) {
                 wc_add_notice(esc_html__('Please select a parcel machine for HP delivery.', 'express-label-maker'), 'error');
+            }
+        }
+
+        // GLS
+        $gls_enabled = get_option('explm_gls_enable_pickup', '');
+        $gls_shipping_method = get_option('explm_gls_pickup_shipping_method', '');
+        $gls_shipping_method = str_replace(":", "-", $gls_shipping_method);
+
+        if ($gls_enabled === '1' && $chosen_method === $gls_shipping_method) {
+            if (empty($_POST['gls_parcel_locker_location_id'])) {
+                wc_add_notice(esc_html__('Please select a parcel machine for GLS delivery.', 'express-label-maker'), 'error');
             }
         }
     }
