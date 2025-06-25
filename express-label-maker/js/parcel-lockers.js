@@ -198,7 +198,7 @@ jQuery(document).ready(function ($) {
 
     lockers.forEach(function (locker) {
       var item = $(`
-        <div class="dpd-parcel-locker-item parcel-locker-item" data-locker-id="${locker.location_id}">
+        <div class="dpd-parcel-locker-item parcel-locker-item" data-locker-id="${locker.id}">
           <h4>${locker.name}</h4>
           <p>${locker.address}</p>
         </div>
@@ -223,7 +223,7 @@ jQuery(document).ready(function ($) {
 
   // Odabir DPD paketomata
   function selectDpdLocker(locker) {
-    $("#dpd_parcel_locker_location_id").val(locker.location_id);
+    $("#dpd_parcel_locker_location_id").val(locker.id);
     $("#dpd_parcel_locker_name").val(locker.name);
     $("#dpd_parcel_locker_type").val(locker.type);
     $("#dpd_parcel_locker_address").val(locker.address);
@@ -425,7 +425,7 @@ jQuery(document).ready(function ($) {
     }
     lockers.forEach(function (locker) {
       var item = $(`
-        <div class="overseas-parcel-locker-item parcel-locker-item" data-locker-id="${locker.location_id}">
+        <div class="overseas-parcel-locker-item parcel-locker-item" data-locker-id="${locker.id}">
           <h4>${locker.name}</h4>
           <p>${locker.address}</p>
         </div>
@@ -449,7 +449,7 @@ jQuery(document).ready(function ($) {
   }
 
   function selectOverseasLocker(locker) {
-    $("#overseas_parcel_locker_location_id").val(locker.location_id);
+    $("#overseas_parcel_locker_location_id").val(locker.id);
     $("#overseas_parcel_locker_name").val(locker.name);
     $("#overseas_parcel_locker_type").val(locker.type);
     $("#overseas_parcel_locker_address").val(locker.address);
@@ -635,7 +635,7 @@ jQuery(document).ready(function ($) {
 
     lockers.forEach(function (locker) {
       var item = $(`
-        <div class="hp-parcel-locker-item parcel-locker-item" data-locker-id="${locker.location_id}">
+        <div class="hp-parcel-locker-item parcel-locker-item" data-locker-id="${locker.id}">
           <h4>${locker.name}</h4>
           <p>${locker.address}</p>
         </div>
@@ -660,7 +660,7 @@ jQuery(document).ready(function ($) {
 
   // Odabir hp paketomata
   function selectHpLocker(locker) {
-    $("#hp_parcel_locker_location_id").val(locker.location_id);
+    $("#hp_parcel_locker_location_id").val(locker.id);
     $("#hp_parcel_locker_name").val(locker.name);
     $("#hp_parcel_locker_type").val(locker.type);
     $("#hp_parcel_locker_address").val(locker.address);
@@ -847,7 +847,7 @@ jQuery(document).ready(function ($) {
 
     lockers.forEach(function (locker) {
       var item = $(`
-        <div class="gls-parcel-locker-item parcel-locker-item" data-locker-id="${locker.location_id}">
+        <div class="gls-parcel-locker-item parcel-locker-item" data-locker-id="${locker.id}">
           <h4>${locker.name}</h4>
           <p>${locker.address}</p>
         </div>
@@ -872,7 +872,7 @@ jQuery(document).ready(function ($) {
 
   // Odabir GLS paketomata
   function selectGlsLocker(locker) {
-    $("#gls_parcel_locker_location_id").val(locker.location_id);
+    $("#gls_parcel_locker_location_id").val(locker.id);
     $("#gls_parcel_locker_name").val(locker.name);
     $("#gls_parcel_locker_type").val(locker.type);
     $("#gls_parcel_locker_address").val(locker.address);
