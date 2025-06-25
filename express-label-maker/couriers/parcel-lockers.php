@@ -793,10 +793,6 @@ class ExplmParcelLockers {
             foreach ($locker_data as $key => $value) {
                 $order->update_meta_data($key, $value);
             }
-    
-            $order->set_shipping_address_1($locker_data['dpd_parcel_locker_street'] . ' ' . $locker_data['dpd_parcel_locker_house_number']);
-            $order->set_shipping_postcode($locker_data['dpd_parcel_locker_postal_code']);
-            $order->set_shipping_city($locker_data['dpd_parcel_locker_city']);
 
             $formatted = $locker_data['overseas_parcel_locker_name'] . ' (' . $locker_data['overseas_parcel_locker_location_id'] . ')';
             $order->update_meta_data('parcel_locker_formatted', $formatted);
@@ -816,10 +812,6 @@ class ExplmParcelLockers {
             foreach ($locker_data as $key => $value) {
                 $order->update_meta_data($key, $value);
             }
-    
-            $order->set_shipping_address_1($locker_data['overseas_parcel_locker_street'] . ' ' . $locker_data['overseas_parcel_locker_house_number']);
-            $order->set_shipping_postcode($locker_data['overseas_parcel_locker_postal_code']);
-            $order->set_shipping_city($locker_data['overseas_parcel_locker_city']);
 
             $formatted = $locker_data['overseas_parcel_locker_name'] . ' (' . $locker_data['overseas_parcel_locker_location_id'] . ')';
             $order->update_meta_data('parcel_locker_formatted', $formatted);
@@ -840,10 +832,6 @@ class ExplmParcelLockers {
                 $order->update_meta_data($key, $value);
             }
     
-            $order->set_shipping_address_1($locker_data['hp_parcel_locker_street'] . ' ' . $locker_data['hp_parcel_locker_house_number']);
-            $order->set_shipping_postcode($locker_data['hp_parcel_locker_postal_code']);
-            $order->set_shipping_city($locker_data['hp_parcel_locker_city']);
-
             $formatted = $locker_data['hp_parcel_locker_name'] . ' (' . $locker_data['hp_parcel_locker_location_id'] . ')';
             $order->update_meta_data('parcel_locker_formatted', $formatted);
 
@@ -862,10 +850,6 @@ class ExplmParcelLockers {
             foreach ($locker_data as $key => $value) {
                 $order->update_meta_data($key, $value);
             }
-    
-            $order->set_shipping_address_1($locker_data['gls_parcel_locker_street'] . ' ' . $locker_data['gls_parcel_locker_house_number']);
-            $order->set_shipping_postcode($locker_data['gls_parcel_locker_postal_code']);
-            $order->set_shipping_city($locker_data['gls_parcel_locker_city']);
 
             $formatted = $locker_data['gls_parcel_locker_name'] . ' (' . $locker_data['gls_parcel_locker_location_id'] . ')';
             $order->update_meta_data('parcel_locker_formatted', $formatted);
