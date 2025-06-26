@@ -38,8 +38,8 @@ class ExplmPrintLabel
 
         $response = wp_remote_request('https://expresslabelmaker.com/api/v1/' . $saved_country . '/' . $courier . '/create/label', $args);
 
-        error_log('$response: ' . print_r($response, true));
-
+/*         error_log('$response: ' . print_r($response, true));
+ */
         if (is_wp_error($response)) {
             wp_send_json_error(array(
                 'errors' => array(array(
@@ -52,7 +52,7 @@ class ExplmPrintLabel
         
         $body_response = json_decode(wp_remote_retrieve_body($response), true);
 
-        error_log('response body: ' . print_r($body_response, true));
+  /*       error_log('response body: ' . print_r($body_response, true)); */
         
         if ($response['response']['code'] != '201') {
             $errors = array();

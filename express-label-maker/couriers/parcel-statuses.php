@@ -197,7 +197,7 @@ class ExplmParcelStatuses
         if (!is_wp_error($remote_response)) {
             $response_body = json_decode(wp_remote_retrieve_body($remote_response), true);
 
-            error_log('response body: ' . print_r($response_body, true));
+           /*  error_log('response body: ' . print_r($response_body, true)); */
 
             if (!empty($response_body['data']['statuses']) && is_array($response_body['data']['statuses'])) {
                 $grouped_statuses = [];
@@ -285,7 +285,7 @@ class ExplmParcelStatuses
             'parcels' => $parcel_requests
         );
 
-  /*       error_log('GLS request body: ' . print_r($body, true)); */
+/*         error_log('GLS request body: ' . print_r($body, true)); */
 
         $args = array(
             'method' => 'POST',
@@ -299,11 +299,11 @@ class ExplmParcelStatuses
         if (!is_wp_error($remote_response)) {
             $response_body = json_decode(wp_remote_retrieve_body($remote_response), true);
 
-         /*    error_log('GLS response body: ' . print_r($response_body, true)); */
+        /*     error_log('GLS response body: ' . print_r($response_body, true)); */
 
-            if (!empty($response_body['data']) && is_array($response_body['data'])) {
+             if (!empty($response_body['data']['statuses']) && is_array($response_body['data']['statuses'])) {
                 $grouped_statuses = [];
-                foreach ($response_body['data'] as $status) {
+                foreach ($response_body['data']['statuses'] as $status) {
                     $order_number = $status['order_number'] ?? null;
                     if (!$order_number) continue;
 

@@ -115,6 +115,9 @@ jQuery(document).ready(function ($) {
         case "hp":
           var parcelData = setHPCollectionData(form);
           break;
+        case "gls":
+          var parcelData = setGLSCollectionData(form);
+          break;
       }
   
       $.ajax({
@@ -129,6 +132,7 @@ jQuery(document).ready(function ($) {
           country: country,
         },
         success: function (response) {
+          console.log(response, 'RESPNSE')
           if (response.success) {
             jQuery(".explm-modal-wrapper").fadeOut(300, function () {
               jQuery(this).remove();
@@ -282,6 +286,66 @@ jQuery(document).ready(function ($) {
 
       location_id: form.find('input[name="hp_parcel_locker_location_id"]').val() || "",
       location_type: form.find('input[name="hp_parcel_locker_type"]').val() || "",
+    };
+  }
+
+  function setGLSCollectionData(form) {
+    const customerNote = (form.find('textarea[name="collection_info_for_sender"]').val() || "").trim();
+    let sender_remark  = customerNote;
+    if (sender_remark.length > 100) {
+      sender_remark = sender_remark.substring(0, 97) + "...";
+    }
+
+    const additional_services = form
+      .find('input[name="delivery_additional_services[]"]:checked')
+      .map(function () {
+        return this.value;
+      })
+      .get()
+      .join(",");
+
+    return {
+      recipient_name: form.find('input[name="collection_company_or_personal_name"]').val() || "",
+      recipient_phone: form.find('input[name="collection_phone"]').val() || "",
+      recipient_email: form.find('input[name="collection_email"]').val() || "",
+      recipient_adress:
+        (form.find('input[name="collection_street"]').val() || "") +
+        " " +
+        (form.find('input[name="collection_property_number"]').val() || ""),
+      recipient_city: form.find('input[name="collection_city"]').val() || "",
+      recipient_postal_code: form.find('input[name="collection_postal_code"]').val() || "",
+      recipient_country: form.find('select[name="collection_country"]').val() || "",
+
+      sender_name: form.find('input[name="customer_name"]').val() || "",
+      sender_phone: form.find('input[name="phone"]').val() || "",
+      sender_email: form.find('input[name="email"]').val() || "",
+      sender_adress:
+        (form.find('input[name="customer_address"]').val() || "") +
+        " " +
+        (form.find('input[name="house_number"]').val() || ""),
+      sender_city: form.find('input[name="city"]').val() || "",
+      sender_postal_code: form.find('input[name="zip_code"]').val() || "",
+      sender_country: form.find('input[name="country"]').val() || "",
+
+      order_number: $("#hiddenOrderId").val() || "",
+      parcel_weight: form.find('input[name="weight"]').val() || "2.00",
+      parcel_remark: sender_remark,
+      parcel_value: form.find('input[name="order_total"]').val() || "",
+
+      parcel_size: form.find('select[name="parcel_size"]').val() || "",
+      parcel_count: form.find('select[name="package_number"]').val() || 1,
+
+      cod_amount: "2", 
+      cod_currency: "",
+
+      value: "",
+
+      additional_services: additional_services,
+      printer_type: form.find('select[name="printer_type"]').val() || "",
+      print_position: form.find('select[name="print_position"]').val() || "",
+
+      location_id: form.find('input[name="gls_parcel_locker_location_id"]').val() || "",
+      location_type: form.find('input[name="gls_parcel_locker_type"]').val() || "",
     };
   }
 
