@@ -38,7 +38,7 @@ class ExplmUserStatusData
         $user_data = $userObj->getData($saved_country . 'hp');
 
         return [
-            'url' => "https://expresslabelmaker.com/api/v1/{$saved_country}/hp/get/parcel-status",
+            'url' => EXPLM_API_BASE_URL . "api/v1/{$saved_country}/hp/get/parcel-status",
             'user' => $user_data,
             'parcel_number' => $pl_number
         ];
@@ -49,7 +49,7 @@ class ExplmUserStatusData
         $user_data = $userObj->getData($saved_country . 'gls');
 
         return [
-            'url' => "https://expresslabelmaker.com/api/v1/{$saved_country}/gls/get/parcel-status",
+            'url' => EXPLM_API_BASE_URL . "api/v1/{$saved_country}/gls/get/parcel-status",
             'user' => $user_data,
             'parcel_number' => $pl_number
         ];

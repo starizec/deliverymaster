@@ -36,7 +36,7 @@ class ExplmLicence
             'timeout' => 120
         );
 
-        $response = wp_remote_request('https://expresslabelmaker.com/api/v1/licence/start-trial', $args);
+        $response = wp_remote_request(EXPLM_API_BASE_URL . 'api/v1/licence/start-trial', $args);
 
         if (is_wp_error($response)) {
             wp_send_json_error(array(
@@ -106,7 +106,7 @@ class ExplmLicence
             'timeout' => 120
         );
 
-        $response = wp_remote_request('https://expresslabelmaker.com/api/v1/licence/check', $args);
+        $response = wp_remote_request(EXPLM_API_BASE_URL . 'api/v1/licence/check', $args);
 
        /*  error_log('response body: ' . print_r($response, true)); */
 

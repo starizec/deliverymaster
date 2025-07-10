@@ -47,7 +47,7 @@ class ExplmCollectionRequest
             'timeout' => 120
         );
 
-        $response = wp_remote_request('https://expresslabelmaker.com/api/v1/' . $saved_country . '/' . $courier . '/create/collection-request', $args);
+        $response = wp_remote_request(EXPLM_API_BASE_URL . 'api/v1/' . $saved_country . '/' . $courier . '/create/collection-request', $args);
 
                 error_log('response: ' . print_r($response, true));
 

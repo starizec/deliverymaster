@@ -65,7 +65,7 @@ class ExplmParcelLockers {
     
         $saved_country = get_option("explm_country_option", '');
         $courier = 'overseas';
-        $api_url = "https://expresslabelmaker.com/api/v1/{$saved_country}/{$courier}/delivery-locations";
+        $api_url = EXPLM_API_BASE_URL . "api/v1/{$saved_country}/{$courier}/delivery-locations";
     
         $userObj = new ExplmUser();
         $user_data = $userObj->getData($saved_country . $courier);
@@ -176,7 +176,7 @@ class ExplmParcelLockers {
     
         $saved_country = get_option("explm_country_option", '');
         $courier = 'dpd';
-        $api_url = "https://expresslabelmaker.com/api/v1/{$saved_country}/{$courier}/delivery-locations";
+        $api_url = EXPLM_API_BASE_URL . "api/v1/{$saved_country}/{$courier}/delivery-locations";
     
         $userObj = new ExplmUser();
         $user_data = $userObj->getData($saved_country . $courier);
@@ -335,7 +335,7 @@ class ExplmParcelLockers {
     
         $saved_country = get_option("explm_country_option", '');
         $courier = 'hp';
-        $api_url = "https://expresslabelmaker.com/api/v1/{$saved_country}/{$courier}/delivery-locations";
+        $api_url = EXPLM_API_BASE_URL . "api/v1/{$saved_country}/{$courier}/delivery-locations";
     
         $userObj = new ExplmUser();
         $user_data = $userObj->getData($saved_country . $courier);
@@ -446,7 +446,7 @@ class ExplmParcelLockers {
     
         $saved_country = get_option("explm_country_option", '');
         $courier = 'gls';
-        $api_url = "https://expresslabelmaker.com/api/v1/{$saved_country}/{$courier}/delivery-locations";
+        $api_url = EXPLM_API_BASE_URL . "api/v1/{$saved_country}/{$courier}/delivery-locations";
     
         $userObj = new ExplmUser();
         $user_data = $userObj->getData($saved_country . $courier);

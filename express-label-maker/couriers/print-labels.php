@@ -94,7 +94,7 @@ class ExplmPrintLabels {
             'timeout' => 120
         );
     
-        $response = wp_remote_request('https://expresslabelmaker.com/api/v1/' . $saved_country . '/' . $courier . '/create/labels', $args);
+        $response = wp_remote_request(EXPLM_API_BASE_URL . 'api/v1/' . $saved_country . '/' . $courier . '/create/labels', $args);
 
         error_log(' $response: ' . print_r($response, true));
     
