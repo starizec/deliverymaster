@@ -28,6 +28,12 @@ class ExplmParcelStatuses
             wp_schedule_event(time(), 'every_hour', 'explm_cron_gls_status_update');
         }
         add_action('explm_cron_gls_status_update', array($this, 'update_gls_parcel_statuses'));
+
+        // OVERSEAS
+        if (!wp_next_scheduled('explm_cron_overseas_status_update')) {
+            wp_schedule_event(time(), 'every_hour', 'explm_cron_overseas_status_update');
+        }
+        add_action('explm_cron_overseas_status_update', array($this, 'update_overseas_parcel_statuses'));
     }
 
 
@@ -99,17 +105,6 @@ class ExplmParcelStatuses
 
             $userStatusObj = new ExplmUserStatusData();
             $user_data_status = $userStatusObj->explm_getUserStatusData($pl_parcels, $pl_number);
-
-            if (stripos($pl_parcels, 'overseas') !== false && !empty($user_data_status['url'])) {
-                $remote_response = wp_remote_get($user_data_status['url']);
-
-                if (!is_wp_error($remote_response)) {
-                    $body = json_decode(wp_remote_retrieve_body($remote_response), true);
-                    if (!empty($body['data']['CargoID'])) {
-                        ExplmLabelMaker::update_order_meta($order_id, 'overseas_cargo_id', $body['data']['CargoID']);
-                    }
-                }
-            }
 
             $response[] = array(
                 'order_id' => $order_id,
@@ -291,7 +286,7 @@ class ExplmParcelStatuses
             'method' => 'POST',
             'headers' => array('Content-Type' => 'application/json'),
             'body' => wp_json_encode($body),
-            'timeout' => 20,
+            'timeout' => 60,
         );
 
         $remote_response = wp_remote_request($url, $args);
@@ -300,6 +295,106 @@ class ExplmParcelStatuses
             $response_body = json_decode(wp_remote_retrieve_body($remote_response), true);
 
         /*     error_log('GLS response body: ' . print_r($response_body, true)); */
+
+             if (!empty($response_body['data']['statuses']) && is_array($response_body['data']['statuses'])) {
+                $grouped_statuses = [];
+                foreach ($response_body['data']['statuses'] as $status) {
+                    $order_number = $status['order_number'] ?? null;
+                    if (!$order_number) continue;
+
+                    if (!isset($grouped_statuses[$order_number])) {
+                        $grouped_statuses[$order_number] = [];
+                    }
+
+                    $grouped_statuses[$order_number][] = $status;
+                }
+
+                foreach ($grouped_statuses as $order_number => $statuses) {
+                    $last_status = end($statuses);
+                    $order_id = $order_number_to_id[$order_number] ?? null;
+
+                    if ($order_id && $last_status) {
+                        ExplmLabelMaker::update_order_meta($order_id, 'explm_parcel_status', $last_status['status_message'] ?? '');
+                        ExplmLabelMaker::update_order_meta($order_id, 'explm_parcel_status_date', $last_status['status_date'] ?? '');
+                        ExplmLabelMaker::update_order_meta($order_id, 'explm_parcel_status_code', $last_status['status_code'] ?? '');
+                        ExplmLabelMaker::update_order_meta($order_id, 'explm_parcel_status_color', $last_status['color'] ?? '');
+                    }
+                }
+            }
+        }
+    }
+
+        public function update_overseas_parcel_statuses() {
+        $saved_api_key = get_option('explm_overseas_api_key_option', '');
+
+        if ( empty($saved_api_key) ) {
+            return;
+        }
+
+        $orders = wc_get_orders(array(
+            'limit' => -1,
+            'return' => 'ids'
+        ));
+
+        $two_weeks_ago = strtotime('-14 days');
+
+        $parcel_requests = array();
+        $order_number_to_id = array();
+        $userStatusObj = new ExplmUserStatusData();
+
+        foreach ($orders as $order_id) {
+            $order = wc_get_order($order_id);
+            if (!$order) continue;
+
+            $status_date = $order->get_meta('explm_parcel_status_date');
+            if ($status_date && strtotime($status_date) > $two_weeks_ago) {
+                continue;
+            }
+
+            $pl_number = $order->get_meta('hr_overseas_parcels');
+            if (empty($pl_number)) continue;
+
+            $pl_number_parts = explode(',', $pl_number);
+            $parcel_number = trim(end($pl_number_parts));
+
+            $user_data_status = $userStatusObj->explm_getUserStatusData('overseas_parcels', $parcel_number);
+            if (empty($user_data_status['user']) || empty($user_data_status['parcel_number'])) continue;
+
+            $order_number = (string) $order->get_order_number();
+            $parcel_requests[] = array(
+                'order_number' => $order_number,
+                'parcel_number' => $user_data_status['parcel_number']
+            );
+
+            $order_number_to_id[$order_number] = $order_id;
+            $url = $user_data_status['url'];
+            $user = $user_data_status['user'];
+        }
+
+        if (empty($parcel_requests)) {
+            return;
+        }
+
+        $body = array(
+            'user' => $user,
+            'parcels' => $parcel_requests
+        );
+
+        error_log('overseas request body: ' . print_r($body, true));
+
+        $args = array(
+            'method' => 'POST',
+            'headers' => array('Content-Type' => 'application/json'),
+            'body' => wp_json_encode($body),
+            'timeout' => 60,
+        );
+
+        $remote_response = wp_remote_request($url, $args);
+
+        if (!is_wp_error($remote_response)) {
+            $response_body = json_decode(wp_remote_retrieve_body($remote_response), true);
+
+            error_log('overseas response body: ' . print_r($response_body, true));
 
              if (!empty($response_body['data']['statuses']) && is_array($response_body['data']['statuses'])) {
                 $grouped_statuses = [];

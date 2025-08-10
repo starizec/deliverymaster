@@ -23,15 +23,19 @@ class ExplmUserStatusData
             'url' => $url
         ];
     }
+
     public function overseas_parcels($pl_number) {
         $saved_country = get_option("explm_country_option", '');
-        $saved_api_key = get_option('explm_overseas_api_key_option', '');
-        $url = "https://api.overseas." . $saved_country . "/shipmentbyid?apikey=" . $saved_api_key . "&shipmentid=" . $pl_number;
+        $userObj = new ExplmUser();
+        $user_data = $userObj->getData($saved_country . 'overseas');
 
         return [
-            'url' => $url,
+            'url' => EXPLM_API_BASE_URL . "api/v1/{$saved_country}/overseas/get/parcel-status",
+            'user' => $user_data,
+            'parcel_number' => $pl_number
         ];
     }
+
     public function hp_parcels($pl_number) {
         $saved_country = get_option("explm_country_option", '');
         $userObj = new ExplmUser();
@@ -43,6 +47,7 @@ class ExplmUserStatusData
             'parcel_number' => $pl_number
         ];
     }
+
     public function gls_parcels($pl_number) {
         $saved_country = get_option("explm_country_option", '');
         $userObj = new ExplmUser();

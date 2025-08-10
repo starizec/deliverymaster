@@ -81,13 +81,13 @@ jQuery(document).ready(function ($) {
           '<img src="/wp-content/plugins/express-label-maker/assets/statusloading.gif" alt="loading">'
         );
 
-        // HP GLS
+        // HP GLS OVERSEAS
         const url = order.pl_parcels.url || '';
         console.log(url, 'url')
         if (
           order.pl_parcels.user &&
           order.pl_parcels.parcel_number &&
-          (url.includes("/hp/") || url.includes("/gls/"))
+          (url.includes("/hp/") || url.includes("/gls/") || url.includes("/overseas/")) 
         )
         {
           const statusText =

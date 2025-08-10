@@ -114,14 +114,14 @@ function explm_overseas_tab_content() {
             update_option('explm_overseas_phone', $phone);
             update_option('explm_overseas_email', $email);
             update_option('explm_overseas_country', $country);
-            echo '<div style="position:absolute;width:95%;" style="display: flex;" class="updated"><p>' . esc_html__('Collection Request Data saved.', 'express-label-maker') . '</p></div>';
+            echo '<div style="position:absolute;width:95%;" style="display: flex;" class="updated"><p>' . esc_html__('Sender information saved.', 'express-label-maker') . '</p></div>';
         } else {
             echo '<div style="position:absolute;width:95%;" style="display: flex;" class="error"><p>' . esc_html__('All fields are required.', 'express-label-maker') . '</p></div>';
         }
     }
 
     echo '<div style="flex: 1 1 auto;">';
-    echo '<h3>' . esc_html__('Collection Request Data', 'express-label-maker') . '</h3>';
+    echo '<h3>' . esc_html__('Sender information', 'express-label-maker') . '</h3>';
     echo '<form method="post" action="">';
     echo '<table class="form-table">';
 

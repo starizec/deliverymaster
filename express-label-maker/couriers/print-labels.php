@@ -237,8 +237,10 @@ class ExplmPrintLabels {
         return $data;
     }      
     
-    public function setOVERSEASParcelsData($shipping, $billing, $order_data, $order_total, $address_without_house_number, $house_number, $weight, $order_id, $parcel_type, $package_number, $payment_method) {
-        
+
+    public function setOVERSEASParcelsData($shipping, $billing, $order_data, $order_total, $address_without_house_number, $house_number, $weight, $order_id, $parcel_type, $package_number, $payment_method, $currency)
+        {
+
         $overseas_note = get_option('explm_overseas_customer_note', '');
         $sender_remark = !empty($overseas_note) 
             ? $overseas_note 
@@ -246,28 +248,45 @@ class ExplmPrintLabels {
         
         if (!empty($sender_remark) && mb_strlen($sender_remark) > 35) {
             $sender_remark = mb_substr($sender_remark, 0, 32) . '...';
-        }        
+        }     
 
-        $data = array(
-            'cod_amount'     => $payment_method === 'cod' ? (float)$order_total : null,
-            'name1'          => (string)trim($shipping['first_name'] . ' ' . $shipping['last_name']),
-            'rPropNum'       => (string)($address_without_house_number . $house_number), 
-            'city'           => (string)$shipping['city'],
-            'pcode'          => (string)$shipping['postcode'],
-            'email'          => isset($billing['email']) ? (string)$billing['email'] : null,
-            'sender_remark'  => $sender_remark, 
-            'order_number'   => (string)$order_id,
-            'num_of_parcel'  => (int)$package_number,
-            'phone'          => isset($billing['phone']) ? (string)$billing['phone'] : null
-        );
-    
+        $parcel_value   = number_format((float)$order_total, 2, '.', '');
+        $parcel_weight  = number_format((float)$weight, 2, '.', '');
+       
         $locker_id = ExplmLabelMaker::get_order_meta($order_id, 'overseas_parcel_locker_location_id', true);
-        if (!empty($locker_id)) {
-            $data['pudo_id'] = (string)$locker_id;
-        } elseif (!empty($_POST['overseas_parcel_locker_location_id'])) {
-            $data['pudo_id'] = (string)sanitize_text_field($_POST['overseas_parcel_locker_location_id']);
-        }
-    
+        $locker_type = ExplmLabelMaker::get_order_meta($order_id, 'overseas_parcel_locker_type', true);
+
+        $data = [
+            'recipient_name'        => (string)trim($shipping['first_name'] . ' ' . $shipping['last_name']),
+            'recipient_phone'       => isset($billing['phone']) ? (string)$billing['phone'] : '',
+            'recipient_email'       => isset($billing['email']) ? (string)$billing['email'] : '',
+            'recipient_adress'      => (string)trim($address_without_house_number . ' ' . $house_number),
+            'recipient_city'        => (string)$shipping['city'],
+            'recipient_postal_code' => (string)$shipping['postcode'],
+            'recipient_country'     => strtoupper((string)$shipping['country']),
+
+            'sender_name'           => (string)get_option('explm_overseas_company_or_personal_name', ''),
+            'sender_phone'          => (string)get_option('explm_overseas_phone', ''),
+            'sender_email'          => (string)get_option('explm_overseas_email', ''),
+            'sender_adress'         => (string)trim(get_option('explm_overseas_street', '') . ' ' . get_option('explm_overseas_property_number', '')),
+            'sender_city'           => (string)get_option('explm_overseas_city', ''),
+            'sender_postal_code'    => (string)get_option('explm_overseas_postal_code', ''),
+            'sender_country'        => strtoupper((string)get_option('explm_overseas_country', '')),
+
+            'order_number'          => (string)$order_id,
+            'parcel_weight'         => (string)$parcel_weight,
+            'parcel_remark'         => (string)$sender_remark,
+            'parcel_value'          => (string)$parcel_value,
+            'parcel_size'           => (string)get_option('explm_overseas_parcel_size', ''),
+            'parcel_count'          => (int)$package_number,
+            'cod_amount'            => $payment_method === 'cod' ? (float)$order_total : '',
+            'cod_currency'          => $payment_method === 'cod' ? (string)$currency : '',
+
+            'location_id'   => (string)(!empty($locker_id) ? $locker_id : (isset($_POST['overseas_parcel_locker_location_id']) ? sanitize_text_field(wp_unslash($_POST['overseas_parcel_locker_location_id'])) : '')),
+            'location_type' => (string)(!empty($locker_type) ? $locker_type : (isset($_POST['overseas_parcel_locker_type']) ? sanitize_text_field(wp_unslash($_POST['overseas_parcel_locker_type'])) : '')),
+
+        ];
+
         return $data;
     }
     
