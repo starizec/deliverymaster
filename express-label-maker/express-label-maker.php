@@ -445,32 +445,40 @@ class ExplmLabelMaker
     }
 
     public function display_custom_order_meta_data($column, $order) {
-        // For backward compatibility, handle cases where $order might not be passed
+
         if (!is_a($order, 'WC_Order')) {
-            global $post;
-            if (!$post) {
-                return;
-            }
-            $order = wc_get_order($post->ID);
+            $order = wc_get_order(is_numeric($order) ? $order : get_the_ID());
         }
-    
-        if (!$order) {
+        if (!$order) return;
+
+        if ($column !== 'explm_parcel_status') return;
+
+        $status = (string) $order->get_meta('explm_parcel_status');
+        $color  = (string) $order->get_meta('explm_parcel_status_color');
+        $date   = (string) $order->get_meta('explm_parcel_status_date');
+
+        if ($status === '' && $color === '') { 
+            echo '&mdash;';
             return;
         }
-    
-        if ($column === 'explm_parcel_status') {
-            $custom_meta_data = $order->get_meta('explm_parcel_status');
-            if (empty($custom_meta_data)) {
-                return;
-            }
-            
-            if (strlen($custom_meta_data) > 30) {
-                echo '<span title="' . esc_attr($custom_meta_data) . '">' . esc_html(substr($custom_meta_data, 0, 30)) . '...</span>';
-            } else {
-                echo '<span title="' . esc_attr($custom_meta_data) . '">' . esc_html($custom_meta_data) . '</span>';
-            }
+
+        $title = $status . ($date ? ' (' . $date . ')' : '');
+
+        if (function_exists('mb_strlen') && mb_strlen($status) > 30) {
+            $display = mb_substr($status, 0, 30) . '...';
+        } else if (strlen($status) > 30) {
+            $display = substr($status, 0, 30) . '...';
+        } else {
+            $display = $status;
         }
+
+        $style = $color !== '' 
+            ? 'background:' . esc_attr($color) . ';padding:2px 6px;border-radius:3px;display:inline-block'
+            : '';
+
+        echo '<span class="explm-package-status order-status" title="' . esc_attr($title) . '" style="' . $style . '">' . esc_html($display) . '</span>';
     }
+
 
     public function explm_show_confirm_modal() {
         check_ajax_referer('explm_nonce', 'security');
