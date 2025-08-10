@@ -457,7 +457,7 @@ class ExplmLabelMaker
         $date   = (string) $order->get_meta('explm_parcel_status_date');
 
         if ($status === '' && $color === '') { 
-            echo '&mdash;';
+            echo esc_html( __('Status not available', 'express-label-maker') );
             return;
         }
 

@@ -192,9 +192,9 @@ if (!defined('ABSPATH')) {
                     <div class="additional-services-options">
                         <?php
                         $notif_options = [
-                            'INS' => esc_html__('Osiguranje pošiljke', 'express-label-maker'),
-                            'FDS' => esc_html__('Email obavijest primatelju', 'express-label-maker'),
-                            'FSS' => esc_html__('SMS obavijest primatelju', 'express-label-maker'),
+                            'INS' => esc_html__('Shipment insurance', 'express-label-maker'),
+                            'FDS' => esc_html__('Email notification to recipient', 'express-label-maker'),
+                            'FSS' => esc_html__('SMS notification to recipient', 'express-label-maker'),
                         ];
 
                         foreach ($notif_options as $id => $label) {
