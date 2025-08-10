@@ -83,7 +83,6 @@ class ExplmLabelMaker
         wp_enqueue_script('explm_admin_js', plugin_dir_url(__FILE__) . 'js/elm.js', array('jquery'), $plugin_version, true);
         wp_enqueue_script('explm_print_label_js', plugin_dir_url(__FILE__) . 'js/print-label.js', array('jquery', 'sweetalert2'), $plugin_version, true);
         wp_enqueue_script('explm_print_labels_js', plugin_dir_url(__FILE__) . 'js/print-labels.js', array('jquery', 'sweetalert2'), $plugin_version, true);
-        wp_enqueue_script('explm_parcel_statuses_js', plugin_dir_url(__FILE__) . 'js/parcel-statuses.js', array('jquery', 'sweetalert2'), $plugin_version, true);
         wp_enqueue_script('explm_licence_settings_js', plugin_dir_url(__FILE__) . 'js/licence-settings.js', array('jquery', 'sweetalert2'), $plugin_version, true);
         wp_enqueue_script('explm_collection_request_js', plugin_dir_url(__FILE__) . 'js/collection-request.js', array('jquery', 'sweetalert2'), $plugin_version, true);
     
