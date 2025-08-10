@@ -164,39 +164,59 @@ jQuery(document).ready(function ($) {
       });
     });
   
-    function setDPDCollectionData(form) {
-      var rawDate = form.find('input[name="collection_pickup_date"]').val();
-      var formattedDate = rawDate.split("-").join("");
-      return {
-        cname: form.find('input[name="customer_name"]').val(),
-        cname1: form.find('input[name="contact_person"]').val(),
-        cstreet: form.find('input[name="customer_address"]').val(),
-        cPropertyNumber: form.find('input[name="house_number"]').val(),
-        ccity: form.find('input[name="city"]').val(),
-        cpostal: form.find('input[name="zip_code"]').val(),
-        ccountry: form.find('input[name="country"]').val(),
-        cphone: form.find('input[name="phone"]').val(),
-        cemail: form.find('input[name="email"]').val(),
-        info1: form.find('input[name="collection_info_for_sender"]').val(),
-        info2: form.find('input[name="collection_info_for_courier"]').val(),
-        rname: form
-          .find('input[name="collection_company_or_personal_name"]')
-          .val(),
-        rname2: form.find('input[name="collection_contact_person"]').val(),
-        rstreet: form.find('input[name="collection_street"]').val(),
-        rPropertyNumber: form
-          .find('input[name="collection_property_number"]')
-          .val(),
-        rcity: form.find('input[name="collection_city"]').val(),
-        rpostal: form.find('input[name="collection_postal_code"]').val(),
-        rcountry: form.find('select[name="collection_country"]').val(),
-        rphone: form.find('input[name="collection_phone"]').val(),
-        remail: form.find('input[name="collection_email"]').val(),
-        pickup_date: formattedDate,
-        weight: form.find('input[name="weight"]').val(),
-        num_of_parcel: form.find('input[name="package_number"]').val(),
-      };
+
+  function setDPDCollectionData(form) {
+    const customerNote = (form.find('textarea[name="collection_info_for_sender"]').val() || "").trim();
+    let sender_remark  = customerNote;
+    if (sender_remark.length > 50) {
+      sender_remark = sender_remark.substring(0, 47) + "...";
     }
+
+    var rawDate = form.find('input[name="collection_pickup_date"]').val();
+    var formattedDate = rawDate.split("-").join("");
+
+    return {
+      recipient_name: form.find('input[name="collection_company_or_personal_name"]').val() || "",
+      recipient_phone: form.find('input[name="collection_phone"]').val() || "",
+      recipient_email: form.find('input[name="collection_email"]').val() || "",
+      recipient_adress:
+        (form.find('input[name="collection_street"]').val() || "") +
+        " " +
+        (form.find('input[name="collection_property_number"]').val() || ""),
+      recipient_city: form.find('input[name="collection_city"]').val() || "",
+      recipient_postal_code: form.find('input[name="collection_postal_code"]').val() || "",
+      recipient_country: form.find('select[name="collection_country"]').val() || "",
+
+      sender_name: form.find('input[name="customer_name"]').val() || "",
+      sender_phone: form.find('input[name="phone"]').val() || "",
+      sender_email: form.find('input[name="email"]').val() || "",
+      sender_adress:
+        (form.find('input[name="customer_address"]').val() || "") +
+        " " +
+        (form.find('input[name="house_number"]').val() || ""),
+      sender_city: form.find('input[name="city"]').val() || "",
+      sender_postal_code: form.find('input[name="zip_code"]').val() || "",
+      sender_country: form.find('input[name="country"]').val() || "",
+
+      order_number: $("#hiddenOrderId").val() || "",
+      parcel_weight: form.find('input[name="weight"]').val() || "2.00",
+      parcel_remark: sender_remark,
+      parcel_value: form.find('input[name="order_total"]').val() || "",
+
+      parcel_size: form.find('select[name="parcel_size"]').val() || "",
+      parcel_count: form.find('select[name="package_number"]').val() || 1,
+
+      cod_amount: "", 
+      cod_currency: "",
+
+      value: "",
+
+      pickup_date: formattedDate,
+
+      location_id: form.find('input[name="gls_parcel_locker_location_id"]').val() || "",
+      location_type: form.find('input[name="gls_parcel_locker_type"]').val() || "",
+    };
+  }
 
   function setOverseasCollectionData(form) {
     const customerNote = (form.find('textarea[name="collection_info_for_sender"]').val() || "").trim();

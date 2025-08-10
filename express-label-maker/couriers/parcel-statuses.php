@@ -184,7 +184,7 @@ class ExplmParcelStatuses
             'method' => 'POST',
             'headers' => array('Content-Type' => 'application/json'),
             'body' => wp_json_encode($body),
-            'timeout' => 20,
+            'timeout' => 120,
         );
 
         $remote_response = wp_remote_request($url, $args);
@@ -286,7 +286,7 @@ class ExplmParcelStatuses
             'method' => 'POST',
             'headers' => array('Content-Type' => 'application/json'),
             'body' => wp_json_encode($body),
-            'timeout' => 60,
+            'timeout' => 120,
         );
 
         $remote_response = wp_remote_request($url, $args);
@@ -380,13 +380,13 @@ class ExplmParcelStatuses
             'parcels' => $parcel_requests
         );
 
-        error_log('overseas request body: ' . print_r($body, true));
+/*         error_log('overseas request body: ' . print_r($body, true)); */
 
         $args = array(
             'method' => 'POST',
             'headers' => array('Content-Type' => 'application/json'),
             'body' => wp_json_encode($body),
-            'timeout' => 60,
+            'timeout' => 120,
         );
 
         $remote_response = wp_remote_request($url, $args);
@@ -394,7 +394,7 @@ class ExplmParcelStatuses
         if (!is_wp_error($remote_response)) {
             $response_body = json_decode(wp_remote_retrieve_body($remote_response), true);
 
-            error_log('overseas response body: ' . print_r($response_body, true));
+            /* error_log('overseas response body: ' . print_r($response_body, true)); */
 
              if (!empty($response_body['data']['statuses']) && is_array($response_body['data']['statuses'])) {
                 $grouped_statuses = [];

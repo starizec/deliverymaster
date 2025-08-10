@@ -18,9 +18,13 @@ class ExplmUserStatusData
 
     public function dpd_parcels($pl_number) {
         $saved_country = get_option("explm_country_option", '');
-        $url = "https://easyship." . $saved_country . "/api/parcel/parcel_status?secret=FcJyN7vU7WKPtUh7m1bx&parcel_number=" . $pl_number;
+        $userObj = new ExplmUser();
+        $user_data = $userObj->getData($saved_country . 'dpd');
+
         return [
-            'url' => $url
+            'url' => EXPLM_API_BASE_URL . "api/v1/{$saved_country}/dpd/get/parcel-status",
+            'user' => $user_data,
+            'parcel_number' => $pl_number
         ];
     }
 

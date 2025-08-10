@@ -69,14 +69,8 @@ class ExplmPrintLabels {
             $courierUpper = strtoupper($courier);
             $parcel_data = $this->{"set{$courierUpper}ParcelsData"}($shipping, $billing, $order_data, $order_total, $address_without_house_number, $house_number, $weight, $order_id, $parcel_type, 1, $payment_method, $currency);
     
-            if ($courier === 'hp' || $courier === 'gls') {
-                $parcels_array[] = $parcel_data;
-            } else {
-                $parcels_array[] = array(
-                    "order_number" => (string)$order_id,
-                    "parcel" => $parcel_data
-                );
-            }
+
+            $parcels_array[] = $parcel_data;
 
         }
     
@@ -195,8 +189,10 @@ class ExplmPrintLabels {
         }
     }     
 
-    public function setDPDParcelsData($shipping, $billing, $order_data, $order_total, $address_without_house_number, $house_number, $weight, $order_id, $parcel_type, $package_number, $payment_method = null) {
-        
+    
+    public function setDPDParcelsData($shipping, $billing, $order_data, $order_total, $address_without_house_number, $house_number, $weight, $order_id, $parcel_type, $package_number, $payment_method, $currency)
+    {
+
         $dpd_note = get_option('explm_dpd_customer_note', '');
         $sender_remark = !empty($dpd_note) 
             ? $dpd_note 
@@ -205,37 +201,57 @@ class ExplmPrintLabels {
         if (!empty($sender_remark) && mb_strlen($sender_remark) > 50) {
             $sender_remark = mb_substr($sender_remark, 0, 47) . '...';
         }
-        
-        $data = array(
-            'cod_amount'    => (float)$order_total,
-            'name1'         => (string)trim($shipping['first_name'] . ' ' . $shipping['last_name']),
-            'street'        => (string)$address_without_house_number, 
-            'rPropNum'      => (string)$house_number, 
-            'city'          => (string)$shipping['city'], 
-            'country'       => (string)$shipping['country'], 
-            'pcode'         => (string)$shipping['postcode'],
-            'email'         => isset($billing['email']) ? (string)$billing['email'] : null, 
-            'sender_remark' => $sender_remark, 
-            'weight'        => (float)$weight,
-            'order_number'  => (string)$order_id,
-            'cod_purpose'   => (string)$order_id,
-            'parcel_type'   => (string)$parcel_type,
-            'num_of_parcel' => (int)$package_number, 
-            'phone'         => isset($billing['phone']) ? (string)$billing['phone'] : null,
-            'contact'       => (string)trim($shipping['first_name'] . ' ' . $shipping['last_name']) 
-        );
-    
+
+        $parcel_value   = number_format((float)$order_total, 2, '.', '');
+        $parcel_weight  = number_format((float)$weight, 2, '.', '');
+       
         $locker_id = ExplmLabelMaker::get_order_meta($order_id, 'dpd_parcel_locker_location_id', true);
-        if (!empty($locker_id)) {
-            $data['pudo_id'] = (string)$locker_id;
-            $data['parcel_type'] = 'D-B2C-PSD';
-        } elseif (!empty($_POST['dpd_parcel_locker_location_id'])) {
-            $data['pudo_id'] = (string)sanitize_text_field($_POST['dpd_parcel_locker_location_id']);
-            $data['parcel_type'] = 'D-B2C-PSD';
-        }        
-    
+        $locker_type = ExplmLabelMaker::get_order_meta($order_id, 'dpd_parcel_locker_type', true);
+
+        $post_locker_id = isset($_POST['dpd_parcel_locker_location_id'])
+        ? sanitize_text_field(wp_unslash($_POST['dpd_parcel_locker_location_id']))
+        : '';
+
+        if (!empty($locker_id) || !empty($post_locker_id)) {
+            $parcel_type = 'D-B2C-PSD';
+        }
+
+        $data = [
+            'recipient_name'        => (string)trim($shipping['first_name'] . ' ' . $shipping['last_name']),
+            'recipient_phone'       => isset($billing['phone']) ? (string)$billing['phone'] : '',
+            'recipient_email'       => isset($billing['email']) ? (string)$billing['email'] : '',
+            'recipient_adress'      => (string)trim($address_without_house_number . ' ' . $house_number),
+            'recipient_city'        => (string)$shipping['city'],
+            'recipient_postal_code' => (string)$shipping['postcode'],
+            'recipient_country'     => strtoupper((string)$shipping['country']),
+
+            'sender_name'           => (string)get_option('explm_dpd_company_or_personal_name', ''),
+            'sender_phone'          => (string)get_option('explm_dpd_phone', ''),
+            'sender_email'          => (string)get_option('explm_dpd_email', ''),
+            'sender_adress'         => (string)trim(get_option('explm_dpd_street', '') . ' ' . get_option('explm_dpd_property_number', '')),
+            'sender_city'           => (string)get_option('explm_dpd_city', ''),
+            'sender_postal_code'    => (string)get_option('explm_dpd_postal_code', ''),
+            'sender_country'        => strtoupper((string)get_option('explm_dpd_country', '')),
+
+            'order_number'          => (string)$order_id,
+            'parcel_weight'         => (string)$parcel_weight,
+            'parcel_remark'         => (string)$sender_remark,
+            'parcel_value'          => (string)$parcel_value,
+            'parcel_size'           => (string)get_option('explm_dpd_parcel_size', ''),
+            'parcel_count'          => (int)$package_number,
+            'cod_amount'            => $payment_method === 'cod' ? (float)$order_total : '',
+            'cod_currency'          => $payment_method === 'cod' ? (string)$currency : '',
+
+            'parcel_type'   => (string)$parcel_type,
+
+            'location_id'   => (string)(!empty($locker_id) ? $locker_id : (isset($_POST['dpd_parcel_locker_location_id']) ? sanitize_text_field(wp_unslash($_POST['dpd_parcel_locker_location_id'])) : '')),
+            'location_type' => (string)(!empty($locker_type) ? $locker_type : (isset($_POST['dpd_parcel_locker_type']) ? sanitize_text_field(wp_unslash($_POST['dpd_parcel_locker_type'])) : '')),
+
+        ];
+
         return $data;
-    }      
+    }
+
     
 
     public function setOVERSEASParcelsData($shipping, $billing, $order_data, $order_total, $address_without_house_number, $house_number, $weight, $order_id, $parcel_type, $package_number, $payment_method, $currency)
@@ -347,7 +363,7 @@ class ExplmPrintLabels {
         return $data;
     }
 
-        public function setGLSParcelsData($shipping, $billing, $order_data, $order_total, $address_without_house_number, $house_number, $weight, $order_id, $parcel_type, $package_number, $payment_method, $currency)
+public function setGLSParcelsData($shipping, $billing, $order_data, $order_total, $address_without_house_number, $house_number, $weight, $order_id, $parcel_type, $package_number, $payment_method, $currency)
     {
 
         $gls_note = get_option('explm_gls_customer_note', '');

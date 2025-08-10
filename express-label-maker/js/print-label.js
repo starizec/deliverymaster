@@ -114,19 +114,14 @@ jQuery(document).ready(function ($) {
     ).fail(hideLoader);
   });
 
-  function setDPDParcelData(form) {
+
+function setDPDParcelData(form) {
     const isCod =
       form.find('input[name="parcel_type"]:checked').val() === "cod";
-    const dpdParcelLockerId = form.find('input[name="parcel_locker"]').val();
-
-    let parcelType = "";
-    if (dpdParcelLockerId) {
-      parcelType = "D-B2C-PSD";
-    } else if (explm_ajax.serviceType === "DPD Classic") {
-      parcelType = isCod ? "D-COD" : "D";
-    } else if (explm_ajax.serviceType === "DPD Home") {
-      parcelType = isCod ? "D-COD-B2C" : "D-B2C";
-    }
+    const parcelLockerId =
+      form.find('input[name="dpd_parcel_locker_location_id"]').val() || "";
+    const parcelLockerType =
+      form.find('input[name="dpd_parcel_locker_type"]').val() || "";
 
     const dpdNote = (explm_ajax.dpd_note || "").trim();
     const customerNote = (
@@ -139,28 +134,58 @@ jQuery(document).ready(function ($) {
       sender_remark = sender_remark.substring(0, 47) + "...";
     }
 
-    const data = {
-      cod_amount: form.find('input[name="cod_amount"]').val(),
-      name1: form.find('input[name="customer_name"]').val(),
-      street: form.find('input[name="customer_address"]').val(),
-      rPropNum: form.find('input[name="house_number"]').val(),
-      city: form.find('input[name="city"]').val(),
-      country: form.find('input[name="country"]').val(),
-      pcode: form.find('input[name="zip_code"]').val(),
-      email: form.find('input[name="email"]').val(),
-      sender_remark: sender_remark,
-      weight: form.find('input[name="weight"]').val(),
-      order_number: form.find('input[name="reference"]').val(),
-      cod_purpose: form.find('input[name="reference"]').val(),
-      parcel_type: parcelType,
-      num_of_parcel: form.find('input[name="package_number"]').val(),
-      phone: form.find('input[name="phone"]').val(),
-      contact: form.find('input[name="contact_person"]').val(),
-    };
-
-    if (dpdParcelLockerId) {
-      data.pudo_id = dpdParcelLockerId;
+    let parcelType = "";
+    if (parcelLockerId) {
+      parcelType = "D-B2C-PSD";
+    } else if (explm_ajax.serviceType === "DPD Classic") {
+      parcelType = isCod ? "D-COD" : "D";
+    } else if (explm_ajax.serviceType === "DPD Home") {
+      parcelType = isCod ? "D-COD-B2C" : "D-B2C";
     }
+
+    const data = {
+      recipient_name: form.find('input[name="customer_name"]').val() || "",
+      recipient_phone: form.find('input[name="phone"]').val() || "",
+      recipient_email: form.find('input[name="email"]').val() || "",
+      recipient_adress:
+        (form.find('input[name="customer_address"]').val() || "") +
+        " " +
+        (form.find('input[name="house_number"]').val() || ""),
+      recipient_city: form.find('input[name="city"]').val() || "",
+      recipient_postal_code: form.find('input[name="zip_code"]').val() || "",
+      recipient_country: form.find('input[name="country"]').val() || "",
+
+      sender_name: explm_ajax.dpd_sender_name || "",
+      sender_phone: explm_ajax.dpd_sender_phone || "",
+      sender_email: explm_ajax.dpd_sender_email || "",
+      sender_adress:
+        (explm_ajax.dpd_sender_street || "") +
+        " " +
+        (explm_ajax.dpd_sender_number || ""),
+      sender_city: explm_ajax.dpd_sender_city || "",
+      sender_postal_code: explm_ajax.dpd_sender_postcode || "",
+      sender_country: explm_ajax.dpd_sender_country || "",
+
+      order_number: form.find('input[name="reference"]').val() || "",
+      parcel_weight: form.find('input[name="weight"]').val() || "2.00",
+      parcel_remark: sender_remark,
+      parcel_value: form.find('input[name="order_total"]').val() || "",
+
+      parcel_size: form.find('select[name="parcel_size"]').val() || "",
+      parcel_count: form.find('select[name="package_number"]').val() || 1,
+
+      cod_amount: isCod
+        ? form.find('input[name="cod_amount"]').val()
+        : "",
+      cod_currency: isCod ? form.find('input[name="hiddenCurrency"]').val() : "",
+
+      value: "",
+
+      parcel_type: parcelType,
+
+      location_id: parcelLockerId,
+      location_type: parcelLockerType,
+    };
 
     return data;
   }
