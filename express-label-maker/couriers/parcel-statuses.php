@@ -184,7 +184,7 @@ class ExplmParcelStatuses
             'method' => 'POST',
             'headers' => array('Content-Type' => 'application/json'),
             'body' => wp_json_encode($body),
-            'timeout' => 20,
+            'timeout' => 120,
         );
 
         $remote_response = wp_remote_request($url, $args);
@@ -286,7 +286,7 @@ class ExplmParcelStatuses
             'method' => 'POST',
             'headers' => array('Content-Type' => 'application/json'),
             'body' => wp_json_encode($body),
-            'timeout' => 60,
+            'timeout' => 120,
         );
 
         $remote_response = wp_remote_request($url, $args);
@@ -386,7 +386,7 @@ class ExplmParcelStatuses
             'method' => 'POST',
             'headers' => array('Content-Type' => 'application/json'),
             'body' => wp_json_encode($body),
-            'timeout' => 60,
+            'timeout' => 120,
         );
 
         $remote_response = wp_remote_request($url, $args);

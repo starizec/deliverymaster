@@ -69,7 +69,7 @@ class ExplmPrintLabels {
             $courierUpper = strtoupper($courier);
             $parcel_data = $this->{"set{$courierUpper}ParcelsData"}($shipping, $billing, $order_data, $order_total, $address_without_house_number, $house_number, $weight, $order_id, $parcel_type, 1, $payment_method, $currency);
     
-            if ($courier === 'hp' || $courier === 'gls') {
+            if ($courier === 'hp' || $courier === 'gls' || $courier === 'overseas') {
                 $parcels_array[] = $parcel_data;
             } else {
                 $parcels_array[] = array(
