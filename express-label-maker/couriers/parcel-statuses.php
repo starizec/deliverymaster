@@ -145,7 +145,7 @@ class ExplmParcelStatuses
             if (!$order) continue;
 
             $status_date = $order->get_meta('explm_parcel_status_date');
-            if ($status_date && strtotime($status_date) > $two_weeks_ago) {
+            if ($status_date && strtotime($status_date) < $two_weeks_ago) {
                 continue;
             }
 
@@ -247,7 +247,7 @@ class ExplmParcelStatuses
             if (!$order) continue;
 
             $status_date = $order->get_meta('explm_parcel_status_date');
-            if ($status_date && strtotime($status_date) > $two_weeks_ago) {
+            if ($status_date && strtotime($status_date) < $two_weeks_ago) {
                 continue;
             }
 
@@ -347,7 +347,7 @@ class ExplmParcelStatuses
             if (!$order) continue;
 
             $status_date = $order->get_meta('explm_parcel_status_date');
-            if ($status_date && strtotime($status_date) > $two_weeks_ago) {
+            if ($status_date && strtotime($status_date) < $two_weeks_ago) {
                 continue;
             }
 

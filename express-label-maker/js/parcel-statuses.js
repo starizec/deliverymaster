@@ -27,10 +27,6 @@ function displayError(error) {
 function getStatusText(r, meta) {
   const statusHandlers = {
     _dpd_: () => r.parcel_status || "No status available",
-    _overseas_: () =>
-      r.data && r.data.Events && r.data.Events.length > 0
-        ? r.data.Events[r.data.Events.length - 1].StatusDescription
-        : "No status available",
   };
 
   for (let key in statusHandlers) {
@@ -162,10 +158,6 @@ function applyStatusClass(element, status) {
     case "PRINTED": // DPD
     case "DELIVERED": // DPD
     case "DELIVERED_BY_DRIVER_TO_DPD_PARCELSHOP ": // DPD
-    case "Otkupnina plaćena gotovinom.": // OVERSEAS
-    case "Prijevoz/pouzeće je naplaćen.":
-    case "Pošiljka je isporučena.":
-    case "Pošiljka je isporučena originalnom pošiljatelju.":
       element.addClass("explm-status-delivered");
       break;
     case "CANCELLED":
