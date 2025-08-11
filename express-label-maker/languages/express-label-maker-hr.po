@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ExpressLabelMaker\n"
-"POT-Creation-Date: 2025-08-11 01:12+0200\n"
-"PO-Revision-Date: 2025-08-11 01:12+0200\n"
+"POT-Creation-Date: 2025-08-11 23:52+0200\n"
+"PO-Revision-Date: 2025-08-11 23:53+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: hr_HR\n"
@@ -81,6 +81,14 @@ msgstr "Molimo odaberite paketomat za GLS dostavu."
 #: couriers/parcel-statuses.php:10
 msgid "Every Hour"
 msgstr "Svakog sata"
+
+#: couriers/parcel-statuses.php:174
+msgid "Status nije dostupan"
+msgstr "Status nije dostupan"
+
+#: couriers/parcel-statuses.php:198 couriers/parcel-statuses.php:220
+msgid "Filter by parcel status"
+msgstr "Filtriraj po statusu paketa"
 
 #: express-label-maker.php:98
 #, php-format
@@ -1028,9 +1036,6 @@ msgstr ""
 #. Author of the plugin/theme
 msgid "expresslabelmaker"
 msgstr "expresslabelmaker"
-
-#~ msgid "Status nije dostupan"
-#~ msgstr "Status nije dostupan"
 
 #~ msgid "Collection Request Data saved."
 #~ msgstr "Spremljeni podaci za zahtjev za prikupljanje."

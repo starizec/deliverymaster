@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: Express Label Maker\n"
-"POT-Creation-Date: 2025-08-11 01:12+0200\n"
+"POT-Creation-Date: 2025-08-11 23:52+0200\n"
 "PO-Revision-Date: 2024-07-23 23:18+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -84,6 +84,14 @@ msgstr ""
 
 #: couriers/parcel-statuses.php:10
 msgid "Every Hour"
+msgstr ""
+
+#: couriers/parcel-statuses.php:174
+msgid "Status nije dostupan"
+msgstr ""
+
+#: couriers/parcel-statuses.php:198 couriers/parcel-statuses.php:220
+msgid "Filter by parcel status"
 msgstr ""
 
 #: express-label-maker.php:98
