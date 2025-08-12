@@ -10,6 +10,35 @@ if (!defined('ABSPATH')) {
 <div class="explm-modal-wrapper">
     <div class="explm-modal">
         <div class="explm-modal-header">
+            <?php
+            switch ($courier) {
+                case 'dpd':
+                    $logo_file = 'dpd-logo.png';
+                    $logo_alt  = __('DPD Logo', 'express-label-maker');
+                    break;
+                case 'hp':
+                    $logo_file = 'hp-logo.png';
+                    $logo_alt  = __('HP Logo', 'express-label-maker');
+                    break;
+                case 'overseas':
+                    $logo_file = 'overseas-logo.png';
+                    $logo_alt  = __('Overseas Logo', 'express-label-maker');
+                    break;
+                case 'gls':
+                    $logo_file = 'gls-logo.png';
+                    $logo_alt  = __('GLS Logo', 'express-label-maker');
+                    break;
+                default:
+                    $logo_file = '';
+                    $logo_alt  = '';
+            }
+
+            if ( ! empty( $logo_file ) ) {
+                echo '<img src="' . esc_url( plugins_url( 'assets/' . $logo_file, dirname(__DIR__) . '/express-label-maker.php' ) ) . '" 
+                        alt="' . esc_attr( $logo_alt ) . '" 
+                        style="height:30px;width:30px;vertical-align:middle;margin-right:10px;" />';
+            }
+            ?>
             <h2 style="margin-top: 0;">
                 <?php esc_html_e('Order Details', 'express-label-maker'); ?> #
                 <?php echo esc_attr($order_data['id']); ?>
@@ -129,6 +158,7 @@ if (!defined('ABSPATH')) {
 
                 switch ($courier) {
                     case 'dpd':
+                    $dpd_delivery_service = get_option('explm_dpd_service_type_option', '');
                     $dpd_parcel_locker_location_id = ExplmLabelMaker::get_order_meta($order_data['id'], 'dpd_parcel_locker_location_id', true);
                     $dpd_parcel_locker_name = ExplmLabelMaker::get_order_meta($order_data['id'], 'dpd_parcel_locker_name', true);
             ?>
@@ -143,9 +173,29 @@ if (!defined('ABSPATH')) {
                     <?php esc_html_e('Parcel Locker ID:', 'express-label-maker'); ?>
                     <input type="text" name="parcel_locker" value="<?php echo esc_attr($dpd_parcel_locker_location_id); ?>">
                 </label>
+
+                 <!-- Delivery Service -->
+                <label class="explm-labels">
+                    <?php esc_html_e('Delivery Service:', 'express-label-maker'); ?>
+                    <select name="delivery_service">
+                        <?php
+                        $services = [
+                            'B2B'  => 'B2B',
+                            'B2C'  => 'B2C',
+                            'SWAP' => 'SWAP',
+                            'TYRE' => 'TYRE',
+                            'PAL'  => 'PAL',
+                            'Ship-From-Shop' => 'Ship-From-Shop',
+                        ];
+                        foreach ($services as $id => $label) {
+                            echo '<option value="' . esc_attr($id) . '" ' . selected($dpd_delivery_service, $id, false) . '>' . esc_html($label) . '</option>';
+                        }
+                        ?>
+                    </select>
+                </label>
                 
 
-                <?php 
+                <?php
                     break;
 
                     case 'overseas':
@@ -195,22 +245,6 @@ if (!defined('ABSPATH')) {
                     <input type="text" name="hp_parcel_locker_type" value="<?php echo esc_attr($hp_locker_type); ?>">
                 </label>
 
-                <!-- Recipient Notifications -->
-                <label class="explm-labels">
-                    <?php esc_html_e('Recipient Notifications:', 'express-label-maker'); ?>
-                    <div class="notification-options">
-                        <?php
-                        $notif_options = [32 => 'Email', 30 => 'SMS'];
-                        foreach ($notif_options as $id => $label) {
-                            ?>
-                            <label style="margin-right: 15px;">
-                                <input type="checkbox" name="delivery_additional_services[]" value="<?php echo esc_attr($id); ?>" <?php checked(in_array((string)$id, $hp_notifications)); ?>>
-                                <?php echo esc_html($label); ?>
-                            </label>
-                        <?php } ?>
-                    </div>
-                </label>
-
                 <!-- Delivery Service -->
                 <label class="explm-labels">
                     <?php esc_html_e('Delivery Service:', 'express-label-maker'); ?>
@@ -232,28 +266,44 @@ if (!defined('ABSPATH')) {
                     </select>
                 </label>
 
+                <!--Additional Notifications -->
+                <label class="explm-labels">
+                    <?php esc_html_e('Additional services:', 'express-label-maker'); ?>
+                    <div class="notification-options">
+                        <?php
+                        $notif_options = [32 => __('Email notification to recipient', 'express-label-maker'), 30 => __('SMS notification to recipient', 'express-label-maker')];  
+                        foreach ($notif_options as $id => $label) {
+                            ?>
+                            <label style="margin-right: 15px; margin-bottom: 3px; display:block;">
+                                <input type="checkbox" name="delivery_additional_services[]" value="<?php echo esc_attr($id); ?>" <?php checked(in_array((string)$id, $hp_notifications)); ?>>
+                                <?php echo esc_html($label); ?>
+                            </label>
+                        <?php } ?>
+                    </div>
+                </label>
+
+               <!-- Insured Shipment -->
+                <label class="explm-labels">
+                    <?php esc_html_e('Insured shipment value:', 'express-label-maker'); ?>
+                    <input type="checkbox" name="insured_value" value="1" <?php checked($hp_insured_value, '1'); ?>>
+                </label>
+
                 <!-- Parcel Size -->
                 <label class="explm-labels">
                     <?php esc_html_e('Base parcel size (valid only for parcel lockers):', 'express-label-maker'); ?>
                     <select name="parcel_size">
                         <?php
-                        $sizes = [
-                            'X' => 'XS – Paket veličine XS',
-                            'S' => 'S – Paket veličine S',
-                            'M' => 'M – Paket veličine M',
-                            'L' => 'L – Paket veličine L',
-                        ];
+                            $sizes = [
+                                'X' => __('XS – Parcel size XS', 'express-label-maker'),
+                                'S' => __('S – Parcel size S', 'express-label-maker'),
+                                'M' => __('M – Parcel size M', 'express-label-maker'),
+                                'L' => __('L – Parcel size L', 'express-label-maker'),
+                            ];
                         foreach ($sizes as $key => $label) {
                             echo '<option value="' . esc_attr($key) . '" ' . selected($hp_parcel_size, $key, false) . '>' . esc_html($label) . '</option>';
                         }
                         ?>
                     </select>
-                </label>
-
-                <!-- Insured Shipment -->
-                <label class="explm-labels">
-                    <?php esc_html_e('Insured shipment value:', 'express-label-maker'); ?>
-                    <input type="checkbox" name="insured_value" value="1" <?php checked($hp_insured_value, '1'); ?>>
                 </label>
 
                 <?php 

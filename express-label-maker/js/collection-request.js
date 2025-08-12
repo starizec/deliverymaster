@@ -212,6 +212,7 @@ jQuery(document).ready(function ($) {
       value: "",
 
       pickup_date: formattedDate,
+      delivery_service: form.find('select[name="delivery_service"]').val() || "",
 
       location_id: form.find('input[name="gls_parcel_locker_location_id"]').val() || "",
       location_type: form.find('input[name="gls_parcel_locker_type"]').val() || "",

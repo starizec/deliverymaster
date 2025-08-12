@@ -69,12 +69,18 @@ function explm_gls_tab_content() {
     echo '<form method="post" action="">';
     echo '<table class="form-table">';
 
-    echo '<tr><th scope="row"><label for="explm_gls_username">' . esc_html__('Username', 'express-label-maker') . '</label></th>';
+    echo '<tr><th scope="row"><label for="explm_gls_username">' . esc_html__('Username', 'express-label-maker') . ' ';
+    echo '<span style="cursor:help;" title="' . esc_attr__('Use the Username from your GLS administration interface.', 'express-label-maker') . '">ℹ️</span>';
+    echo '</label></th>';
     echo '<td><input name="explm_gls_username" type="text" id="explm_gls_username" value="' . esc_attr(get_option('explm_gls_username_option', '')) . '" class="regular-text" required autocomplete="username"></td></tr>';
-    echo '<tr><th scope="row"><label for="explm_gls_password">' . esc_html__('Password', 'express-label-maker') . '</label></th>';
+    echo '<tr><th scope="row"><label for="explm_gls_password">' . esc_html__('Password', 'express-label-maker') . ' ';
+    echo '<span style="cursor:help;" title="' . esc_attr__('Use the Password from your GLS administration interface.', 'express-label-maker') . '">ℹ️</span>';
+    echo '</label></th>';
     echo '<td><input name="explm_gls_password" type="password" id="explm_gls_password" value="' . esc_attr(get_option('explm_gls_password_option', '')) . '" class="regular-text" required autocomplete="current-password"></td></tr>';
     echo '<tr>';
-    echo '<tr><th scope="row"><label for="explm_gls_client_number">' . esc_html__('Client number', 'express-label-maker') . '</label></th>';
+    echo '<tr><th scope="row"><label for="explm_gls_client_number">' . esc_html__('Client number', 'express-label-maker') . ' ';
+    echo '<span style="cursor:help;" title="' . esc_attr__('Use the Client number from your GLS administration interface.', 'express-label-maker') . '">ℹ️</span>';
+    echo '</label></th>';
     echo '<td><input name="explm_gls_client_number" type="text" id="explm_gls_client_number" value="' . esc_attr(get_option('explm_gls_client_number_option', '')) . '" class="regular-text" required></td></tr>';
     echo '<tr>';
     echo '<th scope="row"><label for="enable_paketomat">' . esc_html__('Pickup station', 'express-label-maker') . '</label></th>';
@@ -96,12 +102,12 @@ function explm_gls_tab_content() {
     echo '</tr>';
 
     $notif_options = [
-        'INS' => 'Osiguranje pošiljke',
-        'FDS' => 'Email obavijest primatelju',
-        'FSS' => 'SMS obavijest primatelju',
+        'INS' => __('Insured shipment value', 'express-label-maker'),
+        'FDS' => __('Email notification to recipient', 'express-label-maker'),
+        'FSS' => __('SMS notification to recipient', 'express-label-maker'),
     ];
     echo '<tr>';
-    echo '<th scope="row">' . esc_html__('Recipient Notifications', 'express-label-maker') . '</th>';
+    echo '<th scope="row">' . esc_html__('Additional services', 'express-label-maker') . '</th>';
     echo '<td>';
     foreach ($notif_options as $id => $label) {
         echo '<label style="margin-right: 15px;">';

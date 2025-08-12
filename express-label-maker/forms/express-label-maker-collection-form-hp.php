@@ -10,6 +10,9 @@ if (!defined('ABSPATH')) {
 <div class="explm-modal-wrapper">
     <div class="explm-modal">
         <div class="explm-modal-header">
+            <img src="<?php echo esc_url( plugins_url( 'assets/hp-logo.png', dirname(__DIR__) . '/express-label-maker.php' ) ); ?>"
+            alt="<?php esc_attr_e('HP Logo', 'express-label-maker'); ?>"
+            style="height:30px;width:30px;vertical-align:middle;" />
             <h2 style="margin-top: 0;">
                 <?php esc_html_e('Order Details', 'express-label-maker'); ?> #
                 <?php echo esc_attr($order_data['id']); ?>
@@ -152,7 +155,20 @@ if (!defined('ABSPATH')) {
                 <input type="hidden" id="hiddenCollectionCourier" value="hp" />
                 </div>
                 <div class="explm-form-columns">      
-                <h3 style="margin: 0 0 5px 0;"><?php esc_html_e('Courier', 'express-label-maker'); ?></h3>          
+                <h3 style="margin: 0 0 5px 0;"><?php esc_html_e('Courier', 'express-label-maker'); ?></h3>     
+                
+                <!-- Weight -->
+                <label class="explm-labels">
+                    <?php esc_html_e('Weight:', 'express-label-maker'); ?>
+                    <input type="text" name="weight" value="<?php echo esc_attr($weight); ?>">
+                </label>
+
+                <!-- Package Number -->
+                <label class="explm-labels">
+                    <?php esc_html_e('Package Number:', 'express-label-maker'); ?>
+                    <input type="text" name="package_number" value="<?php echo esc_attr($package_number); ?>">
+                </label>
+
                  <!-- Info for courier -->
                  <label class="explm-labels">
                     <?php esc_html_e('Info for courier:', 'express-label-maker'); ?>
@@ -166,15 +182,15 @@ if (!defined('ABSPATH')) {
                 $hp_insured_value    = get_option('explm_hp_insured_value', '');
                 ?>
 
-        <!-- Recipient Notifications -->
+        <!--Additional Notifications -->
             <label class="explm-labels">
-                <?php esc_html_e('Recipient Notifications:', 'express-label-maker'); ?>
+                <?php esc_html_e('Additional services:', 'express-label-maker'); ?>
                 <div class="notification-options">
                     <?php
-                    $notif_options = [32 => 'Email', 30 => 'SMS'];
+                    $notif_options = [32 => __('Email notification to recipient', 'express-label-maker'), 30 => __('SMS notification to recipient', 'express-label-maker')];
                     foreach ($notif_options as $id => $label) {
                         ?>
-                        <label style="margin-right: 15px;">
+                        <label style="margin-right: 15px; margin-bottom: 3px; display:block;">
                             <input
                                 type="checkbox"
                                 name="delivery_additional_services[]"
@@ -187,6 +203,17 @@ if (!defined('ABSPATH')) {
                     }
                     ?>
                 </div>
+            </label>
+
+           <!-- Insured Shipment -->
+            <label class="explm-labels">
+                <?php esc_html_e('Insured shipment value:', 'express-label-maker'); ?>
+                <input
+                    type="checkbox"
+                    name="insured_value"
+                    value="1"
+                    <?php checked($hp_insured_value, '1'); ?>
+                />
             </label>
 
             <!-- Delivery Service -->
@@ -221,10 +248,10 @@ if (!defined('ABSPATH')) {
                 <select name="parcel_size">
                     <?php
                     $sizes = [
-                        'X' => 'XS – Paket veličine XS',
-                        'S' => 'S – Paket veličine S',
-                        'M' => 'M – Paket veličine M',
-                        'L' => 'L – Paket veličine L',
+                        'X' => __('XS – Parcel size XS', 'express-label-maker'),
+                        'S' => __('S – Parcel size S', 'express-label-maker'),
+                        'M' => __('M – Parcel size M', 'express-label-maker'),
+                        'L' => __('L – Parcel size L', 'express-label-maker'),
                     ];
                     foreach ($sizes as $key => $label) {
                         printf(
@@ -236,17 +263,6 @@ if (!defined('ABSPATH')) {
                     }
                     ?>
                 </select>
-            </label>
-
-            <!-- Insured Shipment -->
-            <label class="explm-labels">
-                <?php esc_html_e('Insured shipment value:', 'express-label-maker'); ?>
-                <input
-                    type="checkbox"
-                    name="insured_value"
-                    value="1"
-                    <?php checked($hp_insured_value, '1'); ?>
-                />
             </label>
         </form>
         <div class="explm-modal-actions">

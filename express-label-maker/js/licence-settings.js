@@ -144,6 +144,7 @@ jQuery(document).ready(function ($) {
                         font-size: 18px;
                         font-weight: bold;
                         animation: pulse 2s infinite;
+                        max-width: 800px;
                       ">
                         🕒 ${message}
                       </div>

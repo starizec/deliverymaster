@@ -41,7 +41,7 @@ function explm_dpd_tab_content() {
             }
             echo '<div class="updated"><p>' . esc_html__('DPD settings saved.', 'express-label-maker') . '</p></div>';
         } else {
-            echo '<div class="error"><p>' . esc_html__('Username, Password, and Service Type are required.', 'express-label-maker') . '</p></div>';
+            echo '<div class="error"><p>' . esc_html__('Username, Password, and Delivery Service are required.', 'express-label-maker') . '</p></div>';
         }
     }
 
@@ -53,15 +53,14 @@ function explm_dpd_tab_content() {
     echo '<form method="post" action="">';
     echo '<table class="form-table">';
 
-    echo '<tr><th scope="row"><label for="explm_dpd_username">' . esc_html__('Username', 'express-label-maker') . '</label></th>';
+    echo '<tr><th scope="row"><label for="explm_dpd_username">' . esc_html__('Username', 'express-label-maker') . ' ';
+    echo '<span style="cursor:help;" title="' . esc_attr__('Use your Easyship account username.', 'express-label-maker') . '">ℹ️</span>';
+    echo '</label></th>';
     echo '<td><input name="explm_dpd_username" type="text" id="explm_dpd_username" value="' . esc_attr(get_option('explm_dpd_username_option', '')) . '" class="regular-text" required autocomplete="username"></td></tr>';   
-    echo '<tr><th scope="row"><label for="explm_dpd_password">' . esc_html__('Password', 'express-label-maker') . '</label></th>';
+    echo '<tr><th scope="row"><label for="explm_dpd_password">' . esc_html__('Password', 'express-label-maker') . ' ';
+    echo '<span style="cursor:help;" title="' . esc_attr__('Use your Easyship account password.', 'express-label-maker') . '">ℹ️</span>';
+    echo '</label></th>';
     echo '<td><input name="explm_dpd_password" type="password" id="explm_dpd_password" value="' . esc_attr(get_option('explm_dpd_password_option', '')) . '" class="regular-text" required autocomplete="current-password"></td></tr>';    
-    echo '<tr><th scope="row"><label for="explm_dpd_service_type">' . esc_html__('Service Type', 'express-label-maker') . '</label></th>';
-    echo '<td><select name="explm_dpd_service_type" id="explm_dpd_service_type" required>';
-    echo '<option value="DPD Classic"' . selected(get_option('explm_dpd_service_type_option', ''), 'DPD Classic', false) . '>DPD Classic</option>';
-    echo '<option value="DPD Home"' . selected(get_option('explm_dpd_service_type_option', ''), 'DPD Home', false) . '>DPD Home</option>';
-    echo '</select></td></tr>';
 
     $saved_enable = get_option('explm_dpd_enable_pickup', '');
     echo '<tr>';
@@ -88,6 +87,30 @@ function explm_dpd_tab_content() {
 
     echo '</select></td>';
     echo '</tr>';
+
+    echo '<tr><th scope="row"><label for="explm_dpd_service_type">' . esc_html__('Delivery Service', 'express-label-maker') . '</label></th>';
+    echo '<td><select name="explm_dpd_service_type" id="explm_dpd_service_type" required>';
+
+    $service_types = [
+        'B2B'  => 'B2B',
+        'B2C'  => 'B2C',
+        'SWAP' => 'SWAP',
+        'TYRE' => 'TYRE',
+        'PAL'  => 'PAL',
+        'Ship-From-Shop' => 'Ship-From-Shop',
+    ];
+
+    $saved_service = get_option('explm_dpd_service_type_option', '');
+    if (empty($saved_service) || !array_key_exists($saved_service, $service_types)) {
+        $saved_service = 'B2C';
+    }
+
+    foreach ($service_types as $value => $label) {
+        echo '<option value="' . esc_attr($value) . '"' . selected($saved_service, $value, false) . '>' . esc_html($label) . '</option>';
+    }
+
+    echo '</select></td></tr>';
+
     echo '<tr>';
     echo '<th scope="row"><label for="explm_dpd_customer_note">' . esc_html__('Customer Note', 'express-label-maker') . ' ';
     echo '<span style="cursor:help;" title="' . esc_attr__('If you enter a note here, it will override the customer\'s note on the shipping label.', 'express-label-maker') . '">ℹ️</span>';

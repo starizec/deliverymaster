@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: Express Label Maker\n"
-"POT-Creation-Date: 2025-08-11 23:52+0200\n"
+"POT-Creation-Date: 2025-08-13 01:49+0200\n"
 "PO-Revision-Date: 2024-07-23 23:18+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -204,11 +204,11 @@ msgid "Status not available"
 msgstr ""
 
 #: express-label-maker.php:646 express-label-maker.php:671
-#: forms/express-label-maker-collection-form-gls.php:173
-#: forms/express-label-maker-form.php:138
-#: forms/express-label-maker-form.php:158
-#: forms/express-label-maker-form.php:182
-#: forms/express-label-maker-form.php:277
+#: forms/express-label-maker-collection-form-gls.php:189
+#: forms/express-label-maker-form.php:168
+#: forms/express-label-maker-form.php:208
+#: forms/express-label-maker-form.php:232
+#: forms/express-label-maker-form.php:327
 msgid "Parcel Locker:"
 msgstr ""
 
@@ -217,534 +217,584 @@ msgid "Parcel Locker"
 msgstr ""
 
 #: forms/express-label-maker-collection-form-dpd.php:14
-#: forms/express-label-maker-collection-form-gls.php:14
-#: forms/express-label-maker-collection-form-hp.php:14
-#: forms/express-label-maker-collection-form-overseas.php:14
-#: forms/express-label-maker-form.php:14
-msgid "Order Details"
+#: forms/express-label-maker-form.php:17
+msgid "DPD Logo"
 msgstr ""
 
-#: forms/express-label-maker-collection-form-dpd.php:22
-#: forms/express-label-maker-collection-form-gls.php:22
-#: forms/express-label-maker-collection-form-hp.php:22
-#: forms/express-label-maker-collection-form-overseas.php:22
-msgid "Pickup address"
+#: forms/express-label-maker-collection-form-dpd.php:17
+#: forms/express-label-maker-collection-form-gls.php:17
+#: forms/express-label-maker-collection-form-hp.php:17
+#: forms/express-label-maker-collection-form-overseas.php:17
+#: forms/express-label-maker-form.php:43
+msgid "Order Details"
 msgstr ""
 
 #: forms/express-label-maker-collection-form-dpd.php:25
 #: forms/express-label-maker-collection-form-gls.php:25
 #: forms/express-label-maker-collection-form-hp.php:25
 #: forms/express-label-maker-collection-form-overseas.php:25
-#: forms/express-label-maker-form.php:24
+msgid "Pickup address"
+msgstr ""
+
+#: forms/express-label-maker-collection-form-dpd.php:28
+#: forms/express-label-maker-collection-form-gls.php:28
+#: forms/express-label-maker-collection-form-hp.php:28
+#: forms/express-label-maker-collection-form-overseas.php:28
+#: forms/express-label-maker-form.php:53
 msgid "Customer's Name:"
 msgstr ""
 
-#: forms/express-label-maker-collection-form-dpd.php:30
-#: forms/express-label-maker-collection-form-gls.php:30
-#: forms/express-label-maker-collection-form-hp.php:30
-#: forms/express-label-maker-collection-form-overseas.php:30
-#: forms/express-label-maker-form.php:29
+#: forms/express-label-maker-collection-form-dpd.php:33
+#: forms/express-label-maker-collection-form-gls.php:33
+#: forms/express-label-maker-collection-form-hp.php:33
+#: forms/express-label-maker-collection-form-overseas.php:33
+#: forms/express-label-maker-form.php:58
 msgid "Customer's Address:"
 msgstr ""
 
-#: forms/express-label-maker-collection-form-dpd.php:35
-#: forms/express-label-maker-collection-form-gls.php:35
-#: forms/express-label-maker-collection-form-hp.php:35
-#: forms/express-label-maker-collection-form-overseas.php:35
-#: forms/express-label-maker-form.php:34
+#: forms/express-label-maker-collection-form-dpd.php:38
+#: forms/express-label-maker-collection-form-gls.php:38
+#: forms/express-label-maker-collection-form-hp.php:38
+#: forms/express-label-maker-collection-form-overseas.php:38
+#: forms/express-label-maker-form.php:63
 msgid "House Number:"
 msgstr ""
 
-#: forms/express-label-maker-collection-form-dpd.php:40
-#: forms/express-label-maker-collection-form-dpd.php:99
-#: forms/express-label-maker-collection-form-gls.php:40
-#: forms/express-label-maker-collection-form-gls.php:99
-#: forms/express-label-maker-collection-form-hp.php:40
-#: forms/express-label-maker-collection-form-hp.php:99
-#: forms/express-label-maker-collection-form-overseas.php:40
-#: forms/express-label-maker-collection-form-overseas.php:99
-#: forms/express-label-maker-form.php:39
+#: forms/express-label-maker-collection-form-dpd.php:43
+#: forms/express-label-maker-collection-form-dpd.php:102
+#: forms/express-label-maker-collection-form-gls.php:43
+#: forms/express-label-maker-collection-form-gls.php:102
+#: forms/express-label-maker-collection-form-hp.php:43
+#: forms/express-label-maker-collection-form-hp.php:102
+#: forms/express-label-maker-collection-form-overseas.php:43
+#: forms/express-label-maker-collection-form-overseas.php:102
+#: forms/express-label-maker-form.php:68
 msgid "City:"
 msgstr ""
 
-#: forms/express-label-maker-collection-form-dpd.php:45
-#: forms/express-label-maker-collection-form-gls.php:45
-#: forms/express-label-maker-collection-form-hp.php:45
-#: forms/express-label-maker-collection-form-overseas.php:45
-#: forms/express-label-maker-form.php:44
+#: forms/express-label-maker-collection-form-dpd.php:48
+#: forms/express-label-maker-collection-form-gls.php:48
+#: forms/express-label-maker-collection-form-hp.php:48
+#: forms/express-label-maker-collection-form-overseas.php:48
+#: forms/express-label-maker-form.php:73
 msgid "ZIP Code:"
 msgstr ""
 
-#: forms/express-label-maker-collection-form-dpd.php:50
-#: forms/express-label-maker-collection-form-dpd.php:104
-#: forms/express-label-maker-collection-form-gls.php:50
-#: forms/express-label-maker-collection-form-gls.php:104
-#: forms/express-label-maker-collection-form-hp.php:50
-#: forms/express-label-maker-collection-form-hp.php:104
-#: forms/express-label-maker-collection-form-overseas.php:50
-#: forms/express-label-maker-collection-form-overseas.php:104
-#: forms/express-label-maker-form.php:49
+#: forms/express-label-maker-collection-form-dpd.php:53
+#: forms/express-label-maker-collection-form-dpd.php:107
+#: forms/express-label-maker-collection-form-gls.php:53
+#: forms/express-label-maker-collection-form-gls.php:107
+#: forms/express-label-maker-collection-form-hp.php:53
+#: forms/express-label-maker-collection-form-hp.php:107
+#: forms/express-label-maker-collection-form-overseas.php:53
+#: forms/express-label-maker-collection-form-overseas.php:107
+#: forms/express-label-maker-form.php:78
 msgid "Country:"
 msgstr ""
 
-#: forms/express-label-maker-collection-form-dpd.php:55
-#: forms/express-label-maker-collection-form-gls.php:55
-#: forms/express-label-maker-collection-form-hp.php:55
-#: forms/express-label-maker-collection-form-overseas.php:55
-#: forms/express-label-maker-form.php:54
+#: forms/express-label-maker-collection-form-dpd.php:58
+#: forms/express-label-maker-collection-form-gls.php:58
+#: forms/express-label-maker-collection-form-hp.php:58
+#: forms/express-label-maker-collection-form-overseas.php:58
+#: forms/express-label-maker-form.php:83
 msgid "Contact Person:"
 msgstr ""
 
-#: forms/express-label-maker-collection-form-dpd.php:60
-#: forms/express-label-maker-collection-form-dpd.php:141
-#: forms/express-label-maker-collection-form-gls.php:60
-#: forms/express-label-maker-collection-form-gls.php:141
-#: forms/express-label-maker-collection-form-hp.php:60
-#: forms/express-label-maker-collection-form-hp.php:141
-#: forms/express-label-maker-collection-form-overseas.php:60
-#: forms/express-label-maker-collection-form-overseas.php:141
-#: forms/express-label-maker-form.php:59
+#: forms/express-label-maker-collection-form-dpd.php:63
+#: forms/express-label-maker-collection-form-dpd.php:144
+#: forms/express-label-maker-collection-form-gls.php:63
+#: forms/express-label-maker-collection-form-gls.php:144
+#: forms/express-label-maker-collection-form-hp.php:63
+#: forms/express-label-maker-collection-form-hp.php:144
+#: forms/express-label-maker-collection-form-overseas.php:63
+#: forms/express-label-maker-collection-form-overseas.php:144
+#: forms/express-label-maker-form.php:88
 msgid "Phone:"
 msgstr ""
 
-#: forms/express-label-maker-collection-form-dpd.php:65
-#: forms/express-label-maker-collection-form-dpd.php:146
-#: forms/express-label-maker-collection-form-gls.php:65
-#: forms/express-label-maker-collection-form-gls.php:146
-#: forms/express-label-maker-collection-form-hp.php:65
-#: forms/express-label-maker-collection-form-hp.php:146
-#: forms/express-label-maker-collection-form-overseas.php:65
-#: forms/express-label-maker-collection-form-overseas.php:146
-#: forms/express-label-maker-form.php:64
+#: forms/express-label-maker-collection-form-dpd.php:68
+#: forms/express-label-maker-collection-form-dpd.php:149
+#: forms/express-label-maker-collection-form-gls.php:68
+#: forms/express-label-maker-collection-form-gls.php:149
+#: forms/express-label-maker-collection-form-hp.php:68
+#: forms/express-label-maker-collection-form-hp.php:149
+#: forms/express-label-maker-collection-form-overseas.php:68
+#: forms/express-label-maker-collection-form-overseas.php:149
+#: forms/express-label-maker-form.php:93
 msgid "Email:"
 msgstr ""
 
-#: forms/express-label-maker-collection-form-dpd.php:70
-#: forms/express-label-maker-collection-form-gls.php:70
-#: forms/express-label-maker-collection-form-hp.php:70
-#: forms/express-label-maker-collection-form-overseas.php:70
+#: forms/express-label-maker-collection-form-dpd.php:73
+#: forms/express-label-maker-collection-form-gls.php:73
+#: forms/express-label-maker-collection-form-hp.php:73
+#: forms/express-label-maker-collection-form-overseas.php:73
 msgid "Info for sender:"
 msgstr ""
 
-#: forms/express-label-maker-collection-form-dpd.php:75
-#: forms/express-label-maker-collection-form-gls.php:75
-#: forms/express-label-maker-collection-form-hp.php:75
-#: forms/express-label-maker-collection-form-overseas.php:75
+#: forms/express-label-maker-collection-form-dpd.php:78
+#: forms/express-label-maker-collection-form-gls.php:78
+#: forms/express-label-maker-collection-form-hp.php:78
+#: forms/express-label-maker-collection-form-overseas.php:78
 msgid "Delivery address"
 msgstr ""
 
-#: forms/express-label-maker-collection-form-dpd.php:79
-#: forms/express-label-maker-collection-form-gls.php:79
-#: forms/express-label-maker-collection-form-hp.php:79
-#: forms/express-label-maker-collection-form-overseas.php:79
+#: forms/express-label-maker-collection-form-dpd.php:82
+#: forms/express-label-maker-collection-form-gls.php:82
+#: forms/express-label-maker-collection-form-hp.php:82
+#: forms/express-label-maker-collection-form-overseas.php:82
 msgid "Company or personal name:"
 msgstr ""
 
-#: forms/express-label-maker-collection-form-dpd.php:84
-#: forms/express-label-maker-collection-form-gls.php:84
-#: forms/express-label-maker-collection-form-hp.php:84
-#: forms/express-label-maker-collection-form-overseas.php:84
+#: forms/express-label-maker-collection-form-dpd.php:87
+#: forms/express-label-maker-collection-form-gls.php:87
+#: forms/express-label-maker-collection-form-hp.php:87
+#: forms/express-label-maker-collection-form-overseas.php:87
 msgid "Contact person:"
 msgstr ""
 
-#: forms/express-label-maker-collection-form-dpd.php:89
-#: forms/express-label-maker-collection-form-gls.php:89
-#: forms/express-label-maker-collection-form-hp.php:89
-#: forms/express-label-maker-collection-form-overseas.php:89
+#: forms/express-label-maker-collection-form-dpd.php:92
+#: forms/express-label-maker-collection-form-gls.php:92
+#: forms/express-label-maker-collection-form-hp.php:92
+#: forms/express-label-maker-collection-form-overseas.php:92
 msgid "Street:"
 msgstr ""
 
-#: forms/express-label-maker-collection-form-dpd.php:94
-#: forms/express-label-maker-collection-form-gls.php:94
-#: forms/express-label-maker-collection-form-hp.php:94
-#: forms/express-label-maker-collection-form-overseas.php:94
+#: forms/express-label-maker-collection-form-dpd.php:97
+#: forms/express-label-maker-collection-form-gls.php:97
+#: forms/express-label-maker-collection-form-hp.php:97
+#: forms/express-label-maker-collection-form-overseas.php:97
 msgid "Property number:"
-msgstr ""
-
-#: forms/express-label-maker-collection-form-dpd.php:106
-#: forms/express-label-maker-collection-form-gls.php:106
-#: forms/express-label-maker-collection-form-hp.php:106
-#: forms/express-label-maker-collection-form-overseas.php:106
-#: settings/dpd-settings.php:164 settings/gls-settings.php:221
-#: settings/hp-settings.php:228 settings/overseas-settings.php:151
-msgid "Austria"
-msgstr ""
-
-#: forms/express-label-maker-collection-form-dpd.php:107
-#: forms/express-label-maker-collection-form-gls.php:107
-#: forms/express-label-maker-collection-form-hp.php:107
-#: forms/express-label-maker-collection-form-overseas.php:107
-#: settings/dpd-settings.php:165 settings/gls-settings.php:222
-#: settings/hp-settings.php:229 settings/overseas-settings.php:152
-msgid "Belgium"
-msgstr ""
-
-#: forms/express-label-maker-collection-form-dpd.php:108
-#: forms/express-label-maker-collection-form-gls.php:108
-#: forms/express-label-maker-collection-form-hp.php:108
-#: forms/express-label-maker-collection-form-overseas.php:108
-#: settings/dpd-settings.php:166 settings/gls-settings.php:223
-#: settings/hp-settings.php:230 settings/overseas-settings.php:153
-msgid "Bulgaria"
 msgstr ""
 
 #: forms/express-label-maker-collection-form-dpd.php:109
 #: forms/express-label-maker-collection-form-gls.php:109
 #: forms/express-label-maker-collection-form-hp.php:109
 #: forms/express-label-maker-collection-form-overseas.php:109
-#: settings/dpd-settings.php:167 settings/gls-settings.php:224
-#: settings/hp-settings.php:231 settings/licence-settings.php:51
-#: settings/overseas-settings.php:154
-msgid "Croatia"
+#: settings/dpd-settings.php:187 settings/gls-settings.php:227
+#: settings/hp-settings.php:232 settings/overseas-settings.php:154
+msgid "Austria"
 msgstr ""
 
 #: forms/express-label-maker-collection-form-dpd.php:110
 #: forms/express-label-maker-collection-form-gls.php:110
 #: forms/express-label-maker-collection-form-hp.php:110
 #: forms/express-label-maker-collection-form-overseas.php:110
-#: settings/dpd-settings.php:168 settings/gls-settings.php:225
-#: settings/hp-settings.php:232 settings/overseas-settings.php:155
-msgid "Czechia"
+#: settings/dpd-settings.php:188 settings/gls-settings.php:228
+#: settings/hp-settings.php:233 settings/overseas-settings.php:155
+msgid "Belgium"
 msgstr ""
 
 #: forms/express-label-maker-collection-form-dpd.php:111
 #: forms/express-label-maker-collection-form-gls.php:111
 #: forms/express-label-maker-collection-form-hp.php:111
 #: forms/express-label-maker-collection-form-overseas.php:111
-#: settings/dpd-settings.php:169 settings/gls-settings.php:226
-#: settings/hp-settings.php:233 settings/overseas-settings.php:156
-msgid "Denmark"
+#: settings/dpd-settings.php:189 settings/gls-settings.php:229
+#: settings/hp-settings.php:234 settings/overseas-settings.php:156
+msgid "Bulgaria"
 msgstr ""
 
 #: forms/express-label-maker-collection-form-dpd.php:112
 #: forms/express-label-maker-collection-form-gls.php:112
 #: forms/express-label-maker-collection-form-hp.php:112
 #: forms/express-label-maker-collection-form-overseas.php:112
-#: settings/dpd-settings.php:170 settings/gls-settings.php:227
-#: settings/hp-settings.php:234 settings/overseas-settings.php:157
-msgid "Estonia"
+#: settings/dpd-settings.php:190 settings/gls-settings.php:230
+#: settings/hp-settings.php:235 settings/licence-settings.php:51
+#: settings/overseas-settings.php:157
+msgid "Croatia"
 msgstr ""
 
 #: forms/express-label-maker-collection-form-dpd.php:113
 #: forms/express-label-maker-collection-form-gls.php:113
 #: forms/express-label-maker-collection-form-hp.php:113
 #: forms/express-label-maker-collection-form-overseas.php:113
-#: settings/dpd-settings.php:171 settings/gls-settings.php:228
-#: settings/hp-settings.php:235 settings/overseas-settings.php:158
-msgid "Finland"
+#: settings/dpd-settings.php:191 settings/gls-settings.php:231
+#: settings/hp-settings.php:236 settings/overseas-settings.php:158
+msgid "Czechia"
 msgstr ""
 
 #: forms/express-label-maker-collection-form-dpd.php:114
 #: forms/express-label-maker-collection-form-gls.php:114
 #: forms/express-label-maker-collection-form-hp.php:114
 #: forms/express-label-maker-collection-form-overseas.php:114
-#: settings/dpd-settings.php:172 settings/gls-settings.php:229
-#: settings/hp-settings.php:236 settings/overseas-settings.php:159
-msgid "France"
+#: settings/dpd-settings.php:192 settings/gls-settings.php:232
+#: settings/hp-settings.php:237 settings/overseas-settings.php:159
+msgid "Denmark"
 msgstr ""
 
 #: forms/express-label-maker-collection-form-dpd.php:115
 #: forms/express-label-maker-collection-form-gls.php:115
 #: forms/express-label-maker-collection-form-hp.php:115
 #: forms/express-label-maker-collection-form-overseas.php:115
-#: settings/dpd-settings.php:173 settings/gls-settings.php:230
-#: settings/hp-settings.php:237 settings/overseas-settings.php:160
-msgid "Germany"
+#: settings/dpd-settings.php:193 settings/gls-settings.php:233
+#: settings/hp-settings.php:238 settings/overseas-settings.php:160
+msgid "Estonia"
 msgstr ""
 
 #: forms/express-label-maker-collection-form-dpd.php:116
 #: forms/express-label-maker-collection-form-gls.php:116
 #: forms/express-label-maker-collection-form-hp.php:116
 #: forms/express-label-maker-collection-form-overseas.php:116
-#: settings/dpd-settings.php:174 settings/gls-settings.php:231
-#: settings/hp-settings.php:238 settings/overseas-settings.php:161
-msgid "Hungary"
+#: settings/dpd-settings.php:194 settings/gls-settings.php:234
+#: settings/hp-settings.php:239 settings/overseas-settings.php:161
+msgid "Finland"
 msgstr ""
 
 #: forms/express-label-maker-collection-form-dpd.php:117
 #: forms/express-label-maker-collection-form-gls.php:117
 #: forms/express-label-maker-collection-form-hp.php:117
 #: forms/express-label-maker-collection-form-overseas.php:117
-#: settings/dpd-settings.php:175 settings/gls-settings.php:232
-#: settings/hp-settings.php:239 settings/overseas-settings.php:162
-msgid "Ireland"
+#: settings/dpd-settings.php:195 settings/gls-settings.php:235
+#: settings/hp-settings.php:240 settings/overseas-settings.php:162
+msgid "France"
 msgstr ""
 
 #: forms/express-label-maker-collection-form-dpd.php:118
 #: forms/express-label-maker-collection-form-gls.php:118
 #: forms/express-label-maker-collection-form-hp.php:118
 #: forms/express-label-maker-collection-form-overseas.php:118
-#: settings/dpd-settings.php:176 settings/gls-settings.php:233
-#: settings/hp-settings.php:240 settings/overseas-settings.php:163
-msgid "Italy"
+#: settings/dpd-settings.php:196 settings/gls-settings.php:236
+#: settings/hp-settings.php:241 settings/overseas-settings.php:163
+msgid "Germany"
 msgstr ""
 
 #: forms/express-label-maker-collection-form-dpd.php:119
 #: forms/express-label-maker-collection-form-gls.php:119
 #: forms/express-label-maker-collection-form-hp.php:119
 #: forms/express-label-maker-collection-form-overseas.php:119
-#: settings/dpd-settings.php:177 settings/gls-settings.php:234
-#: settings/hp-settings.php:241 settings/overseas-settings.php:164
-msgid "Latvia"
+#: settings/dpd-settings.php:197 settings/gls-settings.php:237
+#: settings/hp-settings.php:242 settings/overseas-settings.php:164
+msgid "Hungary"
 msgstr ""
 
 #: forms/express-label-maker-collection-form-dpd.php:120
 #: forms/express-label-maker-collection-form-gls.php:120
 #: forms/express-label-maker-collection-form-hp.php:120
 #: forms/express-label-maker-collection-form-overseas.php:120
-#: settings/dpd-settings.php:178 settings/gls-settings.php:235
-#: settings/hp-settings.php:242 settings/overseas-settings.php:165
-msgid "Lithuania"
+#: settings/dpd-settings.php:198 settings/gls-settings.php:238
+#: settings/hp-settings.php:243 settings/overseas-settings.php:165
+msgid "Ireland"
 msgstr ""
 
 #: forms/express-label-maker-collection-form-dpd.php:121
 #: forms/express-label-maker-collection-form-gls.php:121
 #: forms/express-label-maker-collection-form-hp.php:121
 #: forms/express-label-maker-collection-form-overseas.php:121
-#: settings/dpd-settings.php:179 settings/gls-settings.php:236
-#: settings/hp-settings.php:243 settings/overseas-settings.php:166
-msgid "Luxembourg"
+#: settings/dpd-settings.php:199 settings/gls-settings.php:239
+#: settings/hp-settings.php:244 settings/overseas-settings.php:166
+msgid "Italy"
 msgstr ""
 
 #: forms/express-label-maker-collection-form-dpd.php:122
 #: forms/express-label-maker-collection-form-gls.php:122
 #: forms/express-label-maker-collection-form-hp.php:122
 #: forms/express-label-maker-collection-form-overseas.php:122
-#: settings/dpd-settings.php:180 settings/gls-settings.php:237
-#: settings/hp-settings.php:244 settings/overseas-settings.php:167
-msgid "Netherlands"
+#: settings/dpd-settings.php:200 settings/gls-settings.php:240
+#: settings/hp-settings.php:245 settings/overseas-settings.php:167
+msgid "Latvia"
 msgstr ""
 
 #: forms/express-label-maker-collection-form-dpd.php:123
 #: forms/express-label-maker-collection-form-gls.php:123
 #: forms/express-label-maker-collection-form-hp.php:123
 #: forms/express-label-maker-collection-form-overseas.php:123
-#: settings/dpd-settings.php:181 settings/gls-settings.php:238
-#: settings/hp-settings.php:245 settings/overseas-settings.php:168
-msgid "Poland"
+#: settings/dpd-settings.php:201 settings/gls-settings.php:241
+#: settings/hp-settings.php:246 settings/overseas-settings.php:168
+msgid "Lithuania"
 msgstr ""
 
 #: forms/express-label-maker-collection-form-dpd.php:124
 #: forms/express-label-maker-collection-form-gls.php:124
 #: forms/express-label-maker-collection-form-hp.php:124
 #: forms/express-label-maker-collection-form-overseas.php:124
-#: settings/dpd-settings.php:182 settings/gls-settings.php:239
-#: settings/hp-settings.php:246 settings/overseas-settings.php:169
-msgid "Portugal"
+#: settings/dpd-settings.php:202 settings/gls-settings.php:242
+#: settings/hp-settings.php:247 settings/overseas-settings.php:169
+msgid "Luxembourg"
 msgstr ""
 
 #: forms/express-label-maker-collection-form-dpd.php:125
 #: forms/express-label-maker-collection-form-gls.php:125
 #: forms/express-label-maker-collection-form-hp.php:125
 #: forms/express-label-maker-collection-form-overseas.php:125
-#: settings/dpd-settings.php:183 settings/gls-settings.php:240
-#: settings/hp-settings.php:247 settings/overseas-settings.php:170
-msgid "Romania"
+#: settings/dpd-settings.php:203 settings/gls-settings.php:243
+#: settings/hp-settings.php:248 settings/overseas-settings.php:170
+msgid "Netherlands"
 msgstr ""
 
 #: forms/express-label-maker-collection-form-dpd.php:126
 #: forms/express-label-maker-collection-form-gls.php:126
 #: forms/express-label-maker-collection-form-hp.php:126
 #: forms/express-label-maker-collection-form-overseas.php:126
-#: settings/dpd-settings.php:184 settings/gls-settings.php:241
-#: settings/hp-settings.php:248 settings/overseas-settings.php:171
-msgid "Serbia"
+#: settings/dpd-settings.php:204 settings/gls-settings.php:244
+#: settings/hp-settings.php:249 settings/overseas-settings.php:171
+msgid "Poland"
 msgstr ""
 
 #: forms/express-label-maker-collection-form-dpd.php:127
 #: forms/express-label-maker-collection-form-gls.php:127
 #: forms/express-label-maker-collection-form-hp.php:127
 #: forms/express-label-maker-collection-form-overseas.php:127
-#: settings/dpd-settings.php:185 settings/gls-settings.php:242
-#: settings/hp-settings.php:249 settings/overseas-settings.php:172
-msgid "Slovakia"
+#: settings/dpd-settings.php:205 settings/gls-settings.php:245
+#: settings/hp-settings.php:250 settings/overseas-settings.php:172
+msgid "Portugal"
 msgstr ""
 
 #: forms/express-label-maker-collection-form-dpd.php:128
 #: forms/express-label-maker-collection-form-gls.php:128
 #: forms/express-label-maker-collection-form-hp.php:128
 #: forms/express-label-maker-collection-form-overseas.php:128
-#: settings/dpd-settings.php:186 settings/gls-settings.php:243
-#: settings/hp-settings.php:250 settings/licence-settings.php:52
-#: settings/overseas-settings.php:173
-msgid "Slovenia"
+#: settings/dpd-settings.php:206 settings/gls-settings.php:246
+#: settings/hp-settings.php:251 settings/overseas-settings.php:173
+msgid "Romania"
 msgstr ""
 
 #: forms/express-label-maker-collection-form-dpd.php:129
 #: forms/express-label-maker-collection-form-gls.php:129
 #: forms/express-label-maker-collection-form-hp.php:129
 #: forms/express-label-maker-collection-form-overseas.php:129
-#: settings/dpd-settings.php:187 settings/gls-settings.php:244
-#: settings/hp-settings.php:251 settings/overseas-settings.php:174
-msgid "Spain"
+#: settings/dpd-settings.php:207 settings/gls-settings.php:247
+#: settings/hp-settings.php:252 settings/overseas-settings.php:174
+msgid "Serbia"
 msgstr ""
 
 #: forms/express-label-maker-collection-form-dpd.php:130
 #: forms/express-label-maker-collection-form-gls.php:130
 #: forms/express-label-maker-collection-form-hp.php:130
 #: forms/express-label-maker-collection-form-overseas.php:130
-#: settings/dpd-settings.php:188 settings/gls-settings.php:245
-#: settings/hp-settings.php:252 settings/overseas-settings.php:175
-msgid "Sweden"
+#: settings/dpd-settings.php:208 settings/gls-settings.php:248
+#: settings/hp-settings.php:253 settings/overseas-settings.php:175
+msgid "Slovakia"
 msgstr ""
 
 #: forms/express-label-maker-collection-form-dpd.php:131
 #: forms/express-label-maker-collection-form-gls.php:131
 #: forms/express-label-maker-collection-form-hp.php:131
 #: forms/express-label-maker-collection-form-overseas.php:131
-#: settings/dpd-settings.php:189 settings/gls-settings.php:246
-#: settings/hp-settings.php:253 settings/overseas-settings.php:176
+#: settings/dpd-settings.php:209 settings/gls-settings.php:249
+#: settings/hp-settings.php:254 settings/licence-settings.php:52
+#: settings/overseas-settings.php:176
+msgid "Slovenia"
+msgstr ""
+
+#: forms/express-label-maker-collection-form-dpd.php:132
+#: forms/express-label-maker-collection-form-gls.php:132
+#: forms/express-label-maker-collection-form-hp.php:132
+#: forms/express-label-maker-collection-form-overseas.php:132
+#: settings/dpd-settings.php:210 settings/gls-settings.php:250
+#: settings/hp-settings.php:255 settings/overseas-settings.php:177
+msgid "Spain"
+msgstr ""
+
+#: forms/express-label-maker-collection-form-dpd.php:133
+#: forms/express-label-maker-collection-form-gls.php:133
+#: forms/express-label-maker-collection-form-hp.php:133
+#: forms/express-label-maker-collection-form-overseas.php:133
+#: settings/dpd-settings.php:211 settings/gls-settings.php:251
+#: settings/hp-settings.php:256 settings/overseas-settings.php:178
+msgid "Sweden"
+msgstr ""
+
+#: forms/express-label-maker-collection-form-dpd.php:134
+#: forms/express-label-maker-collection-form-gls.php:134
+#: forms/express-label-maker-collection-form-hp.php:134
+#: forms/express-label-maker-collection-form-overseas.php:134
+#: settings/dpd-settings.php:212 settings/gls-settings.php:252
+#: settings/hp-settings.php:257 settings/overseas-settings.php:179
 msgid "Switzerland"
 msgstr ""
 
-#: forms/express-label-maker-collection-form-dpd.php:136
-#: forms/express-label-maker-collection-form-gls.php:136
-#: forms/express-label-maker-collection-form-hp.php:136
-#: forms/express-label-maker-collection-form-overseas.php:136
+#: forms/express-label-maker-collection-form-dpd.php:139
+#: forms/express-label-maker-collection-form-gls.php:139
+#: forms/express-label-maker-collection-form-hp.php:139
+#: forms/express-label-maker-collection-form-overseas.php:139
 msgid "Postal Code:"
 msgstr ""
 
-#: forms/express-label-maker-collection-form-dpd.php:151
+#: forms/express-label-maker-collection-form-dpd.php:154
 msgid "Pickup Date:"
 msgstr ""
 
-#: forms/express-label-maker-collection-form-dpd.php:160
-#: forms/express-label-maker-collection-form-gls.php:155
-#: forms/express-label-maker-collection-form-hp.php:155
-#: forms/express-label-maker-collection-form-overseas.php:155
+#: forms/express-label-maker-collection-form-dpd.php:163
+#: forms/express-label-maker-collection-form-gls.php:158
+#: forms/express-label-maker-collection-form-hp.php:158
+#: forms/express-label-maker-collection-form-overseas.php:158
 msgid "Courier"
 msgstr ""
 
-#: forms/express-label-maker-collection-form-dpd.php:164
-#: forms/express-label-maker-form.php:97
+#: forms/express-label-maker-collection-form-dpd.php:167
+#: forms/express-label-maker-collection-form-gls.php:162
+#: forms/express-label-maker-collection-form-hp.php:162
+#: forms/express-label-maker-collection-form-overseas.php:162
+#: forms/express-label-maker-form.php:126
 msgid "Weight:"
 msgstr ""
 
-#: forms/express-label-maker-collection-form-dpd.php:169
-#: forms/express-label-maker-collection-form-overseas.php:159
-#: forms/express-label-maker-form.php:102
+#: forms/express-label-maker-collection-form-dpd.php:172
+#: forms/express-label-maker-collection-form-gls.php:168
+#: forms/express-label-maker-collection-form-hp.php:168
+#: forms/express-label-maker-collection-form-overseas.php:168
+#: forms/express-label-maker-form.php:131
 msgid "Package Number:"
 msgstr ""
 
-#: forms/express-label-maker-collection-form-dpd.php:174
-#: forms/express-label-maker-collection-form-gls.php:158
-#: forms/express-label-maker-collection-form-hp.php:158
-#: forms/express-label-maker-collection-form-overseas.php:165
+#: forms/express-label-maker-collection-form-dpd.php:177
+#: forms/express-label-maker-collection-form-gls.php:174
+#: forms/express-label-maker-collection-form-hp.php:174
+#: forms/express-label-maker-collection-form-overseas.php:174
 msgid "Info for courier:"
 msgstr ""
 
-#: forms/express-label-maker-collection-form-dpd.php:180
-#: forms/express-label-maker-collection-form-gls.php:249
-#: forms/express-label-maker-collection-form-hp.php:254
-#: forms/express-label-maker-collection-form-overseas.php:171
-msgid "Send request"
-msgstr ""
-
-#: forms/express-label-maker-collection-form-dpd.php:183
-#: forms/express-label-maker-collection-form-gls.php:252
-#: forms/express-label-maker-collection-form-hp.php:257
-#: forms/express-label-maker-collection-form-overseas.php:174
-#: forms/express-label-maker-form.php:375
-msgid "Cancel"
-msgstr ""
-
-#: forms/express-label-maker-collection-form-gls.php:179
-#: forms/express-label-maker-form.php:143
-#: forms/express-label-maker-form.php:163
-#: forms/express-label-maker-form.php:188
-#: forms/express-label-maker-form.php:283
-msgid "Parcel Locker ID:"
-msgstr ""
-
-#: forms/express-label-maker-collection-form-gls.php:185
-#: forms/express-label-maker-form.php:194
-#: forms/express-label-maker-form.php:289
-msgid "Parcel Locker Type:"
-msgstr ""
-
-#: forms/express-label-maker-collection-form-gls.php:191
-#: forms/express-label-maker-form.php:295
-msgid "Additional services:"
-msgstr ""
-
-#: forms/express-label-maker-collection-form-gls.php:195
-#: forms/express-label-maker-form.php:299
-msgid "Shipment insurance"
-msgstr ""
-
-#: forms/express-label-maker-collection-form-gls.php:196
-#: forms/express-label-maker-form.php:300
-msgid "Email notification to recipient"
-msgstr ""
-
-#: forms/express-label-maker-collection-form-gls.php:197
-#: forms/express-label-maker-form.php:301
-msgid "SMS notification to recipient"
-msgstr ""
-
-#: forms/express-label-maker-collection-form-gls.php:212
-#: forms/express-label-maker-form.php:316
-msgid "Printer type:"
-msgstr ""
-
-#: forms/express-label-maker-collection-form-gls.php:231
-#: forms/express-label-maker-form.php:335
-msgid "Print position (Accepted only for A4-Format):"
-msgstr ""
-
-#: forms/express-label-maker-collection-form-hp.php:171
-#: forms/express-label-maker-form.php:200
-msgid "Recipient Notifications:"
-msgstr ""
-
-#: forms/express-label-maker-collection-form-hp.php:194
-#: forms/express-label-maker-form.php:216
+#: forms/express-label-maker-collection-form-dpd.php:187
+#: forms/express-label-maker-collection-form-hp.php:221
+#: forms/express-label-maker-form.php:179
+#: forms/express-label-maker-form.php:250
 msgid "Delivery Service:"
 msgstr ""
 
-#: forms/express-label-maker-collection-form-hp.php:220
-#: forms/express-label-maker-form.php:237
-msgid "Base parcel size (valid only for parcel lockers):"
+#: forms/express-label-maker-collection-form-dpd.php:207
+#: forms/express-label-maker-collection-form-gls.php:265
+#: forms/express-label-maker-collection-form-hp.php:270
+#: forms/express-label-maker-collection-form-overseas.php:180
+msgid "Send request"
 msgstr ""
 
-#: forms/express-label-maker-collection-form-hp.php:243
-#: forms/express-label-maker-form.php:255
+#: forms/express-label-maker-collection-form-dpd.php:210
+#: forms/express-label-maker-collection-form-gls.php:268
+#: forms/express-label-maker-collection-form-hp.php:273
+#: forms/express-label-maker-collection-form-overseas.php:183
+#: forms/express-label-maker-form.php:425
+msgid "Cancel"
+msgstr ""
+
+#: forms/express-label-maker-collection-form-gls.php:14
+#: forms/express-label-maker-form.php:29
+msgid "GLS Logo"
+msgstr ""
+
+#: forms/express-label-maker-collection-form-gls.php:195
+#: forms/express-label-maker-form.php:173
+#: forms/express-label-maker-form.php:213
+#: forms/express-label-maker-form.php:238
+#: forms/express-label-maker-form.php:333
+msgid "Parcel Locker ID:"
+msgstr ""
+
+#: forms/express-label-maker-collection-form-gls.php:201
+#: forms/express-label-maker-form.php:244
+#: forms/express-label-maker-form.php:339
+msgid "Parcel Locker Type:"
+msgstr ""
+
+#: forms/express-label-maker-collection-form-gls.php:207
+#: forms/express-label-maker-collection-form-hp.php:187
+#: forms/express-label-maker-form.php:271
+#: forms/express-label-maker-form.php:345
+msgid "Additional services:"
+msgstr ""
+
+#: forms/express-label-maker-collection-form-gls.php:211
+#: forms/express-label-maker-form.php:349
+msgid "Shipment insurance"
+msgstr ""
+
+#: forms/express-label-maker-collection-form-gls.php:212
+#: forms/express-label-maker-collection-form-hp.php:190
+#: forms/express-label-maker-form.php:274
+#: forms/express-label-maker-form.php:350 settings/gls-settings.php:106
+#: settings/hp-settings.php:122
+msgid "Email notification to recipient"
+msgstr ""
+
+#: forms/express-label-maker-collection-form-gls.php:213
+#: forms/express-label-maker-collection-form-hp.php:190
+#: forms/express-label-maker-form.php:274
+#: forms/express-label-maker-form.php:351 settings/gls-settings.php:107
+#: settings/hp-settings.php:123
+msgid "SMS notification to recipient"
+msgstr ""
+
+#: forms/express-label-maker-collection-form-gls.php:228
+#: forms/express-label-maker-form.php:366
+msgid "Printer type:"
+msgstr ""
+
+#: forms/express-label-maker-collection-form-gls.php:247
+#: forms/express-label-maker-form.php:385
+msgid "Print position (Accepted only for A4-Format):"
+msgstr ""
+
+#: forms/express-label-maker-collection-form-hp.php:14
+#: forms/express-label-maker-form.php:21
+msgid "HP Logo"
+msgstr ""
+
+#: forms/express-label-maker-collection-form-hp.php:210
+#: forms/express-label-maker-form.php:287
 msgid "Insured shipment value:"
 msgstr ""
 
-#: forms/express-label-maker-form.php:72
+#: forms/express-label-maker-collection-form-hp.php:247
+#: forms/express-label-maker-form.php:293
+msgid "Base parcel size (valid only for parcel lockers):"
+msgstr ""
+
+#: forms/express-label-maker-collection-form-hp.php:251
+#: forms/express-label-maker-form.php:297 settings/hp-settings.php:147
+msgid "XS – Parcel size XS"
+msgstr ""
+
+#: forms/express-label-maker-collection-form-hp.php:252
+#: forms/express-label-maker-form.php:298 settings/hp-settings.php:148
+msgid "S – Parcel size S"
+msgstr ""
+
+#: forms/express-label-maker-collection-form-hp.php:253
+#: forms/express-label-maker-form.php:299 settings/hp-settings.php:149
+msgid "M – Parcel size M"
+msgstr ""
+
+#: forms/express-label-maker-collection-form-hp.php:254
+#: forms/express-label-maker-form.php:300 settings/hp-settings.php:150
+msgid "L – Parcel size L"
+msgstr ""
+
+#: forms/express-label-maker-collection-form-overseas.php:14
+#: forms/express-label-maker-form.php:25
+msgid "Overseas Logo"
+msgstr ""
+
+#: forms/express-label-maker-form.php:101
 msgid "Reference:"
 msgstr ""
 
-#: forms/express-label-maker-form.php:77
+#: forms/express-label-maker-form.php:106
 msgid "Payment Method:"
 msgstr ""
 
-#: forms/express-label-maker-form.php:82
+#: forms/express-label-maker-form.php:111
 msgid "Payment:"
 msgstr ""
 
-#: forms/express-label-maker-form.php:92
+#: forms/express-label-maker-form.php:121
 msgid "Collection Date (Order Date):"
 msgstr ""
 
-#: forms/express-label-maker-form.php:107
+#: forms/express-label-maker-form.php:136
 msgid "Cash on Delivery Amount:"
 msgstr ""
 
-#: forms/express-label-maker-form.php:112
+#: forms/express-label-maker-form.php:141
 msgid "Order Total:"
 msgstr ""
 
-#: forms/express-label-maker-form.php:117
+#: forms/express-label-maker-form.php:146
 msgid "Note:"
 msgstr ""
 
-#: forms/express-label-maker-form.php:357
+#: forms/express-label-maker-form.php:407
 msgid "Invalid courier selected."
 msgstr ""
 
-#: forms/express-label-maker-form.php:372
+#: forms/express-label-maker-form.php:422
 msgid "Print"
 msgstr ""
 
@@ -757,7 +807,7 @@ msgid "DPD settings saved."
 msgstr ""
 
 #: settings/dpd-settings.php:44
-msgid "Username, Password, and Service Type are required."
+msgid "Username, Password, and Delivery Service are required."
 msgstr ""
 
 #: settings/dpd-settings.php:52
@@ -769,107 +819,115 @@ msgstr ""
 msgid "Username"
 msgstr ""
 
-#: settings/dpd-settings.php:58 settings/gls-settings.php:74
-#: settings/hp-settings.php:75
+#: settings/dpd-settings.php:57
+msgid "Use your Easyship account username."
+msgstr ""
+
+#: settings/dpd-settings.php:60 settings/gls-settings.php:76
+#: settings/hp-settings.php:77
 msgid "Password"
 msgstr ""
 
-#: settings/dpd-settings.php:60
-msgid "Service Type"
+#: settings/dpd-settings.php:61
+msgid "Use your Easyship account password."
 msgstr ""
 
-#: settings/dpd-settings.php:68 settings/gls-settings.php:80
-#: settings/hp-settings.php:79 settings/overseas-settings.php:55
+#: settings/dpd-settings.php:67 settings/gls-settings.php:86
+#: settings/hp-settings.php:83 settings/overseas-settings.php:58
 msgid "Pickup station"
 msgstr ""
 
-#: settings/dpd-settings.php:77 settings/gls-settings.php:87
-#: settings/hp-settings.php:86 settings/overseas-settings.php:64
+#: settings/dpd-settings.php:76 settings/gls-settings.php:93
+#: settings/hp-settings.php:90 settings/overseas-settings.php:67
 msgid "Pickup station delivery method"
 msgstr ""
 
-#: settings/dpd-settings.php:92 settings/hp-settings.php:159
-#: settings/overseas-settings.php:79
+#: settings/dpd-settings.php:91 settings/hp-settings.php:113
+msgid "Delivery Service"
+msgstr ""
+
+#: settings/dpd-settings.php:115 settings/hp-settings.php:163
+#: settings/overseas-settings.php:82
 msgid "Customer Note"
 msgstr ""
 
-#: settings/dpd-settings.php:93 settings/hp-settings.php:160
-#: settings/overseas-settings.php:80
+#: settings/dpd-settings.php:116 settings/hp-settings.php:164
+#: settings/overseas-settings.php:83
 msgid ""
 "If you enter a note here, it will override the customer's note on the "
 "shipping label."
 msgstr ""
 
-#: settings/dpd-settings.php:103 settings/dpd-settings.php:208
-#: settings/general-settings.php:69 settings/gls-settings.php:160
-#: settings/gls-settings.php:265 settings/hp-settings.php:167
-#: settings/hp-settings.php:272 settings/licence-settings.php:58
-#: settings/overseas-settings.php:89 settings/overseas-settings.php:195
+#: settings/dpd-settings.php:126 settings/dpd-settings.php:231
+#: settings/general-settings.php:69 settings/gls-settings.php:166
+#: settings/gls-settings.php:271 settings/hp-settings.php:171
+#: settings/hp-settings.php:276 settings/licence-settings.php:58
+#: settings/overseas-settings.php:92 settings/overseas-settings.php:198
 msgid "Save Changes"
 msgstr ""
 
-#: settings/dpd-settings.php:104 settings/gls-settings.php:161
-#: settings/hp-settings.php:168 settings/overseas-settings.php:90
+#: settings/dpd-settings.php:127 settings/gls-settings.php:167
+#: settings/hp-settings.php:172 settings/overseas-settings.php:93
 msgid "Delete Account"
 msgstr ""
 
-#: settings/dpd-settings.php:131 settings/gls-settings.php:188
-#: settings/hp-settings.php:195 settings/overseas-settings.php:117
+#: settings/dpd-settings.php:154 settings/gls-settings.php:194
+#: settings/hp-settings.php:199 settings/overseas-settings.php:120
 msgid "Sender information saved."
 msgstr ""
 
-#: settings/dpd-settings.php:133 settings/gls-settings.php:190
-#: settings/hp-settings.php:197 settings/overseas-settings.php:119
+#: settings/dpd-settings.php:156 settings/gls-settings.php:196
+#: settings/hp-settings.php:201 settings/overseas-settings.php:122
 msgid "All fields are required."
 msgstr ""
 
-#: settings/dpd-settings.php:138 settings/gls-settings.php:195
-#: settings/hp-settings.php:202 settings/overseas-settings.php:124
+#: settings/dpd-settings.php:161 settings/gls-settings.php:201
+#: settings/hp-settings.php:206 settings/overseas-settings.php:127
 msgid "Sender information"
 msgstr ""
 
-#: settings/dpd-settings.php:143 settings/gls-settings.php:200
-#: settings/hp-settings.php:207 settings/overseas-settings.php:129
+#: settings/dpd-settings.php:166 settings/gls-settings.php:206
+#: settings/hp-settings.php:211 settings/overseas-settings.php:132
 msgid "Company or personal name"
 msgstr ""
 
-#: settings/dpd-settings.php:144 settings/gls-settings.php:201
-#: settings/hp-settings.php:208 settings/overseas-settings.php:130
+#: settings/dpd-settings.php:167 settings/gls-settings.php:207
+#: settings/hp-settings.php:212 settings/overseas-settings.php:133
 msgid "Contact person"
 msgstr ""
 
-#: settings/dpd-settings.php:145 settings/gls-settings.php:202
-#: settings/hp-settings.php:209 settings/overseas-settings.php:131
+#: settings/dpd-settings.php:168 settings/gls-settings.php:208
+#: settings/hp-settings.php:213 settings/overseas-settings.php:134
 msgid "Street"
 msgstr ""
 
-#: settings/dpd-settings.php:146 settings/gls-settings.php:203
-#: settings/hp-settings.php:210 settings/overseas-settings.php:132
+#: settings/dpd-settings.php:169 settings/gls-settings.php:209
+#: settings/hp-settings.php:214 settings/overseas-settings.php:135
 msgid "Property number"
 msgstr ""
 
-#: settings/dpd-settings.php:147 settings/gls-settings.php:204
-#: settings/hp-settings.php:211 settings/overseas-settings.php:133
+#: settings/dpd-settings.php:170 settings/gls-settings.php:210
+#: settings/hp-settings.php:215 settings/overseas-settings.php:136
 msgid "City"
 msgstr ""
 
-#: settings/dpd-settings.php:148 settings/gls-settings.php:205
-#: settings/hp-settings.php:212 settings/overseas-settings.php:134
+#: settings/dpd-settings.php:171 settings/gls-settings.php:211
+#: settings/hp-settings.php:216 settings/overseas-settings.php:137
 msgid "Country"
 msgstr ""
 
-#: settings/dpd-settings.php:149 settings/gls-settings.php:206
-#: settings/hp-settings.php:213 settings/overseas-settings.php:135
+#: settings/dpd-settings.php:172 settings/gls-settings.php:212
+#: settings/hp-settings.php:217 settings/overseas-settings.php:138
 msgid "Postal Code"
 msgstr ""
 
-#: settings/dpd-settings.php:150 settings/gls-settings.php:207
-#: settings/hp-settings.php:214 settings/overseas-settings.php:136
+#: settings/dpd-settings.php:173 settings/gls-settings.php:213
+#: settings/hp-settings.php:218 settings/overseas-settings.php:139
 msgid "Phone"
 msgstr ""
 
-#: settings/dpd-settings.php:151 settings/gls-settings.php:208
-#: settings/hp-settings.php:215 settings/overseas-settings.php:137
+#: settings/dpd-settings.php:174 settings/gls-settings.php:214
+#: settings/hp-settings.php:219 settings/overseas-settings.php:140
 msgid "Email"
 msgstr ""
 
@@ -913,19 +971,35 @@ msgstr ""
 msgid "GLS Settings"
 msgstr ""
 
+#: settings/gls-settings.php:73
+msgid "Use the Username from your GLS administration interface."
+msgstr ""
+
 #: settings/gls-settings.php:77
+msgid "Use the Password from your GLS administration interface."
+msgstr ""
+
+#: settings/gls-settings.php:81
 msgid "Client number"
 msgstr ""
 
-#: settings/gls-settings.php:104 settings/hp-settings.php:102
-msgid "Recipient Notifications"
+#: settings/gls-settings.php:82
+msgid "Use the Client number from your GLS administration interface."
 msgstr ""
 
-#: settings/gls-settings.php:125
+#: settings/gls-settings.php:105 settings/hp-settings.php:140
+msgid "Insured shipment value"
+msgstr ""
+
+#: settings/gls-settings.php:110 settings/hp-settings.php:126
+msgid "Additional services"
+msgstr ""
+
+#: settings/gls-settings.php:131
 msgid "Printer type"
 msgstr ""
 
-#: settings/gls-settings.php:143
+#: settings/gls-settings.php:149
 msgid "Print position (Accepted only for A4-Format)"
 msgstr ""
 
@@ -945,16 +1019,16 @@ msgstr ""
 msgid "HP Settings"
 msgstr ""
 
-#: settings/hp-settings.php:125
-msgid "Delivery Service"
+#: settings/hp-settings.php:74
+msgid "Use the username from your HP administrative dashboard."
 msgstr ""
 
-#: settings/hp-settings.php:143
-msgid "Base parcel size (valid only for parcel lockers)"
+#: settings/hp-settings.php:78
+msgid "Use the password from your HP administrative dashboard."
 msgstr ""
 
 #: settings/hp-settings.php:154
-msgid "Insured shipment value"
+msgid "Base parcel size (valid only for parcel lockers)"
 msgstr ""
 
 #: settings/licence-settings.php:26
@@ -1001,6 +1075,20 @@ msgstr ""
 msgid "Used"
 msgstr ""
 
+#: settings/licence-settings.php:90
+msgid "Purchase or Renew Licence"
+msgstr ""
+
+#: settings/licence-settings.php:91
+msgid ""
+"If you would like to purchase the plugin or renew your licence, click the "
+"button below to go to the secure payment page."
+msgstr ""
+
+#: settings/licence-settings.php:93
+msgid "Go to Payment Page"
+msgstr ""
+
 #: settings/overseas-settings.php:13
 msgid "Overseas settings deleted."
 msgstr ""
@@ -1019,6 +1107,10 @@ msgstr ""
 
 #: settings/overseas-settings.php:50
 msgid "API Key"
+msgstr ""
+
+#: settings/overseas-settings.php:51
+msgid "Request your API key by emailing cs@overseas.hr."
 msgstr ""
 
 #. Plugin URI of the plugin/theme

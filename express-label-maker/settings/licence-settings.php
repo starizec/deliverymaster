@@ -31,7 +31,7 @@ function explm_licence_tab_content()
     $saved_licence_key = get_option('explm_licence_option', '');
     $saved_country = get_option('explm_country_option', '');
 
-    echo '<div style="display:flex;">';
+    echo '<div style="display:flex;flex-wrap:wrap;">';
     echo '<div>';
     echo '<form method="post" action="">';
     echo '<table class="form-table">';
@@ -80,7 +80,18 @@ function explm_licence_tab_content()
 
     $plugin_version = ExplmLabelMaker::get_plugin_version();
 
-    echo '<div style="margin-top:20px;"> v'.$plugin_version.'</div>';
+    echo '<div style="margin-top:20px;"> v' . esc_html( $plugin_version ) . '</div>';
+    echo '</div>';
 
+    $payment_url = 'https://expresslabelmaker.com/hr/payment/' . ( $saved_licence_key ? rawurlencode( $saved_licence_key ) : '' );
+
+    echo '<div class="explm-licence-side">';
+    echo '<div class="explm-licence-payment">';
+    echo '<h3>' . esc_html__( 'Purchase or Renew Licence', 'express-label-maker' ) . '</h3>';
+    echo '<p>' . esc_html__( 'If you would like to purchase the plugin or renew your licence, click the button below to go to the secure payment page.', 'express-label-maker' ) . '</p>';
+    echo '<a class="button button-primary" target="_blank" rel="noopener" href="' . esc_url( $payment_url ) . '">'
+            . esc_html__( 'Go to Payment Page', 'express-label-maker' ) .
+        '</a>';
+    echo '</div>';
     echo '</div>';
 }

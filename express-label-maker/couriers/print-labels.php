@@ -18,7 +18,6 @@ class ExplmPrintLabels {
         $post_ids = isset($_POST['post_ids']) ? array_map('intval', wp_unslash($_POST['post_ids'])) : array();
     
         $saved_country = get_option("explm_country_option", '');
-        $saved_service_type = get_option("explm_dpd_service_type_option", '');
         $courier = '';
     
         if (preg_match('/explm_(.*?)_print_label/', $actionValue, $match) === 1) {
@@ -55,12 +54,6 @@ class ExplmPrintLabels {
 
             if ($total_weight > 0) {
                 $weight = $total_weight;
-            }
-    
-            if ($saved_service_type === 'DPD Classic') {
-                $parcel_type = $payment_method === 'cod' ? 'D-COD' : 'D';
-            } elseif ($saved_service_type === 'DPD Home') {
-                $parcel_type = $payment_method === 'cod' ? 'D-COD-B2C' : 'D-B2C';
             }
     
             preg_match('/\d[\w\s-]*$/', $shipping['address_1'], $house_number);
@@ -208,14 +201,6 @@ class ExplmPrintLabels {
         $locker_id = ExplmLabelMaker::get_order_meta($order_id, 'dpd_parcel_locker_location_id', true);
         $locker_type = ExplmLabelMaker::get_order_meta($order_id, 'dpd_parcel_locker_type', true);
 
-        $post_locker_id = isset($_POST['dpd_parcel_locker_location_id'])
-        ? sanitize_text_field(wp_unslash($_POST['dpd_parcel_locker_location_id']))
-        : '';
-
-        if (!empty($locker_id) || !empty($post_locker_id)) {
-            $parcel_type = 'D-B2C-PSD';
-        }
-
         $data = [
             'recipient_name'        => (string)trim($shipping['first_name'] . ' ' . $shipping['last_name']),
             'recipient_phone'       => isset($billing['phone']) ? (string)$billing['phone'] : '',
@@ -242,7 +227,7 @@ class ExplmPrintLabels {
             'cod_amount'            => $payment_method === 'cod' ? (float)$order_total : '',
             'cod_currency'          => $payment_method === 'cod' ? (string)$currency : '',
 
-            'parcel_type'   => (string)$parcel_type,
+            'delivery_service'       => (string)get_option('explm_dpd_service_type_option', ''),
 
             'location_id'   => (string)(!empty($locker_id) ? $locker_id : (isset($_POST['dpd_parcel_locker_location_id']) ? sanitize_text_field(wp_unslash($_POST['dpd_parcel_locker_location_id'])) : '')),
             'location_type' => (string)(!empty($locker_type) ? $locker_type : (isset($_POST['dpd_parcel_locker_type']) ? sanitize_text_field(wp_unslash($_POST['dpd_parcel_locker_type'])) : '')),

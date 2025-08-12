@@ -47,7 +47,10 @@ function explm_overseas_tab_content() {
     echo '<form method="post" action="">';
     echo '<table class="form-table">';
     echo '<tr>';
-    echo '<th scope="row"><label for="explm_overseas_api_key">' . esc_html__('API Key', 'express-label-maker') . '</label></th>';
+    echo '<th scope="row"><label for="explm_overseas_api_key">' . esc_html__('API Key', 'express-label-maker') . ' ';
+    echo '<span style="cursor:help;" title="' . esc_attr__('Request your API key by emailing cs@overseas.hr.', 'express-label-maker') . '">ℹ️</span>';
+    echo '</label></th>';
+
     echo '<td><input name="explm_overseas_api_key" type="text" id="explm_overseas_api_key" value="' . esc_attr($saved_api_key) . '" class="regular-text" required></td>';
     echo '</tr>';
     $saved_enable = get_option('explm_overseas_enable_pickup', '');

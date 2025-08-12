@@ -70,9 +70,13 @@ function explm_hp_tab_content() {
     echo '<form method="post" action="">';
     echo '<table class="form-table">';
 
-    echo '<tr><th scope="row"><label for="explm_hp_username">' . esc_html__('Username', 'express-label-maker') . '</label></th>';
+    echo '<tr><th scope="row"><label for="explm_hp_username">' . esc_html__('Username', 'express-label-maker') . ' ';
+    echo '<span style="cursor:help;" title="' . esc_attr__('Use the username from your HP administrative dashboard.', 'express-label-maker') . '">ℹ️</span>';
+    echo '</label></th>';
     echo '<td><input name="explm_hp_username" type="text" id="explm_hp_username" value="' . esc_attr(get_option('explm_hp_username_option', '')) . '" class="regular-text" required autocomplete="username"></td></tr>';
-    echo '<tr><th scope="row"><label for="explm_hp_password">' . esc_html__('Password', 'express-label-maker') . '</label></th>';
+    echo '<tr><th scope="row"><label for="explm_hp_password">' . esc_html__('Password', 'express-label-maker') . ' ';
+    echo '<span style="cursor:help;" title="' . esc_attr__('Use the password from your HP administrative dashboard.', 'express-label-maker') . '">ℹ️</span>';
+    echo '</label></th>';
     echo '<td><input name="explm_hp_password" type="password" id="explm_hp_password" value="' . esc_attr(get_option('explm_hp_password_option', '')) . '" class="regular-text" required autocomplete="current-password"></td></tr>';
 
     echo '<tr>';
@@ -92,22 +96,6 @@ function explm_hp_tab_content() {
         }
     }
     echo '</select></td>';
-    echo '</tr>';
-
-    $notif_options = [
-        32 => 'Email',
-        30 => 'SMS',
-    ];
-    echo '<tr>';
-    echo '<th scope="row">' . esc_html__('Recipient Notifications', 'express-label-maker') . '</th>';
-    echo '<td>';
-    foreach ($notif_options as $id => $label) {
-        echo '<label style="margin-right: 15px;">';
-        echo '<input type="checkbox" name="delivery_additional_services[]" value="' . esc_attr($id) . '" ' . (in_array((string)$id, $saved_notifs) ? 'checked' : '') . '> ';
-        echo esc_html($label);
-        echo '</label>';
-    }
-    echo '</td>';
     echo '</tr>';
 
     $saved_delivery_service = get_option('explm_hp_delivery_service', '');
@@ -130,13 +118,36 @@ function explm_hp_tab_content() {
     echo '</select></td>';
     echo '</tr>';
 
+    $notif_options = [
+        32 => __('Email notification to recipient', 'express-label-maker'),
+        30 => __('SMS notification to recipient', 'express-label-maker'),
+    ];
+    echo '<tr>';
+    echo '<th scope="row">' . esc_html__('Additional services', 'express-label-maker') . '</th>';
+    echo '<td>';
+    foreach ($notif_options as $id => $label) {
+        echo '<label style="margin-right: 15px;">';
+        echo '<input type="checkbox" name="delivery_additional_services[]" value="' . esc_attr($id) . '" ' . (in_array((string)$id, $saved_notifs) ? 'checked' : '') . '> ';
+        echo esc_html($label);
+        echo '</label>';
+    }
+    echo '</td>';
+    echo '</tr>';
+
+    $saved_insured = get_option('explm_hp_insured_value', '1');
+
+    echo '<tr>';
+    echo '<th scope="row"><label for="explm_hp_insured_value">' . esc_html__('Insured shipment value', 'express-label-maker') . '</label></th>';
+    echo '<td><input type="checkbox" name="explm_hp_insured_value" id="explm_hp_insured_value" value="1" ' . checked($saved_insured, '1', false) . '></td>';
+    echo '</tr>';
+
     $saved_parcel_size = get_option('explm_hp_parcel_size', '');
 
     $parcel_sizes = [
-        'X' => 'XS – Paket veličine XS',
-        'S' => 'S – Paket veličine S',
-        'M' => 'M – Paket veličine M',
-        'L' => 'L – Paket veličine L',
+        'X' => __('XS – Parcel size XS', 'express-label-maker'),
+        'S' => __('S – Parcel size S', 'express-label-maker'),
+        'M' => __('M – Parcel size M', 'express-label-maker'),
+        'L' => __('L – Parcel size L', 'express-label-maker'),
     ];
 
     echo '<tr>';
@@ -146,13 +157,6 @@ function explm_hp_tab_content() {
         echo '<option value="' . esc_attr($key) . '" ' . selected($saved_parcel_size, $key, false) . '>' . esc_html($label) . '</option>';
     }
     echo '</select></td>';
-    echo '</tr>';
-
-    $saved_insured = get_option('explm_hp_insured_value', '1');
-
-    echo '<tr>';
-    echo '<th scope="row"><label for="explm_hp_insured_value">' . esc_html__('Insured shipment value', 'express-label-maker') . '</label></th>';
-    echo '<td><input type="checkbox" name="explm_hp_insured_value" id="explm_hp_insured_value" value="1" ' . checked($saved_insured, '1', false) . '></td>';
     echo '</tr>';
 
     echo '<tr>';

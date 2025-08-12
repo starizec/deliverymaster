@@ -10,6 +10,9 @@ if (!defined('ABSPATH')) {
 <div class="explm-modal-wrapper">
     <div class="explm-modal">
         <div class="explm-modal-header">
+            <img src="<?php echo esc_url( plugins_url( 'assets/dpd-logo.png', dirname(__DIR__) . '/express-label-maker.php' ) ); ?>"
+            alt="<?php esc_attr_e('DPD Logo', 'express-label-maker'); ?>"
+            style="height:30px;width:30px;vertical-align:middle;" />
             <h2 style="margin-top: 0;">
                 <?php esc_html_e('Order Details', 'express-label-maker'); ?> #
                 <?php echo esc_attr($order_data['id']); ?>
@@ -173,6 +176,30 @@ if (!defined('ABSPATH')) {
                  <label class="explm-labels">
                     <?php esc_html_e('Info for courier:', 'express-label-maker'); ?>
                     <textarea name="collection_info_for_courier"></textarea>
+                </label>
+
+                <?php
+                $dpd_delivery_service = get_option('explm_dpd_service_type_option', '');
+                ?>
+
+                 <!-- Delivery Service -->
+                <label class="explm-labels">
+                    <?php esc_html_e('Delivery Service:', 'express-label-maker'); ?>
+                    <select name="delivery_service">
+                        <?php
+                        $services = [
+                            'B2B'  => 'B2B',
+                            'B2C'  => 'B2C',
+                            'SWAP' => 'SWAP',
+                            'TYRE' => 'TYRE',
+                            'PAL'  => 'PAL',
+                            'Ship-From-Shop' => 'Ship-From-Shop',
+                        ];
+                        foreach ($services as $id => $label) {
+                            echo '<option value="' . esc_attr($id) . '" ' . selected($dpd_delivery_service, $id, false) . '>' . esc_html($label) . '</option>';
+                        }
+                        ?>
+                    </select>
                 </label>
         </form>
         <div class="explm-modal-actions">

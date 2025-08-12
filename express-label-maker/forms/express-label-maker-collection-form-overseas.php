@@ -10,6 +10,9 @@ if (!defined('ABSPATH')) {
 <div class="explm-modal-wrapper">
     <div class="explm-modal">
         <div class="explm-modal-header">
+            <img src="<?php echo esc_url( plugins_url( 'assets/overseas-logo.png', dirname(__DIR__) . '/express-label-maker.php' ) ); ?>"
+            alt="<?php esc_attr_e('Overseas Logo', 'express-label-maker'); ?>"
+            style="height:30px;width:30px;vertical-align:middle;" />
             <h2 style="margin-top: 0;">
                 <?php esc_html_e('Order Details', 'express-label-maker'); ?> #
                 <?php echo esc_attr($order_data['id']); ?>
@@ -153,6 +156,12 @@ if (!defined('ABSPATH')) {
                 </div>
                 <div class="explm-form-columns">      
                 <h3 style="margin: 0 0 5px 0;"><?php esc_html_e('Courier', 'express-label-maker'); ?></h3> 
+
+                <!-- Weight -->
+                <label class="explm-labels">
+                    <?php esc_html_e('Weight:', 'express-label-maker'); ?>
+                    <input type="text" name="weight" value="<?php echo esc_attr($weight); ?>">
+                </label>
                 
                 <!-- Package Number -->
                 <label class="explm-labels">
