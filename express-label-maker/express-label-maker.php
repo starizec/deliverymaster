@@ -116,6 +116,22 @@ class ExplmLabelMaker
                 'gls_sender_city' => get_option('explm_gls_city', ''),
                 'gls_sender_postcode' => get_option('explm_gls_postal_code', ''),
                 'gls_sender_country' => get_option('explm_gls_country', ''),
+                'dpd_sender_name' => get_option('explm_dpd_company_or_personal_name', ''),
+                'dpd_sender_phone' => get_option('explm_dpd_phone', ''),
+                'dpd_sender_email' => get_option('explm_dpd_email', ''),
+                'dpd_sender_street' => get_option('explm_dpd_street', ''),
+                'dpd_sender_number' => get_option('explm_dpd_property_number', ''),
+                'dpd_sender_city' => get_option('explm_dpd_city', ''),
+                'dpd_sender_postcode' => get_option('explm_dpd_postal_code', ''),
+                'dpd_sender_country' => get_option('explm_dpd_country', ''),
+                'overseas_sender_name' => get_option('explm_overseas_company_or_personal_name', ''),
+                'overseas_sender_phone' => get_option('explm_overseas_phone', ''),
+                'overseas_sender_email' => get_option('explm_overseas_email', ''),
+                'overseas_sender_street' => get_option('explm_overseas_street', ''),
+                'overseas_sender_number' => get_option('explm_overseas_property_number', ''),
+                'overseas_sender_city' => get_option('explm_overseas_city', ''),
+                'overseas_sender_postcode' => get_option('explm_overseas_postal_code', ''),
+                'overseas_sender_country' => get_option('explm_overseas_country', ''),
             )
         );
     }    

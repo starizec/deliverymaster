@@ -134,15 +134,6 @@ function setDPDParcelData(form) {
       sender_remark = sender_remark.substring(0, 47) + "...";
     }
 
-    let parcelType = "";
-    if (parcelLockerId) {
-      parcelType = "D-B2C-PSD";
-    } else if (explm_ajax.serviceType === "DPD Classic") {
-      parcelType = isCod ? "D-COD" : "D";
-    } else if (explm_ajax.serviceType === "DPD Home") {
-      parcelType = isCod ? "D-COD-B2C" : "D-B2C";
-    }
-
     const data = {
       recipient_name: form.find('input[name="customer_name"]').val() || "",
       recipient_phone: form.find('input[name="phone"]').val() || "",
@@ -181,7 +172,7 @@ function setDPDParcelData(form) {
 
       value: "",
 
-      parcel_type: parcelType,
+      delivery_service: form.find('select[name="delivery_service"]').val() || "",
 
       location_id: parcelLockerId,
       location_type: parcelLockerType,
