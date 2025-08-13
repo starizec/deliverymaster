@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ExpressLabelMaker\n"
 "POT-Creation-Date: 2025-08-13 01:49+0200\n"
-"PO-Revision-Date: 2025-08-13 01:56+0200\n"
+"PO-Revision-Date: 2025-08-14 00:06+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: hr_HR\n"
@@ -992,10 +992,8 @@ msgid "Insured shipment value"
 msgstr "Osiguranje pošiljke"
 
 #: settings/gls-settings.php:110 settings/hp-settings.php:126
-#, fuzzy
-#| msgid "Additional services:"
 msgid "Additional services"
-msgstr "Dodatne usluge:"
+msgstr "Dodatne usluge"
 
 #: settings/gls-settings.php:131
 msgid "Printer type"
