@@ -794,7 +794,7 @@ class ExplmParcelLockers {
                 $order->update_meta_data($key, $value);
             }
 
-            $formatted = $locker_data['overseas_parcel_locker_name'] . ' (' . $locker_data['overseas_parcel_locker_location_id'] . ')';
+            $formatted = $locker_data['dpd_parcel_locker_name'] . ' (' . $locker_data['dpd_parcel_locker_location_id'] . ')';
             $order->update_meta_data('parcel_locker_formatted', $formatted);
     
         } elseif (!empty($_POST['overseas_parcel_locker_location_id'])) {
