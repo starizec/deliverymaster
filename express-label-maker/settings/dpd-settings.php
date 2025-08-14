@@ -162,8 +162,8 @@ function explm_dpd_tab_content() {
     echo '</tr>';
 
     echo '<tr id="paketomat_shipping_method_row">';
-    echo '<th scope="row"><label for="explm_overseas_shipping_method">' . esc_html__('Pickup station delivery method', 'express-label-maker') . '</label></th>';
-    echo '<td><select name="explm_overseas_shipping_method" id="explm_overseas_shipping_method" required>';
+    echo '<th scope="row"><label for="explm_dpd_shipping_method">' . esc_html__('Pickup station delivery method', 'express-label-maker') . '</label></th>';
+    echo '<td><select name="explm_dpd_shipping_method" id="explm_dpd_shipping_method">';
 
     if ( !empty($shipping_methods) ) {
         foreach ( $shipping_methods as $key => $method_obj ) {
@@ -173,6 +173,9 @@ function explm_dpd_tab_content() {
             echo '<option value="' . esc_attr($key) . '" ' . selected($saved_method, $key, false) . '>' . esc_html($title) . '</option>';
         }
     }
+
+    echo '</select></td></tr>';
+
 
     echo '<tr><th scope="row"><label for="explm_dpd_service_type">' . esc_html__('Delivery Service', 'express-label-maker') . '</label></th>';
     echo '<td><select name="explm_dpd_service_type" id="explm_dpd_service_type" required>';
