@@ -1,32 +1,3 @@
-function showErrorsPopup(errors) {
-  let html = "";
-
-  if (!errors || errors.length === 0) {
-      html = "Unknown error occurred.";
-  } else if (errors.length === 1) {
-      html = `<b>Error code:</b> ${errors[0].error_code || "unknown"}<br>` +
-             `<b>Message:</b> ${errors[0].error_message || "unknown"}`;
-  } else {
-      errors.forEach((error, idx) => {
-          html += `<b>Error ${idx + 1}:</b><br>` +
-                  `<b>Error code:</b> ${error.error_code || "unknown"}<br>` +
-                  `<b>Message:</b> ${error.error_message || "unknown"}<br><br>`;
-      });
-  }
-
-  Swal.fire({
-      icon: "error",
-      title: "Error",
-      html: html,
-      confirmButtonText: "OK",
-      customClass: {
-          popup: 'explm-swal-scroll',
-          title: 'explm-swal-title',
-          confirmButton: 'explm-swal-button'
-      },
-  });
-}
-
 jQuery(document).ready(function ($) {
   $("body").append(
     '<div class="explm-loading-panel"><div class="explm-spinner"></div></div>'
@@ -77,7 +48,7 @@ jQuery(document).ready(function ($) {
                       jQuery(this).remove();
                   });
               } else {
-                  showErrorsPopup(response.data.errors || []);
+                  explm.showErrorsPopup(response, { title: 'Error start trial licence' });
               }
           },
       });
@@ -203,7 +174,7 @@ jQuery(document).ready(function ($) {
                   }
               }
           } else {
-              showErrorsPopup(response.data.errors || []);
+               explm.showErrorsPopup(response, { title: 'Error licence check' });
           }
       },
   });

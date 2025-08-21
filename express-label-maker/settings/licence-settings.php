@@ -83,7 +83,7 @@ function explm_licence_tab_content()
     echo '<div style="margin-top:20px;"> v' . esc_html( $plugin_version ) . '</div>';
     echo '</div>';
 
-    $payment_url = 'https://expresslabelmaker.com/hr/payment/' . ( $saved_licence_key ? rawurlencode( $saved_licence_key ) : '' );
+    $payment_url = EXPLM_API_BASE_URL . 'hr/payment/' . ( $saved_licence_key ? rawurlencode( $saved_licence_key ) : '' );
 
     echo '<div class="explm-licence-side">';
     echo '<div class="explm-licence-payment">';

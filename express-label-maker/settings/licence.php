@@ -29,6 +29,8 @@ class ExplmLicence
             )
         );
 
+      /*   error_log('body: ' . print_r($body, true)); */
+
         $args = array(
             'method' => 'POST',
             'headers' => array('Content-Type' => 'application/json'),
@@ -37,6 +39,8 @@ class ExplmLicence
         );
 
         $response = wp_remote_request(EXPLM_API_BASE_URL . 'api/v1/licence/start-trial', $args);
+
+        /* error_log('response: ' . print_r($response, true)); */
 
         if (is_wp_error($response)) {
             wp_send_json_error(array(
@@ -48,6 +52,8 @@ class ExplmLicence
         }
         
         $body_response = json_decode(wp_remote_retrieve_body($response), true);
+/* 
+         error_log('response body: ' . print_r($body_response, true)); */
         
         if ($response['response']['code'] != '201') {
             $errors = array();
@@ -97,8 +103,8 @@ class ExplmLicence
             )
         );
 
-       /*  error_log('response body: ' . print_r($body, true));
- */
+        error_log('body: ' . print_r($body, true));
+
         $args = array(
             'method' => 'POST',
             'headers' => array('Content-Type' => 'application/json'),
@@ -108,7 +114,7 @@ class ExplmLicence
 
         $response = wp_remote_request(EXPLM_API_BASE_URL . 'api/v1/licence/check', $args);
 
-       /*  error_log('response body: ' . print_r($response, true)); */
+        error_log('response: ' . print_r($response, true));
 
         if (is_wp_error($response)) {
             wp_send_json_error(array(
@@ -121,7 +127,7 @@ class ExplmLicence
         
         $body_response = json_decode(wp_remote_retrieve_body($response), true);
 
-       /*  error_log('response body: ' . print_r($body_response, true)); */
+        error_log('response body: ' . print_r($body_response, true));
         
         if ($response['response']['code'] != '201') {
             $errors = array();

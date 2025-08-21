@@ -108,7 +108,7 @@ jQuery(document).ready(function ($) {
           location.reload();
         } else {
           hideModal();
-          showErrorsPopup(response.data.errors || []);
+          explm.showErrorsPopup(response, { title: 'Errors while creating label' });
         }
       }
     ).fail(hideLoader);
@@ -185,9 +185,9 @@ function setDPDParcelData(form) {
     const isCod =
       form.find('input[name="parcel_type"]:checked').val() === "cod";
     const parcelLockerId =
-      form.find('input[name="gls_parcel_locker_location_id"]').val() || "";
+      form.find('input[name="overseas_parcel_locker_location_id"]').val() || "";
     const parcelLockerType =
-      form.find('input[name="gls_parcel_locker_type"]').val() || "";
+      form.find('input[name="overseas_parcel_locker_type"]').val() || "";
 
     const overseasNote = (explm_ajax.overseas_note || "").trim();
     const customerNote = (
@@ -413,44 +413,6 @@ function setDPDParcelData(form) {
     a.click();
     URL.revokeObjectURL(url);
     document.body.removeChild(a);
-  }
-
-  function showErrorsPopup(errors) {
-    let html = "";
-
-    if (errors.length === 1) {
-      html =
-        `<b>Order number:</b> ${errors[0].order_number}<br>` +
-        `<b>Error code:</b> ${errors[0].error_code || "unknown"}<br>` +
-        `<b>Message:</b> ${errors[0].error_message}`;
-    } else {
-      errors.forEach((error, idx) => {
-        html +=
-          `<b>Error ${idx + 1}:</b><br>` +
-          `<b>Order number:</b> ${error.order_number}<br>` +
-          `<b>Error code:</b> ${error.error_code || "unknown"}<br>` +
-          `<b>Message:</b> ${error.error_message}<br><br>`;
-      });
-    }
-
-    Swal.fire({
-      icon: "error",
-      title: "Errors while creating label",
-      html: html || "<b>Unknown error occurred.</b>",
-      confirmButtonText: "OK",
-      customClass: {
-        popup: "explm-swal-scroll",
-        title: "explm-swal-title",
-        confirmButton: "explm-swal-button",
-      },
-      didOpen: () => {
-        const htmlContainer = Swal.getHtmlContainer();
-        if (htmlContainer) {
-          htmlContainer.style.maxHeight = "50vh";
-          htmlContainer.style.overflowY = "auto";
-        }
-      },
-    });
   }
 
   function showErrorPopup(errorId, errorMessage) {

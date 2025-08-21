@@ -158,7 +158,7 @@ jQuery(document).ready(function ($) {
 
             $(".explm-loading-panel").fadeOut(300);
         
-            showErrorsPopup(response.data.errors || []);
+            explm.showErrorsPopup(response, { title: 'Errors while creating label' });
           }
         }
       });
@@ -391,41 +391,3 @@ jQuery(document).ready(function ($) {
   }
 
 });
-
-  function showErrorsPopup(errors) {
-    let html = "";
-
-    if (errors.length === 1) {
-      html =
-        `<b>Order number:</b> ${errors[0].order_number}<br>` +
-        `<b>Error code:</b> ${errors[0].error_code || "unknown"}<br>` +
-        `<b>Message:</b> ${errors[0].error_message}`;
-    } else {
-      errors.forEach((error, idx) => {
-        html +=
-          `<b>Error ${idx + 1}:</b><br>` +
-          `<b>Order number:</b> ${error.order_number}<br>` +
-          `<b>Error code:</b> ${error.error_code || "unknown"}<br>` +
-          `<b>Message:</b> ${error.error_message}<br><br>`;
-      });
-    }
-
-    Swal.fire({
-      icon: "error",
-      title: "Errors while creating label",
-      html: html || "<b>Unknown error occurred.</b>",
-      confirmButtonText: "OK",
-      customClass: {
-        popup: "explm-swal-scroll",
-        title: "explm-swal-title",
-        confirmButton: "explm-swal-button",
-      },
-      didOpen: () => {
-        const htmlContainer = Swal.getHtmlContainer();
-        if (htmlContainer) {
-          htmlContainer.style.maxHeight = "50vh";
-          htmlContainer.style.overflowY = "auto";
-        }
-      },
-    });
-  }

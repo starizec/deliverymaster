@@ -151,8 +151,6 @@ if (!defined('ABSPATH')) {
             <div class="explm-form-columns">
 
             <?php
-                $dpd_parcel_locker_location_id = '';
-                $overseas_parcel_locker_location_id = '';    
                         
             //DODATI KURIRE
 
@@ -171,7 +169,7 @@ if (!defined('ABSPATH')) {
 
                 <label class="explm-labels">
                     <?php esc_html_e('Parcel Locker ID:', 'express-label-maker'); ?>
-                    <input type="text" name="parcel_locker" value="<?php echo esc_attr($dpd_parcel_locker_location_id); ?>">
+                    <input type="text" name="dpd_parcel_locker_location_id" value="<?php echo esc_attr($dpd_parcel_locker_location_id); ?>">
                 </label>
 
                  <!-- Delivery Service -->
@@ -211,7 +209,7 @@ if (!defined('ABSPATH')) {
 
                 <label class="explm-labels">
                     <?php esc_html_e('Parcel Locker ID:', 'express-label-maker'); ?>
-                    <input type="text" name="parcel_locker" value="<?php echo esc_attr($overseas_parcel_locker_location_id); ?>">
+                    <input type="text" name="overseas_parcel_locker_location_id" value="<?php echo esc_attr($overseas_parcel_locker_location_id); ?>">
                 </label>
                 
                 <?php
@@ -413,8 +411,6 @@ if (!defined('ABSPATH')) {
                 <!-- Hidden courier for api -->
                 <input type="hidden" id="hiddenCourier" value="" />
                 <input type="hidden" id="hiddenOrderId" value="<?php echo esc_attr($order_data['id']); ?>" />
-                <input type="hidden" id="dpdParcelLockerId" value="<?php echo esc_attr($dpd_parcel_locker_location_id); ?>">
-                <input type="hidden" id="overseasParcelLockerId" value="<?php echo esc_attr($overseas_parcel_locker_location_id); ?>">
                 <input type="hidden" name="hiddenCurrency" value="<?php echo esc_attr($order->get_currency()); ?>">
         </form>
         <div class="explm-modal-actions">

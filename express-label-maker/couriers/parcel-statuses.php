@@ -195,7 +195,7 @@ class ExplmParcelStatuses
             name="explm_parcel_status[]"
             class="wc-enhanced-select"
             multiple="multiple"
-            data-placeholder="<?php esc_attr_e('Filter by parcel status', 'express'); ?>"
+            data-placeholder="<?php esc_attr_e('Filter by parcel status', 'express-label-maker'); ?>"
             data-allow_clear="true"
             style="min-width:280px">
 

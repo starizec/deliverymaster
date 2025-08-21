@@ -73,6 +73,8 @@ class ExplmParcelLockers {
         $body = array(
             'user' => $user_data
         );
+
+        error_log('$body: ' . print_r($body, true));
     
         $args = array(
             'method' => 'POST',
@@ -89,6 +91,8 @@ class ExplmParcelLockers {
         }
     
         $body_response = json_decode(wp_remote_retrieve_body($response), true);
+
+        error_log('$body_response: ' . print_r($body_response, true));
 
         if ($response['response']['code'] != '201') {
             $errors = array();
